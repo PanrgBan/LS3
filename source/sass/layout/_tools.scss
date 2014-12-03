@@ -1,0 +1,44 @@
+// ========================= //
+// Tools                     //
+// ========================= //
+
+%clear{
+
+  &:after{
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+%clearFirstMargin{
+  &:first-child{
+    margin: 0;
+  }
+}
+
+%justify-content{
+  text-align: justify;
+  cursor: default;
+
+  &:after{
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+}
+
+%align-v{
+  &:after{
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
+
+%img-fluid{
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
