@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-</head>
-<body>
-
 <h1>LoftSchool | Задание №3</h1>
 
 <h2>WaterMark</h2>
@@ -73,7 +65,3 @@ README.md - описание проекта<br>
 <p><em>TODO/ допилить таск с wiredep и useref</em></p>
 
 <p>Всем спасибо (fantasy mod='off')</p>
-
-  
-</body>
-</html>
