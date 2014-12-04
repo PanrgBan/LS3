@@ -3,7 +3,25 @@ html
   include modules/head.jade
   body
 
-    <!-- Write here -->
+    .wrapper
+      .container
+        .main
+          .case
+            h1.h1 Генерация водяных знаков
+            .work-area
+                //- Область для работы с изображениями
+                img(src="http://lorempixel.com/200/400/cats/2")
+                img.wathermark(src="http://lorempixel.com/100/100/cats/3")
+        .side-panel
+          .case
+            h2.h2 Настройки
+
+            form.form(action='/')
+            //- Загрузка изображений
+
+            //- Положение
+
+            //- Прозрачность
 
 
     script(src="http://yastatic.net/jquery/1.11.1/jquery.min.js")

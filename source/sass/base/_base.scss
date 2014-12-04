@@ -13,7 +13,8 @@ html{
 
 body{
   font-family: $font-family-base;
-  background: #fff;
+  background: fixed #fff url(/images/bg_main.png);
+  background-size: cover;
 }
 
 a{

@@ -2,7 +2,35 @@
 // Variables                 //
 // ========================= //
 
-$grid-gutter: 10px;
+
+$grid-gutter: 10px; // расстояние между ячейчками сетки
+
+
+// ========================= //
+// Color variables
+
+$color-2e3641: #2e3641;
+$color-f1f1f5: #f1f1f5;
+
+
+// ========================= //
+// Fonts variables
 
 $font-family-base: sans-serif;
-$font-family-second: sans-serif;
+
+$roboto_con_300: roboto_condensed_light;
+$roboto_con_300_i: roboto_condensed_light_italic;
+$roboto_con_400: roboto_condensed_regular;
+$roboto_con_400_i: roboto_condensed_italic;
+$roboto_con_700: roboto_condensed_bold;
+$roboto_con_700_i: roboto_condensed_bold_italic;
+$roboto_100: roboto_thin;
+$roboto_100_i: roboto_thin_italic;
+$roboto_300: roboto_light;
+$roboto_300_i: roboto_light_italic;
+$roboto_500: roboto_medium;
+$roboto_500_i: roboto_medium_italic;
+$roboto_700: roboto_bold;
+$roboto_700_i: roboto_bold_italic;
+$roboto_900: roboto_black;
+$roboto_900_i: roboto_black_italic;
