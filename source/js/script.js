@@ -11,8 +11,8 @@ var module = (function() {
         // ее значения не нужно выполнять капких-либо действий
         flag = true;
         // так же тут могут быть настройки модуля
-        width = 250,
-        animateDuration = 1000;
+        //width = 250,
+        //animateDuration = 1000;
 
    app = {
     // метод инициалицации модуля
@@ -31,13 +31,28 @@ var module = (function() {
     },
 
     // метод содержащий все события модуля
-    events: function() {},
+    events: function() {
+        $(function () {
+            var url = window.location.hostname === 'blueimp.github.io' ?
+                '//jquery-file-upload.appspot.com/' : 'server/php/';
+            $('.fileupload').fileupload({
+                url: url,
+                dataType: 'json',
+                done: function (e, data) {
+                    $.each(data.result.files, function (index, file) {
+                        $('<p/>').text(file.name).appendTo('#files');
+                    });
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+    }
 
     // Другие методы...
   };
 
   // инициализируем модуль
-  self.init();
+  app.init();
   // возвращаем объект с публичными методами
   return app;
 }());

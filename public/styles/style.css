@@ -245,11 +245,57 @@ a {
     background-position: 0 -99px; }
 
 .ico_download {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
   width: 21px;
   height: 16px;
   background-position: -108px -112px; }
 
 /* Forms **********************/
+.upload__pic {
+  margin-bottom: 22px; }
+
+.upload-name {
+  font-family: roboto_light;
+  font-size: 14px;
+  color: #2e3641; }
+
+.form-group {
+  position: relative;
+  margin-top: 8px; }
+
+.choose-pic {
+  width: 220px;
+  opacity: 0;
+  height: 27px; }
+
+.upload-wrapper {
+  padding: 7px 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 182px;
+  border: 1px solid #9EB2C0;
+  border-radius: 3px;
+  color: #9EB2C0;
+  font-family: "Segoe UI Light";
+  font-size: 12px;
+  overflow: hidden; }
+
+.upload-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 28px;
+  background: #f97e76;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px; }
+
 /* Buttons ********************/
 /* Titles *********************/
 .h1 {
@@ -261,7 +307,8 @@ a {
   font-size: 26px;
   font-family: roboto_medium;
   color: #2e3641;
-  text-align: center; }
+  text-align: center;
+  margin-bottom: 36px; }
 
 /* Footer *********************/
 .l-footer {

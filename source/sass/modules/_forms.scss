@@ -1,3 +1,50 @@
 // ========================= //
 // Forms                     //
 // ========================= //
+
+.upload__pic {
+  margin-bottom: 22px;
+}
+
+.upload-name {
+  font-family: $roboto_300;
+  font-size: 14px;
+  color: $color-label;
+}
+
+.form-group {
+  position: relative;
+  margin-top: 8px;
+}
+
+.choose-pic {
+  width: 220px;
+  opacity: 0;
+  height: 27px;
+}
+
+.upload-wrapper {
+  padding: 7px 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 182px;
+  border: 1px solid $color-border;
+  border-radius: 3px;
+  color: $color-border;
+  font-family: "Segoe UI Light";
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.upload-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 28px;
+  background: $color-btn;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+

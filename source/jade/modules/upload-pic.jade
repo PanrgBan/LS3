@@ -1,0 +1,11 @@
+.upload
+each label in ['Исходное изображение' , 'Водяной знак']
+    .upload__pic
+        form(method="post")
+
+            label.upload-name= label
+            .form-group
+                .upload-wrapper Загрузите изображение
+                .upload-btn
+                    .ico_download
+                input(type="file" name="files[]" multiple class="choose-pic").fileupload
