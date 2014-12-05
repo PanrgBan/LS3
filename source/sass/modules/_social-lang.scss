@@ -1,0 +1,61 @@
+.soc-lang-panel{
+  position: fixed;
+  top: 100px;
+  left: 0;
+
+  li{
+    background-color: rgba(255,255,255,.6);
+  }
+}
+
+.language-panel{
+  margin: 0 0 18px 0;
+
+  li{
+    margin: 0 0 1px 0;
+
+    a{
+      display: block;
+      min-width: 43px;
+      padding: 9px 4px;
+      text-align: center;
+      color: $color-8e9298;
+
+      &:hover{
+        color: $color-444a53;
+      }
+    }
+
+    &:hover{
+
+    }
+  }
+}
+
+.social-panel{
+  position: relative;
+  transform: translate(-40px, 0);
+  transition: transform .3s;
+
+  &:hover{
+    transform: translate(0, 0);
+
+    .ico_like{
+        background-position: -99px -50px;
+    }
+  }
+
+  .control{
+    position: absolute;
+    left: 40px;
+  }
+
+  li{
+    width: 40px;
+    height: 40px;
+
+    a{
+      display: block;
+    }
+  }
+}

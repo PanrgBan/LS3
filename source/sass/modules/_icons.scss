@@ -1,3 +1,51 @@
 // ========================= //
 // Icons                     //
 // ========================= //
+
+
+[class*="ico_"]{
+  background: url('/images/sprite.png') no-repeat;
+}
+
+.ico_like,
+.ico_fb,
+.ico_tw,
+.ico_vk{
+  width: 40px;
+  height: 40px;
+  transition: background .3s;
+}
+
+.ico_like{
+  background-position: -98px -2px;
+}
+
+.ico_fb{
+  background-position: -49px 0;
+
+  &:hover{
+    background-position: 0 0;
+  }
+}
+
+.ico_tw{
+  background-position: -49px -50px;
+
+  &:hover{
+    background-position: 0 -50px;
+  }
+}
+
+.ico_vk{
+  background-position: -48px -99px;
+
+  &:hover{
+    background-position: 0 -99px;
+  }
+}
+
+.ico_download{
+  width: 21px;
+  height: 16px;
+  background-position: -108px -112px;
+}
