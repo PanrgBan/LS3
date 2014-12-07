@@ -34,22 +34,78 @@
     img{
       vertical-align: middle;
     }
-  }
-
-    .wathermark{
+    .wrap-watermark{
       position: absolute;
-      top: 10px;
-      left: 10px;
+      img{
+        position: absolute;
+        &.left-top{
+          top: 10%;
+          left: 10%;
+          right: auto;
+          bottom: auto;
+        }
+        &.center-top{
+          top: 10%;
+          left: 50%;
+          right: auto;
+          bottom: auto;
+        }
+        &.right-top{
+          top: 10%;
+          left: auto;
+          right: 10%;
+          bottom: auto;
+        }
+        &.left-center{
+          top: 50%;
+          left: 10%;
+          right: auto;
+          bottom: auto;
+        }
+        &.center-center{
+          top: 50%;
+          left: 50%;
+          right: auto;
+          bottom: auto;
+        }
+        &.right-center{
+          top: 50%;
+          left: auto;
+          right: 10%;
+          bottom: auto;
+        }
+        &.left-bottom{
+          top: auto;
+          left: 10%;
+          right: auto;
+          bottom: 10%;
+        }
+        &.center-bottom{
+          top: auto;
+          left: 50%;
+          right: auto;
+          bottom: 10%;
+        }
+        &.right-bottom{
+          top: auto;
+          left: auto;
+          right: 10%;
+          bottom: 10%;
+        }
+      }
     }
-
+  }
 
 .side-panel{
   display: table-cell;
   width: 260px;
   height: 100%;
-  padding: 35px 20px 25px;
+  padding: 35px 0px 25px;
   border-left: 1px solid #2E3641;
   background: $color-f1f1f5;
+  .panel-wrap{
+    padding: 0 20px;
+  }
 }
 
   .form{
