@@ -9,13 +9,17 @@ html
                         h1.h1 Генерация водяных знаков
                         .work-area
                             //- Область для работы с изображениями
-                            img(src="http://lorempixel.com/200/400/cats/2")
-                            img.wathermark(src="http://lorempixel.com/100/100/cats/3")
+                            //img(src="http://lorempixel.com/200/400/cats/2")
+                            //img.wathermark(src="http://lorempixel.com/100/100/cats/3")
+                            img(src="/images/origin-pic.gif")
+                            .wrap-watermark
+                                img.left-top(src="/images/watermark.gif")
                 .side-panel
                     .case
                         h2.h2 Настройки
-                        include modules/upload-pic
-                        //- Положение
+                        .panel-wrap
+                            include modules/upload-pic
+                        include modules/move-watermark
                         //- Прозрачность
         include modules/footer.jade
         include modules/social-lang.jade

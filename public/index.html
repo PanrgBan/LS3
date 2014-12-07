@@ -18,37 +18,68 @@
         <div class="main">
           <div class="case">
             <h1 class="h1">Генерация водяных знаков</h1>
-            <div class="work-area"><img src="http://lorempixel.com/200/400/cats/2"><img src="http://lorempixel.com/100/100/cats/3" class="wathermark">
+            <div class="work-area">
+              <!--img(src="http://lorempixel.com/200/400/cats/2")-->
+              <!--img.wathermark(src="http://lorempixel.com/100/100/cats/3")--><img src="/images/origin-pic.gif">
+              <div class="wrap-watermark"><img src="/images/watermark.gif" class="left-top"></div>
             </div>
           </div>
         </div>
         <div class="side-panel">
           <div class="case">
             <h2 class="h2">Настройки</h2>
-            <div class="upload"></div>
-            <div class="upload__pic">
-              <form method="post">
-                <label class="upload-name">Исходное изображение</label>
-                <div class="form-group">
-                  <div class="upload-wrapper">Загрузите изображение</div>
-                  <div class="upload-btn">
-                    <div class="ico_download"></div>
+            <div class="panel-wrap">
+              <div class="upload"></div>
+              <div class="upload__pic">
+                <form method="post">
+                  <label class="upload-name">Исходное изображение</label>
+                  <div class="form-group">
+                    <div class="upload-wrapper">Загрузите изображение</div>
+                    <div class="upload-btn">
+                      <div class="ico_download"></div>
+                    </div>
+                    <input type="file" name="files[]" multiple class="choose-pic fileupload">
                   </div>
-                  <input type="file" name="files[]" multiple class="choose-pic fileupload">
-                </div>
-              </form>
+                </form>
+              </div>
+              <div class="upload__pic">
+                <form method="post">
+                  <label class="upload-name">Водяной знак</label>
+                  <div class="form-group">
+                    <div class="upload-wrapper">Загрузите изображение</div>
+                    <div class="upload-btn">
+                      <div class="ico_download"></div>
+                    </div>
+                    <input type="file" name="files[]" multiple class="choose-pic fileupload">
+                  </div>
+                </form>
+              </div>
             </div>
-            <div class="upload__pic">
-              <form method="post">
-                <label class="upload-name">Водяной знак</label>
-                <div class="form-group">
-                  <div class="upload-wrapper">Загрузите изображение</div>
-                  <div class="upload-btn">
-                    <div class="ico_download"></div>
+            <div class="move-watermark">
+              <div class="panel-wrap">
+                <p>Положение</p>
+                <div class="move-wrap">
+                  <div class="move-field">
+                    <div class="pane">
+                      <div class="pane-wrap"><a href="#" data-pos="left-top" class="active">1</a><a href="#" data-pos="center-top">1</a><a href="#" data-pos="right-top">1</a><a href="#" data-pos="left-center">1</a><a href="#" data-pos="center-center">1</a><a href="#" data-pos="right-center">1</a><a href="#" data-pos="left-bottom">1</a><a href="#" data-pos="center-bottom">1</a><a href="#" data-pos="right-bottom">1</a></div>
+                    </div>
                   </div>
-                  <input type="file" name="files[]" multiple class="choose-pic fileupload">
+                  <div class="move-spinner">
+                    <div class="pos-x">
+                      <label for="spinner-x">X</label>
+                      <input id="spinner-x" name="pos-x" value="0" class="spinner">
+                    </div>
+                    <div class="pos-y">
+                      <label for="spinner-y">Y</label>
+                      <input id="spinner-y" name="pos-y" value="0" class="spinner">
+                    </div>
+                  </div>
                 </div>
-              </form>
+                <ul>
+                  <li><a href="#" class="four">1</a></li>
+                  <li><a href="#" class="one active">1</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -74,6 +105,7 @@
     <script src="http://yastatic.net/jquery/1.11.1/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="scripts/vendor/jquery-1.11.1.min.js"><\/script>')</script>
     <script src="scripts/vendor/jquery.ui.widget.js"></script>
+    <script src="scripts/vendor/jquery-ui-spinner.min.js"></script>
     <script src="scripts/vendor/jquery.iframe-transport.js"></script>
     <script src="scripts/vendor/jquery.fileupload.js"></script>
     <script src="scripts/app.js"></script>

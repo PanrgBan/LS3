@@ -1,0 +1,28 @@
+div.move-watermark
+    .panel-wrap
+        p Положение
+        .move-wrap
+            .move-field
+                .pane
+                    .pane-wrap
+                        a.active(href='#', data-pos='left-top') 1
+                        a(href='#', data-pos='center-top') 1
+                        a(href='#', data-pos='right-top') 1
+                        a(href='#', data-pos='left-center') 1
+                        a(href='#', data-pos='center-center') 1
+                        a(href='#', data-pos='right-center') 1
+                        a(href='#', data-pos='left-bottom') 1
+                        a(href='#', data-pos='center-bottom') 1
+                        a(href='#', data-pos='right-bottom') 1
+            .move-spinner
+                .pos-x
+                    label(for='spinner-x') X
+                    input(id='spinner-x', class='spinner', name='pos-x',value='0')
+                .pos-y
+                    label(for='spinner-y') Y
+                    input(id='spinner-y', class='spinner', name='pos-y',value='0')
+        ul
+            li
+                a.four(href='#') 1
+            li
+                a.one.active(href='#') 1
