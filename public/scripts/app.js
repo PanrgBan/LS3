@@ -110,20 +110,13 @@ var module = (function() {
 
     // метод содержащий все события модуля
     events: function() {
-        $(function () {
-            var url = window.location.hostname === 'blueimp.github.io' ?
-                '//jquery-file-upload.appspot.com/' : 'server/php/';
             $('.fileupload').fileupload({
-                url: url,
-                dataType: 'json',
-                done: function (e, data) {
-                    $.each(data.result.files, function (index, file) {
-                        $('<p/>').text(file.name).appendTo('#files');
-                    });
+                url: 'php/upload.php',
+                type: 'POST',
+                success: function () {
+                    console.log('succes');
                 }
-            }).prop('disabled', !$.support.fileInput)
-                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-        });
+            });
     }
 
     // Другие методы...
