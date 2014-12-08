@@ -281,49 +281,6 @@ a {
   background-position: -161px -69px; }
 
 /* Forms **********************/
-.upload__pic {
-  margin-bottom: 22px; }
-
-.upload-name {
-  display: inline-block;
-  margin-bottom: 8px;
-  font-family: roboto_light;
-  font-size: 14px;
-  color: #2e3641; }
-
-.form-group {
-  overflow: hidden;
-  position: relative;
-  display: table; }
-
-.fileupload {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  height: 27px; }
-
-.upload-wrapper {
-  padding: 7px 4px;
-  display: table-cell;
-  width: 100%;
-  border: 1px solid #9EB2C0;
-  border-right: none;
-  border-radius: 3px 0 0 3px;
-  color: #9EB2C0;
-  font-family: "Segoe UI Light";
-  font-size: 12px;
-  vertical-align: middle; }
-
-.upload-btn {
-  position: relative;
-  display: table-cell;
-  width: 40px;
-  height: 28px;
-  background: #f97e76;
-  border-radius: 0 3px 3px 0;
-  float: right; }
-
 /* Buttons ********************/
 /* Titles *********************/
 .h1 {
@@ -337,6 +294,14 @@ a {
   color: #2e3641;
   text-align: center;
   margin-bottom: 36px; }
+
+.head {
+  position: relative;
+  margin: 0 0 35px 0; }
+
+.small-title {
+  font-size: 14px;
+  color: #2e3641; }
 
 /* Footer *********************/
 .l-footer {
@@ -397,6 +362,47 @@ a {
     .social-panel li a {
       display: block; }
 
+/* Upload files ***************/
+.upload__pic {
+  margin-bottom: 22px; }
+
+.upload-name {
+  display: inline-block;
+  margin: 0 0 8px 0; }
+
+.form-group {
+  overflow: hidden;
+  position: relative;
+  display: table; }
+
+.fileupload {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 27px;
+  cursor: pointer; }
+
+.upload-wrapper {
+  display: table-cell;
+  width: 100%;
+  padding: 7px 4px;
+  border: 1px solid #9EB2C0;
+  border-right: none;
+  font-size: 12px;
+  vertical-align: middle;
+  border-radius: 3px 0 0 3px;
+  color: #9EB2C0; }
+
+.upload-btn {
+  position: relative;
+  display: table-cell;
+  width: 40px;
+  height: 28px;
+  background: #f97e76;
+  border-radius: 0 3px 3px 0;
+  float: right; }
+
 /* Move watermark *************/
 .move-watermark .panel-wrap {
   border-top: 1px solid #f4c3c2;
@@ -421,13 +427,6 @@ a {
     border-width: 10px;
     border-top: 9px solid #f4c3c2; }
 
-.head {
-  position: relative; }
-
-.small-title {
-  font-size: 14px;
-  color: #2e3641; }
-
 .control {
   position: absolute;
   top: 0;
@@ -448,26 +447,24 @@ a {
       .control li a.four:hover, .control li a.four.active {
         background-position: 0 -28px; }
 
-.move-wrap {
-  padding-top: 35px; }
-  .move-wrap .move-spinner {
-    float: right; }
-    .move-wrap .move-spinner .pos-x {
-      margin-bottom: 12px; }
-    .move-wrap .move-spinner label {
-      display: inline-block;
-      vertical-align: middle; }
-    .move-wrap .move-spinner input {
-      display: inline-block;
-      width: 46px;
-      height: 45px;
-      margin: 0 2px 0 3px;
-      border: 1px solid #9eb2c0;
-      font-size: 24px;
-      line-height: 45px;
-      text-align: center;
-      vertical-align: middle;
-      border-radius: 3px; }
+.move-wrap .move-spinner {
+  float: right; }
+  .move-wrap .move-spinner .pos-x {
+    margin-bottom: 12px; }
+  .move-wrap .move-spinner label {
+    display: inline-block;
+    vertical-align: middle; }
+  .move-wrap .move-spinner input {
+    display: inline-block;
+    width: 46px;
+    height: 45px;
+    margin: 0 2px 0 3px;
+    border: 1px solid #9eb2c0;
+    font-size: 24px;
+    line-height: 45px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 3px; }
 
 .move-field {
   float: left;

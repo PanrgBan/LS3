@@ -32,15 +32,6 @@
   }
 }
 
-.head{
-  position: relative;
-}
-
-.small-title{
-  font-size: 14px;
-  color: #2e3641;
-}
-
 .control{
   position: absolute;
   top: 0;
@@ -76,7 +67,6 @@
 
 .move-wrap{
   @extend %clear;
-  padding-top: 35px;
 
   .move-spinner{
     float: right;

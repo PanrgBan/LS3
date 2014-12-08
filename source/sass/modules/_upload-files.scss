@@ -1,0 +1,52 @@
+// ========================= //
+// Upload files              //
+// ========================= //
+
+.upload__pic {
+  margin-bottom: 22px;
+}
+
+.upload-name {
+  display: inline-block;
+  margin: 0 0 8px 0;
+}
+
+.form-group {
+  overflow: hidden;
+  position: relative;
+  display: table;
+}
+
+.fileupload {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 27px;
+  cursor: pointer;
+}
+
+.upload-wrapper {
+  display: table-cell;
+  width: 100%;
+  padding: 7px 4px;
+  border: 1px solid $color-border;
+  border-right: none;
+
+  font-size: 12px;
+  vertical-align: middle;
+
+  border-radius: 3px 0 0 3px;
+  color: $color-border;
+
+}
+
+.upload-btn {
+  position: relative;
+  display: table-cell;
+  width: 40px;
+  height: 28px;
+  background: $color-btn;
+  border-radius: 0 3px 3px 0;
+  float: right;
+}
