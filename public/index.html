@@ -19,9 +19,7 @@
           <div class="case">
             <h1 class="h1">Генерация водяных знаков</h1>
             <div class="work-area">
-              <!--img(src="http://lorempixel.com/200/400/cats/2")-->
-              <!--img.wathermark(src="http://lorempixel.com/100/100/cats/3")--><img src="/images/origin-pic.gif">
-              <div class="wrap-watermark"><img src="/images/watermark.gif" class="left-top"></div>
+              <div class="img-area"><img id="img" src="http://lorempixel.com/500/400/"><img id="wm" src="http://placehold.it/100x100" class="wm"></div>
             </div>
           </div>
         </div>
@@ -57,28 +55,46 @@
             </div>
             <div class="move-watermark">
               <div class="panel-wrap">
-                <p>Положение</p>
+                <div class="head">
+                  <div class="small-title">Положение</div>
+                  <ul class="control">
+                    <li><a href="#" class="four"></a></li>
+                    <li><a href="#" class="one active"></a></li>
+                  </ul>
+                </div>
                 <div class="move-wrap">
-                  <div class="move-field">
-                    <div class="pane">
-                      <div class="pane-wrap"><a href="#" data-pos="left-top" class="active">1</a><a href="#" data-pos="center-top">1</a><a href="#" data-pos="right-top">1</a><a href="#" data-pos="left-center">1</a><a href="#" data-pos="center-center">1</a><a href="#" data-pos="right-center">1</a><a href="#" data-pos="left-bottom">1</a><a href="#" data-pos="center-bottom">1</a><a href="#" data-pos="right-bottom">1</a></div>
-                    </div>
-                  </div>
+                  <table class="move-field">
+                    <tbody>
+                      <tr>
+                        <td data-x="0" data-y="0" class="active"></td>
+                        <td data-x="1" data-y="0"></td>
+                        <td data-x="2" data-y="0"></td>
+                      </tr>
+                      <tr>
+                        <td data-x="0" data-y="1"></td>
+                        <td data-x="1" data-y="1"></td>
+                        <td data-x="2" data-y="1"></td>
+                      </tr>
+                      <tr>
+                        <td data-x="0" data-y="2"></td>
+                        <td data-x="1" data-y="2"></td>
+                        <td data-x="2" data-y="2"></td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <div class="move-spinner">
                     <div class="pos-x">
-                      <label for="spinner-x">X</label>
-                      <input id="spinner-x" name="pos-x" value="0" class="spinner">
+                      <label>X</label>
+                      <input name="pos-x" value="0" class="spinner">
+                      <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
                     </div>
                     <div class="pos-y">
-                      <label for="spinner-y">Y</label>
-                      <input id="spinner-y" name="pos-y" value="0" class="spinner">
+                      <label>Y</label>
+                      <input name="pos-y" value="0" class="spinner">
+                      <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
                     </div>
                   </div>
                 </div>
-                <ul>
-                  <li><a href="#" class="four">1</a></li>
-                  <li><a href="#" class="one active">1</a></li>
-                </ul>
               </div>
             </div>
           </div>

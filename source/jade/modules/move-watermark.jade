@@ -1,28 +1,37 @@
-div.move-watermark
+.move-watermark
     .panel-wrap
-        p Положение
+        .head
+            .small-title Положение
+            ul.control
+                li: a.four(href='#')
+                li: a.one.active(href='#')
         .move-wrap
-            .move-field
-                .pane
-                    .pane-wrap
-                        a.active(href='#', data-pos='left-top') 1
-                        a(href='#', data-pos='center-top') 1
-                        a(href='#', data-pos='right-top') 1
-                        a(href='#', data-pos='left-center') 1
-                        a(href='#', data-pos='center-center') 1
-                        a(href='#', data-pos='right-center') 1
-                        a(href='#', data-pos='left-bottom') 1
-                        a(href='#', data-pos='center-bottom') 1
-                        a(href='#', data-pos='right-bottom') 1
+            table.move-field
+                tbody
+                    tr
+                        td.active(data-x='0' data-y='0')
+                        td(data-x='1' data-y='0')
+                        td(data-x='2' data-y='0')
+                    tr
+                        td(data-x='0' data-y='1')
+                        td(data-x='1' data-y='1')
+                        td(data-x='2' data-y='1')
+                    tr
+                        td(data-x='0' data-y='2')
+                        td(data-x='1' data-y='2')
+                        td(data-x='2' data-y='2')
+
             .move-spinner
                 .pos-x
-                    label(for='spinner-x') X
-                    input(id='spinner-x', class='spinner', name='pos-x',value='0')
+                    label X
+                    input.spinner(name='pos-x',value='0')
+                    .spinner-group
+                        a.ico-in_arrow-up(href='#q')
+                        a.ico-in_arrow-down(href='#q')
                 .pos-y
-                    label(for='spinner-y') Y
-                    input(id='spinner-y', class='spinner', name='pos-y',value='0')
-        ul
-            li
-                a.four(href='#') 1
-            li
-                a.one.active(href='#') 1
+                    label Y
+                    input.spinner(name='pos-y',value='0')
+                    .spinner-group
+                        a.ico-in_arrow-up(href='#q')
+                        a.ico-in_arrow-down(href='#q')
+

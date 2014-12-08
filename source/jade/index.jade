@@ -9,11 +9,9 @@ html
                         h1.h1 Генерация водяных знаков
                         .work-area
                             //- Область для работы с изображениями
-                            //img(src="http://lorempixel.com/200/400/cats/2")
-                            //img.wathermark(src="http://lorempixel.com/100/100/cats/3")
-                            img(src="/images/origin-pic.gif")
-                            .wrap-watermark
-                                img.left-top(src="/images/watermark.gif")
+                            .img-area
+                                img#img(src="http://lorempixel.com/500/400/")
+                                img#wm.wm(src="http://placehold.it/100x100")
                 .side-panel
                     .case
                         h2.h2 Настройки

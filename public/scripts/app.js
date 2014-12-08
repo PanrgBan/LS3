@@ -1,12 +1,11 @@
 'use strict';
 
 // ***Перемещение водяного знака***
-var moveWatermark = (function() {
+/*var moveWatermark = (function() {
     // Обьявляем пустые переменные, для последующей с ними работы
     var
         app,
         self,
-        flag = true,
         originPic = $('.work-area').children('img'),
         waterMark = $('.work-area').children('div.wrap-watermark').children('img');
 
@@ -19,7 +18,6 @@ var moveWatermark = (function() {
             max:3
         });
 
-      // вызываем метод который понавешает события модуля
       self.events();
       self.wrapWtm();
     },
@@ -72,11 +70,120 @@ var moveWatermark = (function() {
   };
 
   // инициализируем модуль
-  app.init();
+  // app.init();
+  // возвращаем объект с публичными методами
+  return app;
+}());*/
+// ***Перемещение водяного знака***
+
+var moveWatermark2 = (function() {
+    var
+        // Рабочие переменные
+        app,
+        self,
+
+        // Объекты изображений
+        img,
+        wm,
+
+        // Различные размеры для
+        // выравнивания вотермарка
+        sectorW,
+        sectorH,
+        onesectorW,
+        onesectorH,
+        maxWidth,
+        maxHeight,
+
+        // Колличество секторов
+        quantitySectors = 3;
+
+   app = {
+    // Инициалицация модуля
+    init: function() {
+        self = this;
+        img = $('#img');
+        wm = $('#wm');
+
+        self.getInfo();
+        self.setPos(0, 0);
+        self.events();
+    },
+
+    // События модуля
+    events: function() {
+        $('.move-field').on('click', 'td', function(e) {
+            e.preventDefault();
+
+            var
+                $this = $(this),
+                posX = this.getAttribute('data-x'),
+                posY = this.getAttribute('data-y');
+                console.log(posY);
+
+            $this
+                .parents('.move-field')
+                .find('td')
+                .removeClass('active');
+
+            $this.addClass('active');
+
+            self.setPos(posX, posY);
+        });
+    },
+
+    // Установка позиции вотермарка
+    setPos: function(x, y) {
+        var
+            allW = onesectorW + sectorW * x,
+            allH = onesectorH + sectorH * y;
+
+        if ( allW < 0 ) allW = 0;
+        if ( allH < 0 ) allH = 0;
+        if ( allW > maxWidth ) allW = maxWidth;
+        if ( allH > maxHeight ) allH = maxHeight;
+
+        wm.css({
+            'left': allW,
+            'top': allH
+        })
+    },
+
+    // Получение необходимой информации
+    // о изобажениях и секторах
+    getInfo: function() {
+        var
+            // Размеры основного изображения
+            widthImg = img.width(),
+            heightImg = img.height(),
+
+            // Размеры вотермарка
+            widthWm = wm.width(),
+            heightWm = wm.height();
+
+        // Размеры сектора
+        sectorW = Math.round( widthImg / quantitySectors );
+        sectorH = Math.round( heightImg / quantitySectors );
+
+        // Расстояния для центрироания
+        // вотермарка в секторе
+        onesectorW = ( sectorW - widthWm ) / 2;
+        onesectorH = ( sectorH -  heightWm) / 2;
+
+        // Максимальное расстояние чего-то там
+        maxWidth = widthImg - widthWm;
+        maxHeight = heightImg - heightWm;
+    }
+  };
+
+  // инициализируем модуль
+  setTimeout(function() {
+    app.init();
+  }, 700);
   // возвращаем объект с публичными методами
   return app;
 }());
-// ***Перемещение водяного знака***;'use strict';
+;'use strict';
 
 // переменная являющаяся модулем, в которую отработает самовызывающаяся функция
 var module = (function() {
