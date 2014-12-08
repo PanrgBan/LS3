@@ -455,7 +455,8 @@ a {
     border: 1px solid #9eb2c0;
     background: #dbe1e8;
     -webkit-transition: background 0.2s;
-            transition: background 0.2s; }
+            transition: background 0.2s;
+    cursor: pointer; }
     .move-field td:hover, .move-field td.active {
       background: #f97e76; }
 

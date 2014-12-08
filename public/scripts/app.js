@@ -134,8 +134,8 @@ var moveWatermark2 = (function() {
 
             $this.addClass('active');
 
-            self.stepX = this.getAttribute('data-x'),
-            self.stepY = this.getAttribute('data-y');
+            self.stepX = +this.getAttribute('data-x'),
+            self.stepY = +this.getAttribute('data-y');
             self.setPos();
             self.refreshBoard();
         });
@@ -146,6 +146,16 @@ var moveWatermark2 = (function() {
             var direction = this.getAttribute('data-direction');
             self.doOneStep(direction);
             self.refreshBoard();
+
+            // TODO Переделать
+            var tds = $('.move-field').find('td').removeClass('active');
+            tds.each(function() {
+                if ( $(this).attr('data-x') == self.stepX ){
+                    if ( $(this).attr('data-y') == self.stepY ) {
+                        $(this).addClass('active');
+                    }
+                }
+            })
         });
     },
 
@@ -180,8 +190,8 @@ var moveWatermark2 = (function() {
     // Установка позиции вотермарка
     setPos: function() {
         // Проверяем являются ли stepX и stepY числами
-        if (typeof +self.stepX !== 'number') self.stepX = 0;
-        if (typeof +self.stepY !== 'number') self.stepY = 0;
+        if (typeof self.stepX !== 'number') self.stepX = 0;
+        if (typeof self.stepY !== 'number') self.stepY = 0;
 
         var
             allW = oneSectorW + sectorW * self.stepX,
