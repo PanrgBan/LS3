@@ -285,41 +285,44 @@ a {
   margin-bottom: 22px; }
 
 .upload-name {
+  display: inline-block;
+  margin-bottom: 8px;
   font-family: roboto_light;
   font-size: 14px;
   color: #2e3641; }
 
 .form-group {
+  overflow: hidden;
   position: relative;
-  margin-top: 8px; }
+  display: table; }
 
-.choose-pic {
-  width: 220px;
+.fileupload {
+  position: absolute;
+  top: 0;
+  left: 0;
   opacity: 0;
   height: 27px; }
 
 .upload-wrapper {
   padding: 7px 4px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 182px;
+  display: table-cell;
+  width: 100%;
   border: 1px solid #9EB2C0;
-  border-radius: 3px;
+  border-right: none;
+  border-radius: 3px 0 0 3px;
   color: #9EB2C0;
   font-family: "Segoe UI Light";
   font-size: 12px;
-  overflow: hidden; }
+  vertical-align: middle; }
 
 .upload-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: relative;
+  display: table-cell;
   width: 40px;
   height: 28px;
   background: #f97e76;
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px; }
+  border-radius: 0 3px 3px 0;
+  float: right; }
 
 /* Buttons ********************/
 /* Titles *********************/
