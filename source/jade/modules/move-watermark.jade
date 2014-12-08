@@ -23,14 +23,14 @@
         .move-spinner
             .pos-x
                 label X
-                input.spinner(name='pos-x',value='0')
+                .spinner#board-x 0
                 .spinner-group
-                    a.ico-in_arrow-up(href='#q')
-                    a.ico-in_arrow-down(href='#q')
+                    a.ico-in_arrow-up(href='#q' data-direction='x-up')
+                    a.ico-in_arrow-down(href='#q' data-direction='x-down')
             .pos-y
                 label Y
-                input.spinner(name='pos-y',value='0')
+                .spinner#board-y 0
                 .spinner-group
-                    a.ico-in_arrow-up(href='#q')
-                    a.ico-in_arrow-down(href='#q')
+                    a.ico-in_arrow-up(href='#q' data-direction='y-up')
+                    a.ico-in_arrow-down(href='#q' data-direction='y-down')
 

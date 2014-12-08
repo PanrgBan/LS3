@@ -432,7 +432,7 @@ a {
   .move-spinner label {
     display: inline-block;
     vertical-align: middle; }
-  .move-spinner input {
+  .move-spinner .spinner {
     display: inline-block;
     width: 46px;
     height: 45px;

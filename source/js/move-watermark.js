@@ -82,16 +82,20 @@ var moveWatermark2 = (function() {
         app,
         self,
 
-        // Объекты изображений
+        // Изображения
         img,
         wm,
+
+        // Панели отображения позиции
+        boardX,
+        boardY,
 
         // Различные размеры для
         // выравнивания вотермарка
         sectorW,
         sectorH,
-        onesectorW,
-        onesectorH,
+        oneSectorW,
+        oneSectorH,
         maxWidth,
         maxHeight,
 
@@ -99,14 +103,20 @@ var moveWatermark2 = (function() {
         quantitySectors = 3;
 
    app = {
+    // Шаг позиции вотермарка
+    stepX: 0,
+    stepY: 0,
+
     // Инициалицация модуля
     init: function() {
         self = this;
         img = $('#img');
         wm = $('#wm');
+        boardX = $('#board-x');
+        boardY = $('#board-y');
 
         self.getInfo();
-        self.setPos(0, 0);
+        self.setPos();
         self.events();
     },
 
@@ -115,29 +125,70 @@ var moveWatermark2 = (function() {
         $('.move-field').on('click', 'td', function(e) {
             e.preventDefault();
 
-            var
-                $this = $(this),
-                posX = this.getAttribute('data-x'),
-                posY = this.getAttribute('data-y');
-                console.log(posY);
+            var $this = $(this);
 
             $this
-                .parents('.move-field')
+                .parents('table')
                 .find('td')
                 .removeClass('active');
 
             $this.addClass('active');
 
-            self.setPos(posX, posY);
+            self.stepX = this.getAttribute('data-x'),
+            self.stepY = this.getAttribute('data-y');
+            self.setPos();
+            self.refreshBoard();
+        });
+
+        $('.spinner-group').on('click', 'a',function(e) {
+            e.preventDefault()
+
+            var direction = this.getAttribute('data-direction');
+            self.doOneStep(direction);
+            self.refreshBoard();
         });
     },
 
-    // Установка позиции вотермарка
-    setPos: function(x, y) {
-        var
-            allW = onesectorW + sectorW * x,
-            allH = onesectorH + sectorH * y;
+    // Изменение позиции на один шаг
+    // direction - направление шага
+    doOneStep: function(direction) {
 
+        switch(direction) {
+            case 'x-up':
+                self.stepX += 1;
+                if (self.stepX >= quantitySectors) self.stepX = 0;
+                break;
+            case 'x-down':
+                self.stepX -= 1;
+                if (self.stepX < 0) self.stepX = quantitySectors - 1
+                break;
+            case 'y-up':
+                self.stepY += 1;
+                if (self.stepY >= quantitySectors) self.stepY = 0;
+                break;
+            case 'y-down':
+                self.stepY -= 1;
+                if (self.stepY < 0) self.stepY = quantitySectors - 1
+                break;
+            default:
+                self.stepX = 0;
+                self.stepY = 0;
+        }
+        self.setPos();
+    },
+
+    // Установка позиции вотермарка
+    setPos: function() {
+        // Проверяем являются ли stepX и stepY числами
+        if (typeof +self.stepX !== 'number') self.stepX = 0;
+        if (typeof +self.stepY !== 'number') self.stepY = 0;
+
+        var
+            allW = oneSectorW + sectorW * self.stepX,
+            allH = oneSectorH + sectorH * self.stepY;
+
+        // Проверяем чтобы вотермарк не
+        // выходил за границы изображения
         if ( allW < 0 ) allW = 0;
         if ( allH < 0 ) allH = 0;
         if ( allW > maxWidth ) allW = maxWidth;
@@ -167,19 +218,23 @@ var moveWatermark2 = (function() {
 
         // Расстояния для центрироания
         // вотермарка в секторе
-        onesectorW = ( sectorW - widthWm ) / 2;
-        onesectorH = ( sectorH -  heightWm) / 2;
+        oneSectorW = ( sectorW - widthWm ) / 2;
+        oneSectorH = ( sectorH -  heightWm) / 2;
 
         // Максимальное расстояние чего-то там
         maxWidth = widthImg - widthWm;
         maxHeight = heightImg - heightWm;
+    },
+
+    // Изменение значения позиции
+    refreshBoard: function() {
+        boardX.text(self.stepX);
+        boardY.text(self.stepY);
     }
   };
 
   // инициализируем модуль
-  setTimeout(function() {
     app.init();
-  }, 700);
   // возвращаем объект с публичными методами
   return app;
 }());
