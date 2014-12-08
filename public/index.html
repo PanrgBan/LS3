@@ -27,9 +27,8 @@
           <div class="case">
             <h2 class="h2">Настройки</h2>
             <div class="panel-wrap">
-              <div class="upload"></div>
-              <div class="upload__pic">
-                <form method="post">
+              <div class="upload">
+                <form method="post" class="upload__pic">
                   <label class="small-title upload-name">Исходное изображение</label>
                   <div class="form-group">
                     <div class="upload-wrapper">Загрузите изображение</div>
@@ -39,9 +38,7 @@
                     <input type="file" name="userfile" class="fileupload">
                   </div>
                 </form>
-              </div>
-              <div class="upload__pic">
-                <form method="post">
+                <form method="post" class="upload__pic">
                   <label class="small-title upload-name">Водяной знак</label>
                   <div class="form-group">
                     <div class="upload-wrapper">Загрузите изображение</div>
@@ -53,46 +50,44 @@
                 </form>
               </div>
             </div>
-            <div class="move-watermark">
-              <div class="panel-wrap">
-                <div class="head">
-                  <div class="small-title">Положение</div>
-                  <ul class="control">
-                    <li><a href="#" class="four"></a></li>
-                    <li><a href="#" class="one active"></a></li>
-                  </ul>
-                </div>
-                <div class="move-wrap">
-                  <table class="move-field">
-                    <tbody>
-                      <tr>
-                        <td data-x="0" data-y="0" class="active"></td>
-                        <td data-x="1" data-y="0"></td>
-                        <td data-x="2" data-y="0"></td>
-                      </tr>
-                      <tr>
-                        <td data-x="0" data-y="1"></td>
-                        <td data-x="1" data-y="1"></td>
-                        <td data-x="2" data-y="1"></td>
-                      </tr>
-                      <tr>
-                        <td data-x="0" data-y="2"></td>
-                        <td data-x="1" data-y="2"></td>
-                        <td data-x="2" data-y="2"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="move-spinner">
-                    <div class="pos-x">
-                      <label>X</label>
-                      <input name="pos-x" value="0" class="spinner">
-                      <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
-                    </div>
-                    <div class="pos-y">
-                      <label>Y</label>
-                      <input name="pos-y" value="0" class="spinner">
-                      <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
-                    </div>
+            <div class="panel-wrap top-line">
+              <div class="head">
+                <div class="small-title">Положение</div>
+                <ul class="control">
+                  <li><a href="#" class="four"></a></li>
+                  <li><a href="#" class="one active"></a></li>
+                </ul>
+              </div>
+              <div class="move-wrap">
+                <table class="move-field">
+                  <tbody>
+                    <tr>
+                      <td data-x="0" data-y="0" class="active"></td>
+                      <td data-x="1" data-y="0"></td>
+                      <td data-x="2" data-y="0"></td>
+                    </tr>
+                    <tr>
+                      <td data-x="0" data-y="1"></td>
+                      <td data-x="1" data-y="1"></td>
+                      <td data-x="2" data-y="1"></td>
+                    </tr>
+                    <tr>
+                      <td data-x="0" data-y="2"></td>
+                      <td data-x="1" data-y="2"></td>
+                      <td data-x="2" data-y="2"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="move-spinner">
+                  <div class="pos-x">
+                    <label>X</label>
+                    <input name="pos-x" value="0" class="spinner">
+                    <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
+                  </div>
+                  <div class="pos-y">
+                    <label>Y</label>
+                    <input name="pos-y" value="0" class="spinner">
+                    <div class="spinner-group"><a href="#q" class="ico-in_arrow-up"></a><a href="#q" class="ico-in_arrow-down"></a></div>
                   </div>
                 </div>
               </div>

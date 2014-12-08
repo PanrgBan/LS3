@@ -3,6 +3,7 @@
 // ========================= //
 
 .upload__pic {
+  @extend %clearLastMargin;
   margin-bottom: 22px;
 }
 

@@ -34,66 +34,6 @@
     img{
       vertical-align: middle;
     }
-    .wrap-watermark{
-      position: absolute;
-      img{
-        position: absolute;
-        &.left-top{
-          top: 10%;
-          left: 10%;
-          right: auto;
-          bottom: auto;
-        }
-        &.center-top{
-          top: 10%;
-          left: 50%;
-          right: auto;
-          bottom: auto;
-        }
-        &.right-top{
-          top: 10%;
-          left: auto;
-          right: 10%;
-          bottom: auto;
-        }
-        &.left-center{
-          top: 50%;
-          left: 10%;
-          right: auto;
-          bottom: auto;
-        }
-        &.center-center{
-          top: 50%;
-          left: 50%;
-          right: auto;
-          bottom: auto;
-        }
-        &.right-center{
-          top: 50%;
-          left: auto;
-          right: 10%;
-          bottom: auto;
-        }
-        &.left-bottom{
-          top: auto;
-          left: 10%;
-          right: auto;
-          bottom: 10%;
-        }
-        &.center-bottom{
-          top: auto;
-          left: 50%;
-          right: auto;
-          bottom: 10%;
-        }
-        &.right-bottom{
-          top: auto;
-          left: auto;
-          right: 10%;
-          bottom: 10%;
-        }
-      }
-    }
   }
 
 .side-panel{
@@ -103,12 +43,37 @@
   padding: 35px 0px 25px;
   border-left: 1px solid #2E3641;
   background: $color-f1f1f5;
-  .panel-wrap{
-    padding: 0 20px;
-  }
 }
 
-  .form{
-    position: absolute;
-    bottom: 0;
+  .panel-wrap{
+    padding: 17px 20px 32px;
   }
+
+    .top-line{
+      position: relative;
+      border-top: 1px solid $color-f4c3c2;
+
+      &:before,
+      &:after{
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 50%;
+        border-color: transparent;
+        border-style: solid;
+      }
+
+      &:before{
+        z-index: 2;
+        margin: 0 0 0 -8px;
+        border-width: 8px;
+        border-top: 7px solid $color-f1f1f5;
+      }
+
+      &:after{
+        z-index: 1;
+        margin: 0 0 0 -10px;
+        border-width: 10px;
+        border-top: 9px solid $color-f4c3c2;
+      }
+    }

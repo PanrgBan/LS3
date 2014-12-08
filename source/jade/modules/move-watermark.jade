@@ -1,37 +1,36 @@
-.move-watermark
-    .panel-wrap
-        .head
-            .small-title Положение
-            ul.control
-                li: a.four(href='#')
-                li: a.one.active(href='#')
-        .move-wrap
-            table.move-field
-                tbody
-                    tr
-                        td.active(data-x='0' data-y='0')
-                        td(data-x='1' data-y='0')
-                        td(data-x='2' data-y='0')
-                    tr
-                        td(data-x='0' data-y='1')
-                        td(data-x='1' data-y='1')
-                        td(data-x='2' data-y='1')
-                    tr
-                        td(data-x='0' data-y='2')
-                        td(data-x='1' data-y='2')
-                        td(data-x='2' data-y='2')
+.panel-wrap.top-line
+    .head
+        .small-title Положение
+        ul.control
+            li: a.four(href='#')
+            li: a.one.active(href='#')
+    .move-wrap
+        table.move-field
+            tbody
+                tr
+                    td.active(data-x='0' data-y='0')
+                    td(data-x='1' data-y='0')
+                    td(data-x='2' data-y='0')
+                tr
+                    td(data-x='0' data-y='1')
+                    td(data-x='1' data-y='1')
+                    td(data-x='2' data-y='1')
+                tr
+                    td(data-x='0' data-y='2')
+                    td(data-x='1' data-y='2')
+                    td(data-x='2' data-y='2')
 
-            .move-spinner
-                .pos-x
-                    label X
-                    input.spinner(name='pos-x',value='0')
-                    .spinner-group
-                        a.ico-in_arrow-up(href='#q')
-                        a.ico-in_arrow-down(href='#q')
-                .pos-y
-                    label Y
-                    input.spinner(name='pos-y',value='0')
-                    .spinner-group
-                        a.ico-in_arrow-up(href='#q')
-                        a.ico-in_arrow-down(href='#q')
+        .move-spinner
+            .pos-x
+                label X
+                input.spinner(name='pos-x',value='0')
+                .spinner-group
+                    a.ico-in_arrow-up(href='#q')
+                    a.ico-in_arrow-down(href='#q')
+            .pos-y
+                label Y
+                input.spinner(name='pos-y',value='0')
+                .spinner-group
+                    a.ico-in_arrow-up(href='#q')
+                    a.ico-in_arrow-down(href='#q')
 

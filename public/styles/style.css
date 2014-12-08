@@ -67,8 +67,7 @@ html {
 body {
   font-family: roboto_light, sans-serif;
   background: fixed #fff url(/images/bg_main.png);
-  background-size: cover;
-  height: 3000px; }
+  background-size: cover; }
 
 a {
   text-decoration: none;
@@ -198,6 +197,9 @@ a {
   display: table;
   clear: both; }
 
+.upload__pic:last-child {
+  margin: 0; }
+
 .work-area:after {
   content: '';
   display: inline-block;
@@ -293,7 +295,7 @@ a {
   font-family: roboto_medium;
   color: #2e3641;
   text-align: center;
-  margin-bottom: 36px; }
+  margin-bottom: 10px; }
 
 .head {
   position: relative;
@@ -404,29 +406,6 @@ a {
   float: right; }
 
 /* Move watermark *************/
-.move-watermark .panel-wrap {
-  border-top: 1px solid #f4c3c2;
-  position: relative;
-  padding-top: 17px !important;
-  padding-bottom: 32px !important; }
-  .move-watermark .panel-wrap:before, .move-watermark .panel-wrap:after {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    border-color: transparent;
-    border-style: solid; }
-  .move-watermark .panel-wrap:before {
-    z-index: 2;
-    margin: 0 0 0 -8px;
-    border-width: 8px;
-    border-top: 7px solid #f1f1f5; }
-  .move-watermark .panel-wrap:after {
-    z-index: 1;
-    margin: 0 0 0 -10px;
-    border-width: 10px;
-    border-top: 9px solid #f4c3c2; }
-
 .control {
   position: absolute;
   top: 0;
@@ -438,8 +417,7 @@ a {
       display: block;
       height: 19px;
       width: 19px;
-      background: url("../images/sprite_move.jpg") no-repeat 0 0;
-      text-indent: -9999px; }
+      background: url("../images/sprite_move.jpg") no-repeat 0 0; }
       .control li a.one {
         background-position: -29px -28px; }
       .control li a.one:hover, .control li a.one.active {
@@ -447,14 +425,14 @@ a {
       .control li a.four:hover, .control li a.four.active {
         background-position: 0 -28px; }
 
-.move-wrap .move-spinner {
+.move-spinner {
   float: right; }
-  .move-wrap .move-spinner .pos-x {
+  .move-spinner .pos-x {
     margin-bottom: 12px; }
-  .move-wrap .move-spinner label {
+  .move-spinner label {
     display: inline-block;
     vertical-align: middle; }
-  .move-wrap .move-spinner input {
+  .move-spinner input {
     display: inline-block;
     width: 46px;
     height: 45px;
@@ -498,7 +476,9 @@ a {
   .img-area .wm {
     position: absolute;
     top: 0;
-    left: 0; }
+    left: 0;
+    -webkit-transition: all 0.3s;
+            transition: all 0.3s; }
 
 .main {
   display: table-cell;
@@ -516,55 +496,6 @@ a {
   text-align: center; }
   .work-area img {
     vertical-align: middle; }
-  .work-area .wrap-watermark {
-    position: absolute; }
-    .work-area .wrap-watermark img {
-      position: absolute; }
-      .work-area .wrap-watermark img.left-top {
-        top: 10%;
-        left: 10%;
-        right: auto;
-        bottom: auto; }
-      .work-area .wrap-watermark img.center-top {
-        top: 10%;
-        left: 50%;
-        right: auto;
-        bottom: auto; }
-      .work-area .wrap-watermark img.right-top {
-        top: 10%;
-        left: auto;
-        right: 10%;
-        bottom: auto; }
-      .work-area .wrap-watermark img.left-center {
-        top: 50%;
-        left: 10%;
-        right: auto;
-        bottom: auto; }
-      .work-area .wrap-watermark img.center-center {
-        top: 50%;
-        left: 50%;
-        right: auto;
-        bottom: auto; }
-      .work-area .wrap-watermark img.right-center {
-        top: 50%;
-        left: auto;
-        right: 10%;
-        bottom: auto; }
-      .work-area .wrap-watermark img.left-bottom {
-        top: auto;
-        left: 10%;
-        right: auto;
-        bottom: 10%; }
-      .work-area .wrap-watermark img.center-bottom {
-        top: auto;
-        left: 50%;
-        right: auto;
-        bottom: 10%; }
-      .work-area .wrap-watermark img.right-bottom {
-        top: auto;
-        left: auto;
-        right: 10%;
-        bottom: 10%; }
 
 .side-panel {
   display: table-cell;
@@ -573,9 +504,27 @@ a {
   padding: 35px 0px 25px;
   border-left: 1px solid #2E3641;
   background: #f1f1f5; }
-  .side-panel .panel-wrap {
-    padding: 0 20px; }
 
-.form {
-  position: absolute;
-  bottom: 0; }
+.panel-wrap {
+  padding: 17px 20px 32px; }
+
+.top-line {
+  position: relative;
+  border-top: 1px solid #f4c3c2; }
+  .top-line:before, .top-line:after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    border-color: transparent;
+    border-style: solid; }
+  .top-line:before {
+    z-index: 2;
+    margin: 0 0 0 -8px;
+    border-width: 8px;
+    border-top: 7px solid #f1f1f5; }
+  .top-line:after {
+    z-index: 1;
+    margin: 0 0 0 -10px;
+    border-width: 10px;
+    border-top: 9px solid #f4c3c2; }

@@ -17,6 +17,12 @@
   }
 }
 
+%clearLastMargin{
+  &:last-child{
+    margin: 0;
+  }
+}
+
 %justify-content{
   text-align: justify;
   cursor: default;
