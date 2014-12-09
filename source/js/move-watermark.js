@@ -244,7 +244,8 @@ var moveWatermark2 = (function() {
   };
 
   // инициализируем модуль
-    app.init();
+    //app.init();
+    setTimeout(function() { app.init() }, 500)
   // возвращаем объект с публичными методами
   return app;
 }());
