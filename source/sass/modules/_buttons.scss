@@ -1,3 +1,32 @@
 // ========================= //
 // Buttons                   //
 // ========================= //
+
+.btn {
+  width: 45%;
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  color: #f1f1f5;
+  font: 500 18px $roboto_500;
+  border-radius: 3px;
+  margin-top: 40px;
+  margin-bottom: -30px;
+  border: none;
+  
+  &:hover {
+      box-shadow: inset 0px 0px 10px rgba(0,0,0,0.2);
+    }
+  
+  &.btn-reset {
+    background-color: #c1cfd9;
+    margin-left: -10px;
+    margin-right: 37px;
+  }
+  
+  &.btn-download {
+    background-color: #f97e76;
+    margin-right: -10px;
+  }
+}

@@ -284,6 +284,28 @@ a {
 
 /* Forms **********************/
 /* Buttons ********************/
+.btn {
+  width: 45%;
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  color: #f1f1f5;
+  font: 500 18px roboto_medium;
+  border-radius: 3px;
+  margin-top: 40px;
+  margin-bottom: -30px;
+  border: none; }
+  .btn:hover {
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2); }
+  .btn.btn-reset {
+    background-color: #c1cfd9;
+    margin-left: -10px;
+    margin-right: 37px; }
+  .btn.btn-download {
+    background-color: #f97e76;
+    margin-right: -10px; }
+
 /* Titles *********************/
 .h1 {
   font-size: 36px;
@@ -491,6 +513,35 @@ a {
     left: 0;
     -webkit-transition: all 0.3s;
             transition: all 0.3s; }
+
+/* Transparency ***************/
+.range-controls {
+  position: relative;
+  overflow: hidden;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  margin-bottom: -20px;
+  white-space: nowrap; }
+  .range-controls .scale {
+    width: 218px;
+    background-color: #dbe1e8;
+    cursor: pointer; }
+    .range-controls .scale .bar {
+      width: 128px;
+      height: 3px;
+      background-color: #9eb2c0; }
+    .range-controls .scale .toggle {
+      position: absolute;
+      top: 20px;
+      left: 122px;
+      border: 7px solid #dbe1e8;
+      border-radius: 50%;
+      background-color: #9eb2c0;
+      box-shadow: 0 2px 1px 0 #cfcfcf;
+      cursor: pointer;
+      padding: 4px; }
+      .range-controls .scale .toggle:hover {
+        background-color: #f97e76; }
 
 .main {
   display: table-cell;
