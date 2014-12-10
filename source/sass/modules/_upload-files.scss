@@ -16,15 +16,20 @@
   overflow: hidden;
   position: relative;
   display: table;
+  transition: all .3s ease-in-out;
 }
 
 .fileupload {
   position: absolute;
   top: 0;
-  left: 0;
+  left: -100%;
   opacity: 0;
   height: 27px;
+  width: 200%;
   cursor: pointer;
+  &:hover + .upload-wrapper {
+    color: darken($color-border, 50%);
+  }
 }
 
 .upload-wrapper {
@@ -33,13 +38,11 @@
   padding: 7px 4px;
   border: 1px solid $color-border;
   border-right: none;
-
   font-size: 12px;
   vertical-align: middle;
-
   border-radius: 3px 0 0 3px;
   color: $color-border;
-
+  transition: color .3s ease-in-out;
 }
 
 .upload-btn {
@@ -50,4 +53,9 @@
   background: $color-btn;
   border-radius: 0 3px 3px 0;
   float: right;
+}
+
+.error {
+  border-color: $color-btn;
+  color: $color-error;
 }

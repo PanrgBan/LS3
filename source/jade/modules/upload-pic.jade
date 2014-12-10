@@ -1,10 +1,11 @@
 .panel-wrap
   .upload
-    each label in ['Исходное изображение' , 'Водяной знак']
-      form.upload__pic(method="post")
-        label.small-title.upload-name= label
-        .form-group
-            .upload-wrapper Загрузите изображение
-            .upload-btn
-                .ico_download
-            input(type="file" name="userfile").fileupload
+    form(method="post")
+        each label in ['Исходное изображение' , 'Водяной знак']
+            .upload__pic
+                label.small-title.upload-name= label
+                .form-group
+                    input(type="file" name="userfile" id =label).fileupload
+                    .upload-wrapper Загрузите изображение
+                    .upload-btn
+                        .ico_download

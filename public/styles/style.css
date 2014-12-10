@@ -375,15 +375,20 @@ a {
 .form-group {
   overflow: hidden;
   position: relative;
-  display: table; }
+  display: table;
+  -webkit-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out; }
 
 .fileupload {
   position: absolute;
   top: 0;
-  left: 0;
+  left: -100%;
   opacity: 0;
   height: 27px;
+  width: 200%;
   cursor: pointer; }
+  .fileupload:hover + .upload-wrapper {
+    color: #25323a; }
 
 .upload-wrapper {
   display: table-cell;
@@ -394,7 +399,9 @@ a {
   font-size: 12px;
   vertical-align: middle;
   border-radius: 3px 0 0 3px;
-  color: #9EB2C0; }
+  color: #9EB2C0;
+  -webkit-transition: color 0.3s ease-in-out;
+          transition: color 0.3s ease-in-out; }
 
 .upload-btn {
   position: relative;
@@ -404,6 +411,10 @@ a {
   background: #f97e76;
   border-radius: 0 3px 3px 0;
   float: right; }
+
+.error {
+  border-color: #f97e76;
+  color: #800000; }
 
 /* Move watermark *************/
 .control {
