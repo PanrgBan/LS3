@@ -15,18 +15,21 @@
   margin-bottom: -30px;
   border: none;
   
-  &:hover {
-      box-shadow: inset 0px 0px 10px rgba(0,0,0,0.2);
-    }
+  &:after {
+    display: table;
+    content: '';
+    clear: both;
+  }
   
   &.btn-reset {
     background-color: #c1cfd9;
     margin-left: -10px;
-    margin-right: 37px;
+    float: left;
   }
   
   &.btn-download {
-    background-color: #f97e76;
+    background-color: $color-f97e76;
     margin-right: -10px;
+    float: right;
   }
 }

@@ -296,15 +296,18 @@ a {
   margin-top: 40px;
   margin-bottom: -30px;
   border: none; }
-  .btn:hover {
-    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2); }
+  .btn:after {
+    display: table;
+    content: '';
+    clear: both; }
   .btn.btn-reset {
     background-color: #c1cfd9;
     margin-left: -10px;
-    margin-right: 37px; }
+    float: left; }
   .btn.btn-download {
     background-color: #f97e76;
-    margin-right: -10px; }
+    margin-right: -10px;
+    float: right; }
 
 /* Titles *********************/
 .h1 {
