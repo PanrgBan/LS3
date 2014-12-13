@@ -1,14 +1,14 @@
 <?php
+require_once 'lib/wideimage.php';
 
-$typeOfPic = $_FILES['userfile']['type'];
+$numChars = 5;
+$randStr = substr(md5(uniqid()), 0 , $numChars);
 
-if ($typeOfPic  != "image/jpeg" && $typeOfPic  != "image/png" && $typeOfPic  != "image/gif") {
-    echo 'Error';
-    return false;
-}
+$uploadFile = ($_FILES['userfile']['tmp_name']);
+$uploadName = ($_FILES['userfile']['name']);
+$filePath = ('../images/' . $uploadName);
 
 
+WideImage::loadFromFile($uploadFile)->resize('500')->saveToFile($filePath);
 
-$uploaddir = '../images/';
-$uploadfile = $uploaddir . ($_FILES['userfile']['name']);
-move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile);
+echo $filePath;

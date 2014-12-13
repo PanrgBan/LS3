@@ -9,9 +9,14 @@ var module = (function() {
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
-                success: function () {
-                    var picName = this.files[0].name,
+                success: function (src) {
+                    var loadPic = $('img').attr('src', src),
+                    picName = this.files[0].name,
                             valid = true;
+
+                    console.log(loadPic);
+                    loadPic.prependTo($('.img-area'));
+
                     $.each(pics, function (index, val) {
                         var pic = $(val),
                                 val = pic.val();
@@ -31,7 +36,7 @@ var module = (function() {
                     return valid;
                     // Подключаем вотермарк
             }
-        };
+        }
 
 
    app = {
@@ -42,7 +47,7 @@ var module = (function() {
     },
 
     events: function() {
-        pics.fileupload(defObj);
+        pics.fileupload((defObj));
     }
   };
 
