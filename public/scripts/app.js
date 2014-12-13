@@ -217,7 +217,6 @@ var module = (function() {
                                 .text(picName);
                         }});
                     return valid;
-                    console.log(valid);
                     // Подключаем вотермарк
             }
         };
