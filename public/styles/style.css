@@ -536,7 +536,6 @@ a {
     .range-controls .scale .toggle {
       position: absolute;
       top: 20px;
-      left: 122px;
       border: 7px solid #dbe1e8;
       border-radius: 50%;
       background-color: #9eb2c0;
