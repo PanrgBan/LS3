@@ -1,4 +1,29 @@
-'use strict';
+"use strict";
+
+var module = (function () {
+    var app = {
+        init: function () {
+            app.setUpListeners();
+        },
+        setUpListeners: function () {
+            $('form.send').on('submit', app.createImg);
+        },
+        createImg: function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: 'php/create-img.php',
+                type: 'POST',
+                success: function () {
+                    console.log('Good');
+                }
+            })
+        }
+    }
+    app.init();
+    return {}
+})();
+;'use strict';
 
 var moveWatermark = (function() {
 	var
@@ -301,12 +326,14 @@ var module = (function() {
                 url: 'php/upload.php',
                 type: 'POST',
                 success: function (src) {
-                    var loadPic = $('img').attr('src', src),
-                    picName = this.files[0].name,
+                    var loadPic = $('<img/>').attr('src', src),
+                            loadPicName = this.files[0].name,
                             valid = true;
 
-                    console.log(loadPic);
-                    loadPic.prependTo($('.img-area'));
+                    console.log(pics.first());
+
+                    $('#img').remove();
+                    loadPic.prependTo($('.img-area')).attr('id', 'img');
 
                     $.each(pics, function (index, val) {
                         var pic = $(val),
@@ -322,7 +349,7 @@ var module = (function() {
                                 .closest('.form-group')
                                 .find(wrap)
                                 .removeClass('error')
-                                .text(picName);
+                                .text(loadPicName);
                         }});
                     return valid;
                     // Подключаем вотермарк
@@ -331,16 +358,16 @@ var module = (function() {
 
 
    app = {
-    init: function() {
-      self = this;
+       init: function () {
+           self = this;
 
-      self.events();
-    },
+           self.events();
+       },
 
-    events: function() {
-        pics.fileupload((defObj));
-    }
-  };
+       events: function () {
+               pics.fileupload(defObj);
+       }
+   }
 
   app.init();
   return {};

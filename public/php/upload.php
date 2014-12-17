@@ -1,14 +1,20 @@
 <?php
 require_once 'lib/wideimage.php';
 
-$numChars = 5;
-$randStr = substr(md5(uniqid()), 0 , $numChars);
+$width =  650;
+$height = 535;
+$inputName = key($_FILES) ;
 
-$uploadFile = ($_FILES['userfile']['tmp_name']);
-$uploadName = ($_FILES['userfile']['name']);
+
+
+$uploadFile = ($_FILES[$inputName]['tmp_name']);
+$uploadName = ($_FILES[$inputName]['name']);
 $filePath = ('../images/' . $uploadName);
 
+$size = getimagesize($uploadFile);
 
-WideImage::loadFromFile($uploadFile)->resize('500')->saveToFile($filePath);
+WideImage::loadFromFile($uploadFile)->resize(651, 535)->saveToFile($filePath);
 
-echo $filePath;
+echo $size[0];
+echo $size[1];
+exit;

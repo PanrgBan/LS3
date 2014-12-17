@@ -192,6 +192,17 @@ a {
 *******************************/
 /* Grid ***********************/
 /* Tools **********************/
+.clearfix:before, .send:before, .clearfix:after, .send:after {
+  content: "";
+  display: table; }
+
+.clearfix:after, .send:after {
+  clear: both; }
+
+.clearfix, .send {
+  zoom: 1
+  /* Хак для IE 6 и 7 */ }
+
 .move-wrap:after {
   content: '';
   display: table;
