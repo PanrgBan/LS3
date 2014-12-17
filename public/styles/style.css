@@ -192,6 +192,17 @@ a {
 *******************************/
 /* Grid ***********************/
 /* Tools **********************/
+.clearfix:before, .send:before, .clearfix:after, .send:after {
+  content: "";
+  display: table; }
+
+.clearfix:after, .send:after {
+  clear: both; }
+
+.clearfix, .send {
+  zoom: 1
+  /* Хак для IE 6 и 7 */ }
+
 .move-wrap:after {
   content: '';
   display: table;
@@ -484,7 +495,8 @@ a {
   float: left;
   height: 102px;
   width: 102px;
-  border-radius: 10px 10px 0 0; }
+  border-radius: 10px 10px 0 0;
+  position: relative; }
   .move-field td {
     width: 34px;
     height: 34px;
@@ -495,6 +507,39 @@ a {
     cursor: pointer; }
     .move-field td:hover, .move-field td.active {
       background: #f97e76; }
+  .move-field .many-water-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+    .move-field .many-water-field .many-water-field-x, .move-field .many-water-field .many-water-field-y {
+      width: 100%;
+      height: 34px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      position: absolute; }
+    .move-field .many-water-field .many-water-field-y {
+      width: 34px;
+      height: 100%; }
+    .move-field .many-water-field .many-water-field-x span, .move-field .many-water-field .many-water-field-y span{
+      display: block;
+      width: 100%;
+      background: #f97e76;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      position: absolute;
+    }
+    .move-field .many-water-field .many-water-field-y span{
+      height: 100%;
+      width: auto;
+    }
 
 .spinner-group {
   display: inline-block;
@@ -509,13 +554,22 @@ a {
 */
 .img-area {
   display: inline-block;
-  position: relative; }
+  position: relative; 
+  overflow: hidden;}
   .img-area .wm {
     position: absolute;
     top: 0;
     left: 0;
     -webkit-transition: all 0.3s;
             transition: all 0.3s; }
+  .img-area .many-wm-wrap{
+    position:absolute;
+    top:0;
+    left:0;
+  }
+  .img-area .many-wm-wrap .many-wm-wrap-item{
+    float:left;
+  }
 
 /* Transparency ***************/
 .range-controls {

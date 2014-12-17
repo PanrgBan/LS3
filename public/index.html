@@ -33,8 +33,8 @@
                   <div class="upload__pic">
                     <label class="small-title upload-name">Исходное изображение</label>
                     <div class="form-group">
-                      <input type="file" name="userfile" id="Исходное изображение" class="fileupload">
-                      <div class="upload-wrapper">Загрузите изображение</div>
+                      <input type="file" name="userfile" class="fileupload">
+                      <div class="upload-wrapper">Загрузите изображениe</div>
                       <div class="upload-btn">
                         <div class="ico_download"></div>
                       </div>
@@ -43,8 +43,8 @@
                   <div class="upload__pic">
                     <label class="small-title upload-name">Водяной знак</label>
                     <div class="form-group">
-                      <input type="file" name="userfile" id="Водяной знак" class="fileupload">
-                      <div class="upload-wrapper">Загрузите изображение</div>
+                      <input type="file" name="userfile2" class="fileupload">
+                      <div class="upload-wrapper">Загрузите изображениe</div>
                       <div class="upload-btn">
                         <div class="ico_download"></div>
                       </div>
@@ -105,8 +105,10 @@
               </div>
             </div>
             <div class="panel-wrap top-line">
-              <button type="reset" value="reset" class="btn btn-reset">Сброс</button>
-              <button type="submit" value="download" class="btn btn-download">Скачать</button>
+              <form method="post" class="send">
+                <input type="reset" value="Сброс" class="btn btn-reset">
+                <input type="submit" value="Скачать" class="btn btn-download">
+              </form>
             </div>
           </div>
         </div>
@@ -129,8 +131,9 @@
         <li><a href="#a" title="Вконтакте" class="ico_vk"></a></li>
       </ul>
     </div>
-    <script src="http://yastatic.net/jquery/1.11.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="scripts/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <!--script(src="http://yastatic.net/jquery/1.11.1/jquery.min.js")-->
+    <!--script window.jQuery || document.write('<script src="scripts/vendor/jquery-1.11.1.min.js"><\/script>')-->
+    <script src="scripts/vendor/jquery-1.11.1.min.js"></script>
     <script src="scripts/vendor/jquery.ui.widget.js"></script>
     <script src="scripts/vendor/jquery-ui-spinner.min.js"></script>
     <script src="scripts/vendor/jquery.iframe-transport.js"></script>

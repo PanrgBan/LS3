@@ -15,6 +15,13 @@ var moveWatermark = (function() {
 			boardX,
 			boardY,
 
+            // Выбраный режим наложение воттермарка
+            oneWater,
+            // Крест =)
+            manyWaterField,
+            manyWaterFieldX,
+            manyWaterFieldY,
+
 			// Различные размеры для
 			// выравнивания вотермарка
 			sectorW,
@@ -23,6 +30,11 @@ var moveWatermark = (function() {
 			oneSectorH,
 			maxWidth,
 			maxHeight,
+			marginX,
+			marginY,
+
+			// обертка множественного воттера
+			wmWrap,
 
 			// Шаг позиции и расстояния
 			// от вотермарка до границ
@@ -42,6 +54,7 @@ var moveWatermark = (function() {
 			wm = $('#wm');
 			boardX = $('#board-x');
 			boardY = $('#board-y');
+            oneWater = true;
 
 			self.events();
 			self.getInfo();
@@ -54,20 +67,21 @@ var moveWatermark = (function() {
 			// Таблица  ====================
 			$('.move-field').on('click', 'td', function(e) {
 				e.preventDefault();
+                if(oneWater === true){
+                    var $this = $(this);
 
-				var $this = $(this);
+                    $this
+                        .parents('table')
+                        .find('td')
+                        .removeClass('active');
 
-				$this
-					.parents('table')
-					.find('td')
-					.removeClass('active');
+                    $this.addClass('active');
 
-				$this.addClass('active');
-
-				stepX = +this.getAttribute('data-x'),
-				stepY = +this.getAttribute('data-y');
-				self.doOneStep();
-				self.refreshBoard();
+                    stepX = +this.getAttribute('data-x'),
+                    stepY = +this.getAttribute('data-y');
+                    self.doOneStep();
+                    self.refreshBoard();
+                }
 			});
 
 			// Спинер =======================
@@ -89,36 +103,95 @@ var moveWatermark = (function() {
 
 				clearInterval(timer);
 				wm.css('transition', '');
-			})
+			});
 
 			$('.spinner-group').on('mouseleave', 'a', function() {
 				clearTimeout(timer);
-			})
+			});
+			// Переключалка режимов наложения воттера
+            $('.control').on('click','a',function(e){
+                e.preventDefault();
+                $(this).parents('ul').find('a').removeClass('active');
+                $(this).addClass('active');
+                if($(this).hasClass('one')){
+                	// режим наложения одиночного воттера
+                    oneWater = true;
+                    $('.move-field').find('td').eq(0).trigger('click');
+                    (manyWaterField && manyWaterField.hide());
+                    (wmWrap && wmWrap.hide());
+                    wm.show();
+                }else{
+                	// режим наложения множественного воттера
+                    oneWater = false;
+                    wm.hide();
+                    $('.move-field').find('td').removeClass('active');
+                    if(manyWaterField){
+                    	// если крест создан, показываем
+                    	manyWaterField.show();
+                    }else{
+                    	// крест не создан - создаём
+	                    $('.move-field').append("<div class='many-water-field'></div>");
+	                    manyWaterField = $('.many-water-field');
+	                	manyWaterField.append("<div class='many-water-field-x'><span></span></div>").append("<div class='many-water-field-y'><span></span></div>");
+	                	manyWaterFieldX = $('.many-water-field-x').find('span');
+            			manyWaterFieldY = $('.many-water-field-y').find('span');
+    				}
+                    if(wmWrap){
+                    	// если обертка каскадом воттеров существует - показываем
+                    	wmWrap.show();
+                    	self.setPosMany();
+                    }else{
+                    	//если не существует - создаём
+                    	self.manyWater();
+                    }
+                    self.refreshBoard();
+                }
+            });
 		},
 
 		// Попиксельное изменение позиции
 		// direction - направление смещения
 		move: function(direction) {
-
-			switch(direction) {
-				case 'right':
-					left += 1;
-					break;
-				case 'left':
-					left -= 1;
-					break;
-				case 'bottom':
-					top += 1;
-					break;
-				case 'top':
-					top -= 1;
-					break;
-				default:
-					stepX = 0;
-					stepY = 0;
+			if(oneWater){
+				switch(direction) {
+					case 'right':
+						left += 1;
+						break;
+					case 'left':
+						left -= 1;
+						break;
+					case 'bottom':
+						top += 1;
+						break;
+					case 'top':
+						top -= 1;
+						break;
+					default:
+						stepX = 0;
+						stepY = 0;
+				}
+				self.setPos();
+			}else{
+				switch(direction) {
+					case 'right':
+						marginX += 1;
+						break;
+					case 'left':
+						marginX -= 1;
+						break;
+					case 'bottom':
+						marginY += 1;
+						break;
+					case 'top':
+						marginY -= 1;
+						break;
+					default:
+						marginX = 0;
+						marginY = 0;
+				}
+				self.setPosMany();
 			}
 
-			self.setPos();
 		},
 
 		// Изменение позиции по секторам
@@ -171,12 +244,20 @@ var moveWatermark = (function() {
 			// Максимальное расстояние чего-то там
 			maxWidth = widthImg - widthWm;
 			maxHeight = heightImg - heightWm;
+
 		},
 
 		// Изменение значения позиции
 		refreshBoard: function() {
-			boardX.text(left);
-			boardY.text(top);
+			if(oneWater){
+				boardX.text(left);
+				boardY.text(top);
+			}else{
+				boardX.text(parseInt(marginX));
+				boardY.text(parseInt(marginY));
+				manyWaterFieldX.css("height", marginX+'%');
+            	manyWaterFieldY.css("width", marginY+'%');
+			}
 		},
 
 		// Повтор функции каждые 40мс
@@ -196,6 +277,54 @@ var moveWatermark = (function() {
 		// Задержка вызова функции
 		delay: function( handler, delay ) {
 			return setTimeout( handler, delay || 0 );
+		},
+		// множественная накладка водянного знака
+		manyWater: function(){
+			// отрисовываем обертку для заполнения воттерами
+			var picWm = wm.attr('src');
+			$('.img-area').append('<div class="many-wm-wrap"></div>');
+			wmWrap = $('.many-wm-wrap');
+			wmWrap.css({
+				width: img.width()*1.5,
+				height: img.height()*1.5
+			});
+			// считаем кол-во воттеров, которые влезают в обертку
+			var countXWm = parseInt(wmWrap.width()/wm.width());
+			var countYWm = parseInt(wmWrap.height()/wm.height());
+			var countWm = (countXWm * countYWm);
+			// считаем кол-во воттеров, которые влезают в области нашего изображения
+			var countXWmL = parseInt(img.width()/wm.width());
+			var countYWmL = parseInt(img.height()/wm.height());
+			// считаем отступы для ровного заполнения воттерами большой картинки
+			marginX = (img.width()/countXWmL)-wm.width();
+			marginY = (img.height()/countYWmL)-wm.height();
+			// плодим воттеры
+			for(var i = 0;i < countWm;i++){
+				wmWrap.append('<div class="many-wm-wrap-item"></div>');
+			}
+			// наделяем нужными стилями
+			$('.many-wm-wrap-item').css({
+				background: "url("+picWm+") no-repeat 0 0",
+				height: wm.height(),
+				width: wm.width(),
+				marginTop: marginY/2,
+				marginLeft: marginX/2,
+				marginBottom: marginY/2,
+				marginRight: marginX/2
+			});	
+		},
+		// двигаем наш каскад воттеров
+		setPosMany: function(){
+			if ( marginX < 0 ) marginX = 0;
+			if ( marginY < 0 ) marginY = 0;
+			if ( marginX > 100 ) marginX = 100;
+			if ( marginY > 100 ) marginY = 100;
+			$('.many-wm-wrap-item').css({
+				marginTop: marginY/2,
+				marginLeft: marginX/2,
+				marginBottom: marginY/2,
+				marginRight: marginX/2
+			});	
 		}
 	};
 
