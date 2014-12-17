@@ -495,7 +495,8 @@ a {
   float: left;
   height: 102px;
   width: 102px;
-  border-radius: 10px 10px 0 0; }
+  border-radius: 10px 10px 0 0;
+  position: relative; }
   .move-field td {
     width: 34px;
     height: 34px;
@@ -506,6 +507,25 @@ a {
     cursor: pointer; }
     .move-field td:hover, .move-field td.active {
       background: #f97e76; }
+  .move-field .many-water-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+    .move-field .many-water-field .many-water-field-x, .move-field .many-water-field .many-water-field-y {
+      width: 100%;
+      height: 34px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      background: #f97e76;
+      position: absolute; }
+    .move-field .many-water-field .many-water-field-y {
+      width: 34px;
+      height: 100%; }
 
 .spinner-group {
   display: inline-block;
