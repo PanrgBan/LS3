@@ -8,7 +8,8 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles/style.css"><!--[if lt IE 9]>
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="scripts/vendor/angular.min.js"></script><!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
   </head>
@@ -96,10 +97,10 @@
             </div>
             <div class="panel-wrap top-line">
               <div class="small-title">Прозрачность</div>
-              <div class="range-controls">
+              <div ng-app="drag" class="range-controls">
                 <div class="scale">
                   <div class="bar"></div>
-                  <div class="toggle"></div>
+                  <div class="toggle draggable"></div>
                 </div>
               </div>
             </div>
