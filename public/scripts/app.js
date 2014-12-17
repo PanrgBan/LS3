@@ -1,4 +1,29 @@
-'use strict';
+"use strict";
+
+var module = (function () {
+    var app = {
+        init: function () {
+            app.setUpListeners();
+        },
+        setUpListeners: function () {
+            $('form.send').on('submit', app.createImg);
+        },
+        createImg: function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: 'php/create-img.php',
+                type: 'POST',
+                success: function () {
+                    console.log('Good');
+                }
+            })
+        }
+    }
+    app.init();
+    return {}
+})();
+;'use strict';
 
 var moveWatermark = (function() {
 	var
@@ -14,6 +39,9 @@ var moveWatermark = (function() {
 			// Панели отображения позиции
 			boardX,
 			boardY,
+
+            // Выбраный режим наложение воттермарка
+            oneWater,
 
 			// Различные размеры для
 			// выравнивания вотермарка
@@ -42,6 +70,7 @@ var moveWatermark = (function() {
 			wm = $('#wm');
 			boardX = $('#board-x');
 			boardY = $('#board-y');
+            oneWater = true;
 
 			self.events();
 			self.getInfo();
@@ -54,20 +83,21 @@ var moveWatermark = (function() {
 			// Таблица  ====================
 			$('.move-field').on('click', 'td', function(e) {
 				e.preventDefault();
+                if(oneWater === true){
+                    var $this = $(this);
 
-				var $this = $(this);
+                    $this
+                        .parents('table')
+                        .find('td')
+                        .removeClass('active');
 
-				$this
-					.parents('table')
-					.find('td')
-					.removeClass('active');
+                    $this.addClass('active');
 
-				$this.addClass('active');
-
-				stepX = +this.getAttribute('data-x'),
-				stepY = +this.getAttribute('data-y');
-				self.doOneStep();
-				self.refreshBoard();
+                    stepX = +this.getAttribute('data-x'),
+                    stepY = +this.getAttribute('data-y');
+                    self.doOneStep();
+                    self.refreshBoard();
+                }
 			});
 
 			// Спинер =======================
@@ -89,11 +119,27 @@ var moveWatermark = (function() {
 
 				clearInterval(timer);
 				wm.css('transition', '');
-			})
+			});
 
 			$('.spinner-group').on('mouseleave', 'a', function() {
 				clearTimeout(timer);
-			})
+			});
+
+            $('.control').on('click','a',function(e){
+                e.preventDefault();
+                $(this).parents('ul').find('a').removeClass('active');
+                $(this).addClass('active');
+                if($(this).hasClass('one')){
+                    oneWater = true;
+                    $('.move-field').find('td').eq(0).trigger('click');
+                    $('.many-water-field').remove();
+                }else{
+                    oneWater = false;
+                    $('.move-field').find('td').removeClass('active');
+                    $('.move-field').append("<div class='many-water-field'></div>");
+                    $('.many-water-field').append("<div class='many-water-field-x'></div>").append("<div class='many-water-field-y'></div>");
+                }
+            });
 		},
 
 		// Попиксельное изменение позиции
@@ -301,12 +347,14 @@ var module = (function() {
                 url: 'php/upload.php',
                 type: 'POST',
                 success: function (src) {
-                    var loadPic = $('img').attr('src', src),
-                    picName = this.files[0].name,
+                    var loadPic = $('<img/>').attr('src', src),
+                            loadPicName = this.files[0].name,
                             valid = true;
 
-                    console.log(loadPic);
-                    loadPic.prependTo($('.img-area'));
+                    console.log(pics.first());
+
+                    $('#img').remove();
+                    loadPic.prependTo($('.img-area')).attr('id', 'img');
 
                     $.each(pics, function (index, val) {
                         var pic = $(val),
@@ -322,7 +370,7 @@ var module = (function() {
                                 .closest('.form-group')
                                 .find(wrap)
                                 .removeClass('error')
-                                .text(picName);
+                                .text(loadPicName);
                         }});
                     return valid;
                     // Подключаем вотермарк
@@ -331,16 +379,16 @@ var module = (function() {
 
 
    app = {
-    init: function() {
-      self = this;
+       init: function () {
+           self = this;
 
-      self.events();
-    },
+           self.events();
+       },
 
-    events: function() {
-        pics.fileupload((defObj));
-    }
-  };
+       events: function () {
+               pics.fileupload(defObj);
+       }
+   }
 
   app.init();
   return {};

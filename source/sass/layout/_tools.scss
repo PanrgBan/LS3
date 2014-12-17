@@ -2,6 +2,18 @@
 // Tools                     //
 // ========================= //
 
+.clearfix:before,
+.clearfix:after {
+  content:"";
+  display:table;
+}
+.clearfix:after {
+  clear:both;
+}
+.clearfix {
+  zoom:1; /* Хак для IE 6 и 7 */
+}
+
 %clear{
 
   &:after{
