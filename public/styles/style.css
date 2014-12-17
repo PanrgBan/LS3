@@ -521,11 +521,25 @@ a {
       right: 0;
       bottom: 0;
       margin: auto;
-      background: #f97e76;
       position: absolute; }
     .move-field .many-water-field .many-water-field-y {
       width: 34px;
       height: 100%; }
+    .move-field .many-water-field .many-water-field-x span, .move-field .many-water-field .many-water-field-y span{
+      display: block;
+      width: 100%;
+      background: #f97e76;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      position: absolute;
+    }
+    .move-field .many-water-field .many-water-field-y span{
+      height: 100%;
+      width: auto;
+    }
 
 .spinner-group {
   display: inline-block;
@@ -540,13 +554,22 @@ a {
 */
 .img-area {
   display: inline-block;
-  position: relative; }
+  position: relative; 
+  overflow: hidden;}
   .img-area .wm {
     position: absolute;
     top: 0;
     left: 0;
     -webkit-transition: all 0.3s;
             transition: all 0.3s; }
+  .img-area .many-wm-wrap{
+    position:absolute;
+    top:0;
+    left:0;
+  }
+  .img-area .many-wm-wrap .many-wm-wrap-item{
+    float:left;
+  }
 
 /* Transparency ***************/
 .range-controls {
