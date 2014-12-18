@@ -6,10 +6,12 @@ var module = (function() {
         self,
         pics = $('.fileupload'),
         wrap = $('.upload-wrapper'),
+        DATA,
+        GLOBALSCALE,
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
-                success: function (src) {
+                success: function (src) {              //TODO нужно организовать проверку инпута!!!
                     var mainWrap = wrap.closest('.upload__pic'),
                             data = src.split("|"),
                             loadPic = $('<img/>').attr('src', data[2]), // Создание картинки с путем
@@ -19,40 +21,41 @@ var module = (function() {
                             MAXHEIGHT = 535,
                             SCALE = 0;
 
-                    console.log(this);
+                            console.log(this);
+                            DATA = data;
 
-                    if(data[0] > MAXWIDTH) {
-                        loadPic.css('max-width', MAXWIDTH + 'px');
-                        SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
-                    }
-                    if(data[1] > MAXHEIGHT) {
-                        loadPic.css('max-height', MAXHEIGHT+ 'px');
-                        SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
-                    }
+                            $('#img').remove(); // Удалить предыдущую картинку
+                            loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
 
-                    $('#img').remove(); // Удалить предыдущую картинку
-                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
-
-                    mainWrap
-                        .removeClass('disabled')
-                            .find(pics)
-                                .removeClass('disabled-input');
+                        if(data[0] > MAXWIDTH) {
+                            loadPic.css('max-width', MAXWIDTH + 'px');
+                            SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
+                        }
+                        if(data[1] > MAXHEIGHT) {
+                            loadPic.css('max-height', MAXHEIGHT+ 'px');
+                            SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
+                        }
 
 
 
-                    $.each(pics, function (index, val) {
-                        var pic = $(val), // инпут
-                                val = pic.val(); // значение инпута
-                        if (val.length === 0) { // если значение инпута пустое
+                        mainWrap
+                            .removeClass('disabled')
+                                .find(pics)
+                                    .removeClass('disabled-input');
 
-                            valid = false;
-                        } else {
+                        GLOBALSCALE = SCALE;
 
-                        }});
-                    return valid;
-                    // Подключаем вотермарк
+                    //} else {
+                    //    $('#wm').remove();
+                    //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
+                    //    loadPic.css({
+                    //        'max-width': GLOBALSCALE*100+'%',
+                    //        'max-height' : GLOBALSCALE*100+'%'
+                    //    });
+                    //    // Подключаем вотермарк
+                    //}
             }
-        }
+        };
 
 
    app = {
@@ -63,9 +66,7 @@ var module = (function() {
        },
 
        events: function () {
-           pics.on('change', function(e) {
-               $(this).fileupload(defObj);
-           });
+               pics.fileupload(defObj);
        }
    }
 

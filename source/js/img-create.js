@@ -14,8 +14,8 @@ var module = (function () {
             $.ajax({
                 url: 'php/create-img.php',
                 type: 'POST',
-                success: function () {
-                    console.log('Good');
+                success: function (src) {
+
                 }
             })
         }
