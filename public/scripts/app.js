@@ -372,6 +372,7 @@ var moveWatermark = (function() {
         bar,
         lastPosX,
         cursorX,
+        rangControls,
         $document;
   
    app = {
@@ -382,9 +383,11 @@ var moveWatermark = (function() {
       toggle = $('.toggle'),
       scale = $('.scale'),
       bar = $('.bar'),
+      rangControls = $('.range-controls'),
       $document = $(document),
       lastPosX = 0,
       cursorX,
+
       self = this;
 
       self.events();
@@ -392,10 +395,8 @@ var moveWatermark = (function() {
 
     // метод содержащий все события модуля
     events: function() {
-      
-      toggle.bind('mousedown', function (event) {
+      rangControls.bind('mousedown', toggle, function (event) {
         event.preventDefault();
-        console.log(event.screenX);
         startX = event.screenX - x;
         $document.bind('mousemove', mousemove);
         $document.bind('mouseup', mouseup);
@@ -411,6 +412,7 @@ var moveWatermark = (function() {
         lastPosX = parseInt(toggle.css('left'));
         bar.css('width', lastPosX + 'px');
         $('.wm').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
+        $('.many-wm-wrap').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
         }
       };
 
