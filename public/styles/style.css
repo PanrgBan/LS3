@@ -200,7 +200,7 @@ a {
   clear: both; }
 
 .clearfix, .send {
-  zoom: 1;
+  zoom: 1
   /* Хак для IE 6 и 7 */ }
 
 .move-wrap:after {
@@ -519,7 +519,6 @@ a {
       right: 0;
       bottom: 0;
       margin: auto;
-      background: #f97e76;
       position: absolute; }
       .move-field .many-water-field .many-water-field-x span, .move-field .many-water-field .many-water-field-y span {
         display: block;
