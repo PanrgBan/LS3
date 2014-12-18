@@ -3,12 +3,9 @@
   top: 0;
   right: 0;
 
-  li{
-    display: inline-block;
-    margin-left: 7px;
-
     a{
-      display: block;
+      display: inline-block;
+      margin-left: 7px;
       height: 19px;
       width: 19px;
       background: url("../images/sprite_move.jpg")no-repeat 0 0;
@@ -27,7 +24,6 @@
         background-position: 0 -28px;
       }
     }
-  }
 }
 
 .move-wrap{
@@ -101,10 +97,25 @@
         margin: auto;
         background: #f97e76;
         position: absolute;
+        & span{
+          display: block;
+          width: 100%;
+          background: #f97e76;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          position: absolute;
+        }
       }
       .many-water-field-y{
         width: 34px;
         height: 100%;
+        & span{
+          height: 100%;
+          width: auto;
+        }
       }
     }
   }
@@ -129,11 +140,20 @@
 .img-area{
   display: inline-block;
   position: relative;
-
+  overflow: hidden;
+  vertical-align: middle;
   .wm{
     position: absolute;
     top: 0;
     left: 0;
     transition: all .3s;
+  }
+  .many-wm-wrap{
+    position:absolute;
+    top:0;
+    left:0;
+    .many-wm-wrap-item{
+      float: left;
+    }
   }
 }

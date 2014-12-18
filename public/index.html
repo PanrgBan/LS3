@@ -8,7 +8,8 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles/style.css"><!--[if lt IE 9]>
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="scripts/vendor/angular.min.js"></script><!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
   </head>
@@ -55,10 +56,7 @@
             <div class="panel-wrap top-line">
               <div class="head">
                 <div class="small-title">Положение</div>
-                <ul class="control">
-                  <li><a href="#" class="four"></a></li>
-                  <li><a href="#" class="one active"></a></li>
-                </ul>
+                <div class="control"><a href="#" class="four"></a><a href="#" class="one active"></a></div>
               </div>
               <div class="move-wrap">
                 <table class="move-field">
@@ -89,17 +87,17 @@
                   <div class="pos-y">
                     <label>Y</label>
                     <div id="board-y" class="spinner">0</div>
-                    <div class="spinner-group"><a href="#q" data-direction="top" class="ico-in_arrow-up"></a><a href="#q" data-direction="bottom" class="ico-in_arrow-down"></a></div>
+                    <div class="spinner-group"><a href="#q" data-direction="bottom" class="ico-in_arrow-up"></a><a href="#q" data-direction="top" class="ico-in_arrow-down"></a></div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="panel-wrap top-line">
               <div class="small-title">Прозрачность</div>
-              <div class="range-controls">
+              <div ng-app="drag" class="range-controls">
                 <div class="scale">
                   <div class="bar"></div>
-                  <div class="toggle"></div>
+                  <div class="toggle draggable"></div>
                 </div>
               </div>
             </div>
@@ -130,9 +128,8 @@
         <li><a href="#a" title="Вконтакте" class="ico_vk"></a></li>
       </ul>
     </div>
-    <!--script(src="http://yastatic.net/jquery/1.11.1/jquery.min.js")-->
-    <!--script window.jQuery || document.write('<script src="scripts/vendor/jquery-1.11.1.min.js"><\/script>')-->
-    <script src="scripts/vendor/jquery-1.11.1.min.js"></script>
+    <script src="http://yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="scripts/vendor/jquery-1.11.1.min.js"><\/script>')</script>
     <script src="scripts/vendor/jquery.ui.widget.js"></script>
     <script src="scripts/vendor/jquery-ui-spinner.min.js"></script>
     <script src="scripts/vendor/jquery.iframe-transport.js"></script>

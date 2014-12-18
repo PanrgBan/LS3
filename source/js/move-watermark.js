@@ -1,230 +1,371 @@
 'use strict';
 
 var moveWatermark = (function() {
-	var
-			// Рабочие переменные
-			app,
-			self,
-			timer,
+  var
+      // Рабочие переменные
+      app,
+      self,
+      timer,
 
-			// Изображения
-			img,
-			wm,
+      // Изображения
+      img,
+      wm,
+      field,
 
-			// Панели отображения позиции
-			boardX,
-			boardY,
+      // Панели отображения позиции
+      boardX,
+      boardY,
 
-            // Выбраный режим наложение воттермарка
-            oneWater,
+      // Выбраный режим наложение воттермарка
+      oneWater = true,
+      // Крест =)
+      manyWaterField,
+      manyWaterFieldX,
+      manyWaterFieldY,
 
-			// Различные размеры для
-			// выравнивания вотермарка
-			sectorW,
-			sectorH,
-			oneSectorW,
-			oneSectorH,
-			maxWidth,
-			maxHeight,
+      // Различные размеры для
+      // выравнивания вотермарка
+      // Размеры основного изображения
+      widthImg,
+      heightImg,
+      widthWm,
+      heightWm,
+      sectorW,
+      sectorH,
+      oneSectorW,
+      oneSectorH,
+      maxWidth,
+      maxHeight,
+      marginX,
+      marginY,
 
-			// Шаг позиции и расстояния
-			// от вотермарка до границ
-			stepX = 0,
-			stepY = 0,
-			top = 0,
-			left = 0,
+      // обертка множественного воттера
+      wmWrap,
 
-			// Колличество секторов
-			quantitySectors = 3;
+      // Шаг позиции и расстояния
+      // от вотермарка до границ
+      stepX = 0,
+      stepY = 0,
+      top = 0,
+      left = 0,
 
-	app = {
-		// Инициалицация модуля
-		init: function() {
-			self = this;
-			img = $('#img');
-			wm = $('#wm');
-			boardX = $('#board-x');
-			boardY = $('#board-y');
-            oneWater = true;
+      // Колличество секторов
+      quantitySectors = 3,
+      // Множитель увеличения полотна замощения О_о
+      multipleTiling = 1.5;
 
-			self.events();
-			self.getInfo();
-			self.doOneStep();
-			self.refreshBoard();
-		},
+  app = {
+    // Инициалицация модуля
+    init: function() {
+      self = this;
+      img = $('#img');
+      wm = $('#wm');
+      field = $('.move-field');
+      boardX = $('#board-x');
+      boardY = $('#board-y');
 
-		// События модуля
-		events: function() {
-			// Таблица  ====================
-			$('.move-field').on('click', 'td', function(e) {
-				e.preventDefault();
-                if(oneWater === true){
-                    var $this = $(this);
+      self.events();
+      self.getInfo();
+      self.doOneStep();
+      self.refreshBoard();
+    },
 
-                    $this
-                        .parents('table')
-                        .find('td')
-                        .removeClass('active');
+    // События модуля
+    events: function() {
+      // Таблица  ====================
+      field.on('click', 'td', function(e) {
+        e.preventDefault();
+        if ( oneWater ){
+            var $this = $(this);
 
-                    $this.addClass('active');
+            $this
+                .parents('table')
+                .find('td')
+                .removeClass('active');
 
-                    stepX = +this.getAttribute('data-x'),
-                    stepY = +this.getAttribute('data-y');
-                    self.doOneStep();
-                    self.refreshBoard();
-                }
-			});
+            $this.addClass('active');
 
-			// Спинер =======================
-			$('.spinner-group').on('mousedown', 'a', function(e) {
-				e.preventDefault()
+            stepX = +this.getAttribute('data-x'),
+            stepY = +this.getAttribute('data-y');
+            self.doOneStep();
+            self.refreshBoard();
+        }
+      });
 
-				// отключаем анимацию
-				wm.css('transition', 'none');
+      // Спинер =======================
+      $('.spinner-group').on('mousedown', 'a', function(e) {
+        e.preventDefault()
 
-				var direction = this.getAttribute('data-direction');
+        // отключаем анимацию
+        wm.css('transition', 'none');
 
-				self.repeat(null, function() {
-					self.move(direction);
-					self.refreshBoard();
-				});
-			});
+        var direction = this.getAttribute('data-direction');
 
-			$('.spinner-group').on('mouseup', 'a', function(e) {
+        self.repeat(null, function() {
+          self.move(direction);
+          self.refreshBoard();
+        });
+      });
 
-				clearInterval(timer);
-				wm.css('transition', '');
-			});
+      $('.spinner-group').on('mouseup', 'a', function(e) {
+        clearInterval(timer);
+        wm.css('transition', '');
+      });
 
-			$('.spinner-group').on('mouseleave', 'a', function() {
-				clearTimeout(timer);
-			});
+      $('.spinner-group').on('mouseleave', 'a', function() {
+        clearTimeout(timer);
+        wm.css('transition', '');
+      });
 
-            $('.control').on('click','a',function(e){
-                e.preventDefault();
-                $(this).parents('ul').find('a').removeClass('active');
-                $(this).addClass('active');
-                if($(this).hasClass('one')){
-                    oneWater = true;
-                    $('.move-field').find('td').eq(0).trigger('click');
-                    $('.many-water-field').remove();
-                }else{
-                    oneWater = false;
-                    $('.move-field').find('td').removeClass('active');
-                    $('.move-field').append("<div class='many-water-field'></div>");
-                    $('.many-water-field').append("<div class='many-water-field-x'></div>").append("<div class='many-water-field-y'></div>");
-                }
-            });
-		},
+      // Переключалка режимов наложения воттера
+      $('.control').on('click','a', function(e){
+          e.preventDefault();
+          var $this = $(this);
 
-		// Попиксельное изменение позиции
-		// direction - направление смещения
-		move: function(direction) {
+          $this
+            .addClass('active')
+            .siblings()
+            .removeClass('active');
 
-			switch(direction) {
-				case 'right':
-					left += 1;
-					break;
-				case 'left':
-					left -= 1;
-					break;
-				case 'bottom':
-					top += 1;
-					break;
-				case 'top':
-					top -= 1;
-					break;
-				default:
-					stepX = 0;
-					stepY = 0;
-			}
+          if ( $this.hasClass('one') ) {
+            // режим наложения одиночного воттера
+              oneWater = true;
+              field.find('td').eq(0).trigger('click');
 
-			self.setPos();
-		},
+              manyWaterField && manyWaterField.hide()
+              wmWrap && wmWrap.hide()
+              wm.show();
+          } else {
+            // режим наложения множественного воттера
+              oneWater = false;
+              wm.hide();
+              field.find('td').removeClass('active');
 
-		// Изменение позиции по секторам
-		doOneStep: function() {
-			if (typeof stepX !== 'number') stepX = 0;
-			if (typeof stepY !== 'number') stepY = 0;
+              if ( manyWaterField ){
+                // если крест создан, показываем
+                manyWaterField.show();
+              } else {
+                // крест не создан - создаём
+                field.append("<div class='many-water-field'></div>");
+                manyWaterField = $('.many-water-field');
+                manyWaterField
+                  .append("<div class='many-water-field-x'><span></span></div>")
+                  .append("<div class='many-water-field-y'><span></span></div>");
+                manyWaterFieldX = $('.many-water-field-x').find('span');
+                manyWaterFieldY = $('.many-water-field-y').find('span');
+              }
 
-			left = oneSectorW + sectorW * stepX;
-			top = oneSectorH + sectorH * stepY;
+              if(wmWrap){
+                // если обертка каскадом воттеров существует - показываем
+                wmWrap.show();
+                self.setPosMany();
+              }else{
+                //если не существует - создаём
+                self.manyWater();
+              }
+            self.refreshBoard();
+          }
+      });
+    },
 
-			self.setPos();
-		},
+    // Попиксельное изменение позиции
+    // direction - направление смещения
+    move: function( direction ) {
+      if ( oneWater ) {
+        switch ( direction ) {
+          case 'right':
+            left += 1;
+            break;
+          case 'left':
+            left -= 1;
+            break;
+          case 'bottom':
+            top += 1;
+            break;
+          case 'top':
+            top -= 1;
+            break;
+          default:
+            stepX = 0;
+            stepY = 0;
+        }
+        self.setPos();
+      } else {
+        switch ( direction ) {
+          case 'right':
+            marginX += 1;
+            break;
+          case 'left':
+            marginX -= 1;
+            break;
+          case 'bottom':
+            marginY += 1;
+            break;
+          case 'top':
+            marginY -= 1;
+            break;
+          default:
+            marginX = 0;
+            marginY = 0;
+        }
+        self.setPosMany();
+      }
+    },
 
-		// Устанавливаем позицию вотермарка
-		setPos: function() {
-			// Проверяем чтобы вотермарк не
-			// выходил за границы изображения
-			if ( left < 0 ) left = 0;
-			if ( top < 0 ) top = 0;
-			if ( left > maxWidth ) left = maxWidth;
-			if ( top > maxHeight ) top = maxHeight;
+    // Изменение позиции по секторам
+    doOneStep: function() {
+      if (typeof stepX !== 'number') stepX = 0;
+      if (typeof stepY !== 'number') stepY = 0;
 
-			wm.css({
-				'left': left,
-				'top': top
-			})
-		},
+      left = oneSectorW + sectorW * stepX;
+      top = oneSectorH + sectorH * stepY;
 
-		// Получение необходимой информации
-		// о изобажениях и секторах
-		getInfo: function() {
-			var
-				// Размеры основного изображения
-				widthImg = img.width(),
-				heightImg = img.height(),
+      self.setPos();
+    },
 
-				// Размеры вотермарка
-				widthWm = wm.width(),
-				heightWm = wm.height();
+    // Устанавливаем позицию вотермарка
+    setPos: function() {
+      // Проверяем чтобы вотермарк не
+      // выходил за границы изображения
+      if ( left < 0 ) left = 0;
+      if ( top < 0 ) top = 0;
+      if ( left > maxWidth ) left = maxWidth;
+      if ( top > maxHeight ) top = maxHeight;
 
-			// Размеры сектора
-			sectorW = ~~( widthImg / quantitySectors );
-			sectorH = ~~( heightImg / quantitySectors );
+      wm.css({
+        'left': left,
+        'top': top
+      })
+    },
 
-			// Расстояния для центрироания
-			// вотермарка в секторе
-			oneSectorW = ~~( ( sectorW - widthWm ) / 2 );
-			oneSectorH = ~~( ( sectorH -  heightWm) / 2 );
+    // Получение необходимой информации
+    // о изобажениях и секторах
+    getInfo: function() {
+      // Размеры основного изображения
+      widthImg = img.width(),
+      heightImg = img.height(),
 
-			// Максимальное расстояние чего-то там
-			maxWidth = widthImg - widthWm;
-			maxHeight = heightImg - heightWm;
-		},
+      // Размеры вотермарка
+      widthWm = wm.width(),
+      heightWm = wm.height();
 
-		// Изменение значения позиции
-		refreshBoard: function() {
-			boardX.text(left);
-			boardY.text(top);
-		},
+      // Размеры сектора
+      sectorW = ~~( widthImg / quantitySectors );
+      sectorH = ~~( heightImg / quantitySectors );
 
-		// Повтор функции каждые 40мс
-		// i - задержка начала рекурсии
-		// handler - повторяемая функция
-		repeat: function( i, handler ) {
-			i = i || 500;
+      // Расстояния для центрироания
+      // вотермарка в секторе
+      oneSectorW = ~~( ( sectorW - widthWm ) / 2 );
+      oneSectorH = ~~( ( sectorH -  heightWm) / 2 );
 
-			clearTimeout(timer);
-			timer = self.delay(function() {
-				self.repeat(40, handler)
-			}, i);
+      // Максимальное расстояние чего-то там
+      maxWidth = widthImg - widthWm;
+      maxHeight = heightImg - heightWm;
+    },
 
-			handler();
-		},
+    // Изменение значения позиции
+    refreshBoard: function() {
+      if ( oneWater ) {
+        boardX.text(left);
+        boardY.text(top);
+      } else {
+        boardX.text( ~~(marginX) );
+        boardY.text( ~~(marginY) );
 
-		// Задержка вызова функции
-		delay: function( handler, delay ) {
-			return setTimeout( handler, delay || 0 );
-		}
-	};
+        manyWaterFieldX.css( "height", marginX + '%' );
+        manyWaterFieldY.css( "width", marginY + '%' );
+      }
+    },
 
-	// инициализируем модуль
-	setTimeout(function() {
-		app.init();
-	}, 700)
+    // Повтор функции каждые 40мс
+    // i - задержка начала рекурсии
+    // handler - повторяемая функция
+    repeat: function( i, handler ) {
+      i = i || 500;
 
-	// возвращаем объект с публичными методами
-	return {};
+      clearTimeout(timer);
+      timer = self.delay(function() {
+        self.repeat(40, handler)
+      }, i);
+
+      handler();
+    },
+
+    // Задержка вызова функции
+    delay: function( handler, delay ) {
+      return setTimeout( handler, delay || 0 );
+    },
+
+    // множественная накладка водянного знака
+    manyWater: function(){
+      wmWrap = $('<div>', {
+        'class': 'many-wm-wrap'
+      });
+
+      $('.img-area').append( wmWrap );
+
+      var
+          wmSrc = wm.attr('src'),
+
+          // увеличиваем размеры обертки воттеров
+          wmWrapWidth = widthImg * multipleTiling,
+          wmWrapHeight = heightImg * multipleTiling,
+
+          // считаем кол-во воттеров, которые влезают в обертку
+          countXWm = ~~( wmWrapWidth / widthWm) ,
+          countYWm = ~~( wmWrapHeight / heightWm ),
+          countWm = countXWm * countYWm,
+
+          // считаем кол-во воттеров, которые влезают в области нашего изображения
+          countXWmL = parseInt( widthImg / widthWm ),
+          countYWmL = parseInt( heightImg / heightWm );
+
+      // считаем отступы для ровного заполнения воттерами большой картинки
+      marginX = ( widthImg / countXWmL ) - widthWm;
+      marginY = ( heightImg / countYWmL ) - heightWm;
+
+      // плодим воттеры
+      for( var i = 0; i < countWm; i++ ){
+        wmWrap.append('<div class="many-wm-wrap-item"></div>');
+      }
+
+      wmWrap.css({
+        width: wmWrapWidth,
+        height: wmWrapHeight
+      });
+
+      $('.many-wm-wrap-item').css({
+        background: "url(" + wmSrc + ") no-repeat",
+        width: widthWm,
+        height: heightWm,
+        marginTop: marginY/2,
+        marginLeft: marginX/2,
+        marginBottom: marginY/2,
+        marginRight: marginX/2
+      });
+    },
+
+    // двигаем наш каскад воттеров
+    setPosMany: function(){
+      if ( marginX < 0 ) marginX = 0;
+      if ( marginY < 0 ) marginY = 0;
+      if ( marginX > 100 ) marginX = 100;
+      if ( marginY > 100 ) marginY = 100;
+
+      $('.many-wm-wrap-item').css({
+        marginTop: marginY/2,
+        marginLeft: marginX/2,
+        marginBottom: marginY/2,
+        marginRight: marginX/2
+      }); 
+    }
+  };
+
+  // инициализируем модуль
+  setTimeout(function() {
+    app.init();
+  }, 700)
+
+  // возвращаем объект с публичными методами
+  return {};
 }());
