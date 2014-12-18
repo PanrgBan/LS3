@@ -243,20 +243,20 @@ var moveWatermark = (function() {
       } else {
         switch ( direction ) {
           case 'right':
-            marginX += 1;
-              dragX += countXWm;
+            marginY += 1;
+              dragY += countXWm;
             break;
           case 'left':
-            marginX -= 1;
-              dragX -= countXWm;
-            break;
-          case 'bottom':
-            marginY += 1;
-              dragY += countYWm;
+            marginY -= 1;
+              dragY -= countXWm;
             break;
           case 'top':
-            marginY -= 1;
-              dragY -= countYWm;
+            marginX += 1;
+              dragX += countYWm;
+            break;
+          case 'bottom':
+            marginX -= 1;
+              dragX -= countYWm;
             break;
           default:
             marginX = 0;
@@ -413,6 +413,12 @@ var moveWatermark = (function() {
                 drag:function(event, ui){
                     if(ui.position.left > 0) ui.position.left = 0;
                     if(ui.position.top > 0) ui.position.top = 0;
+                    /* Это наработки, пока не обращать внимание, уберу как разберусь!
+                    countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
+                    countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
+                    dragX = (countXWm * widthWm + marginX) - widthImg;
+                    dragY = (countYWm * heightWm + marginY) - heightImg;
+                    console.log(dragX);*/
                     if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
                     if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
                 }
@@ -428,11 +434,11 @@ var moveWatermark = (function() {
       if ( marginY > 100 ) marginY = 100;
 
       $('.many-wm-wrap-item').css({
-        marginTop: marginY/2,
-        marginLeft: marginX/2,
-        marginBottom: marginY/2,
-        marginRight: marginX/2
-      }); 
+        marginTop: marginX/2,
+        marginLeft: marginY/2,
+        marginBottom: marginX/2,
+        marginRight: marginY/2
+      });
     }
   };
 
