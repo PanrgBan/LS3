@@ -438,14 +438,30 @@ var module = (function() {
                 url: 'php/upload.php',
                 type: 'POST',
                 success: function (src) {
-                    var loadPic = $('<img/>').attr('src', src), // Создание картинки с путем
+                    var data = src.split("|"),
+                            loadPic = $('<img/>').attr('src', data[2]), // Создание картинки с путем
                             loadPicName = this.files[0].name, // Имя картинки
-                            valid = true; // Флаг
+                            valid = true,// Флаг
+                            MAXWIDTH = 650,
+                            MAXHEIGHT = 535,
+                            scale = 0;
 
-                    console.log(pics.first());
+                    if(data[0] > MAXWIDTH) {
+                        loadPic.css('max-width', MAXWIDTH + 'px');
+                        scale = (data[0] - MAXWIDTH)/MAXWIDTH;
+                    }
+                    if(data[1] > MAXHEIGHT) {
+                        loadPic.css('max-height', MAXHEIGHT+ 'px');
+                        scale = (data[1] - MAXHEIGHT)/MAXHEIGHT;
+                    }
 
-                    //$('#img').remove(); // Удалить предыдущую картинку
-                    //loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                    console.log(scale);
+
+
+
+
+                    $('#img').remove(); // Удалить предыдущую картинку
+                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
 
                     $.each(pics, function (index, val) {
                         var pic = $(val), // инпут

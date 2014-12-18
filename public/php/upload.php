@@ -13,8 +13,7 @@ $filePath = ('../images/' . $uploadName);
 
 $size = getimagesize($uploadFile);
 
-WideImage::loadFromFile($uploadFile)->resize(651, 535)->saveToFile($filePath);
+WideImage::loadFromFile($uploadFile)->saveToFile($filePath);
 
-echo $size[0];
-echo $size[1];
+echo $size[0] . "|" . $size[1] . "|" . $filePath;
 exit;
