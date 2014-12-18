@@ -38,6 +38,8 @@ var moveWatermark = (function() {
       maxHeight,
       marginX,
       marginY,
+      dragX,
+      dragY,
 
       // обертка множественного воттера
       wmWrap,
@@ -68,6 +70,17 @@ var moveWatermark = (function() {
       self.getInfo();
       self.doOneStep();
       self.refreshBoard();
+      wm.draggable({ 
+        containment: ".img-area", 
+        scroll: false, 
+        drag:function(event, ui){
+          self.refreshBoard(ui.position.left,ui.position.top)
+        },
+        stop: function(event, ui){
+          left = ui.position.left;
+          top = ui.position.top;
+        }
+    });
     },
 
     // События модуля
@@ -90,6 +103,15 @@ var moveWatermark = (function() {
             self.doOneStep();
             self.refreshBoard();
         }
+      });
+
+      wm.on('mousedown', function(){
+        // отключаем анимацию при драге
+        wm.css('transition', 'none');
+      });
+      wm.on('mouseup', function(){
+        // отключаем анимацию при драге
+        wm.css('transition', '');
       });
 
       // Спинер =======================
@@ -264,16 +286,21 @@ var moveWatermark = (function() {
     },
 
     // Изменение значения позиции
-    refreshBoard: function() {
-      if ( oneWater ) {
-        boardX.text(left);
-        boardY.text(top);
-      } else {
-        boardX.text( ~~(marginX) );
-        boardY.text( ~~(marginY) );
+    refreshBoard: function(x,y) {
+      if(!x || !y){
+        if ( oneWater ) {
+          boardX.text(left);
+          boardY.text(top);
+        } else {
+          boardX.text( ~~(marginX) );
+          boardY.text( ~~(marginY) );
 
-        manyWaterFieldX.css( "height", marginX + '%' );
-        manyWaterFieldY.css( "width", marginY + '%' );
+          manyWaterFieldX.css( "height", marginX + '%' );
+          manyWaterFieldY.css( "width", marginY + '%' );
+        }
+      }else{
+        boardX.text(x);
+        boardY.text(y);
       }
     },
 
@@ -324,6 +351,10 @@ var moveWatermark = (function() {
       marginX = ( widthImg / countXWmL ) - widthWm;
       marginY = ( heightImg / countYWmL ) - heightWm;
 
+      // для ограничения драга нашего каскада с воттерами внутри изображения
+      dragX = (countXWm * widthWm + marginX) - widthImg;
+      dragY = (countYWm * heightWm + marginY) - heightImg;
+      
       // плодим воттеры
       for( var i = 0; i < countWm; i++ ){
         wmWrap.append('<div class="many-wm-wrap-item"></div>');
@@ -342,6 +373,19 @@ var moveWatermark = (function() {
         marginLeft: marginX/2,
         marginBottom: marginY/2,
         marginRight: marginX/2
+      });
+
+      $('.many-wm-wrap').on('mouseover',function(e){
+          $('.many-wm-wrap').draggable({
+            scroll: false, 
+            drag:function(event, ui){
+              console.log(dragY+','+dragX);
+              if(ui.position.left > 0) ui.position.left = 0;
+              if(ui.position.top > 0) ui.position.top = 0;
+              if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
+              if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
+            }
+         });
       });
     },
 
