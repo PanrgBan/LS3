@@ -200,7 +200,7 @@ a {
   clear: both; }
 
 .clearfix, .send {
-  zoom: 1;
+  zoom: 1
   /* Хак для IE 6 и 7 */ }
 
 .move-wrap:after {
@@ -451,6 +451,12 @@ a {
 .error {
   border-color: #f97e76;
   color: #800000; }
+
+.disabled {
+  opacity: 0.2; }
+
+.disabled-input {
+  display: none; }
 
 /* Move watermark *************/
 .control {
