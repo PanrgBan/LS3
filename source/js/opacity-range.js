@@ -32,30 +32,29 @@ var opacityRange = (function() {
 
     // метод содержащий все события модуля
     events: function() {
-      rangControls.bind('mousedown', toggle, function (event) {
+      rangControls.on('mousedown', toggle, function (event) {
         event.preventDefault();
         startX = event.screenX - x;
-        $document.bind('mousemove', mousemove);
-        $document.bind('mouseup', mouseup);
+        $document.on('mousemove', mousemove);
+        $document.on('mouseup', mouseup);
       });
 
       function mousemove(event) {
         x = event.screenX - startX;
+
         if ((x > -5) && (x < toggle.parent()[0].offsetWidth - 15)) {
-          toggle.css({
-          left: x + 'px'
-          });
+          toggle.css( 'left', x );
           
-        lastPosX = parseInt(toggle.css('left'));
-        bar.css('width', lastPosX + 'px');
+        lastPosX = ~~( toggle.css('left') );
+        bar.css('width', lastPosX);
         $('.wm').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
         $('.many-wm-wrap').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
         }
       };
 
       function mouseup() {
-        $document.unbind('mousemove', mousemove);
-        $document.unbind('mouseup', mouseup);
+        $document.off('mousemove', mousemove);
+        $document.off('mouseup', mouseup);
       };
     },
      

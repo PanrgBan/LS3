@@ -317,8 +317,8 @@ var moveWatermark = (function() {
           countWm = countXWm * countYWm,
 
           // считаем кол-во воттеров, которые влезают в области нашего изображения
-          countXWmL = parseInt( widthImg / widthWm ),
-          countYWmL = parseInt( heightImg / heightWm );
+          countXWmL = ~~( widthImg / widthWm ),
+          countYWmL = ~~( heightImg / heightWm );
 
       // считаем отступы для ровного заполнения воттерами большой картинки
       marginX = ( widthImg / countXWmL ) - widthWm;
@@ -362,9 +362,7 @@ var moveWatermark = (function() {
   };
 
   // инициализируем модуль
-  setTimeout(function() {
     app.init();
-  }, 700)
 
   // возвращаем объект с публичными методами
   return {};
