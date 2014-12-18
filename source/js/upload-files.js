@@ -16,8 +16,8 @@ var module = (function() {
 
                     console.log(pics.first());
 
-                    $('#img').remove(); // Удалить предыдущую картинку
-                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                    //$('#img').remove(); // Удалить предыдущую картинку
+                    //loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
 
                     $.each(pics, function (index, val) {
                         var pic = $(val), // инпут

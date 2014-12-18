@@ -347,30 +347,30 @@ var module = (function() {
                 url: 'php/upload.php',
                 type: 'POST',
                 success: function (src) {
-                    var loadPic = $('<img/>').attr('src', src),
-                            loadPicName = this.files[0].name,
-                            valid = true;
+                    var loadPic = $('<img/>').attr('src', src), // Создание картинки с путем
+                            loadPicName = this.files[0].name, // Имя картинки
+                            valid = true; // Флаг
 
                     console.log(pics.first());
 
-                    $('#img').remove();
-                    loadPic.prependTo($('.img-area')).attr('id', 'img');
+                    //$('#img').remove(); // Удалить предыдущую картинку
+                    //loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
 
                     $.each(pics, function (index, val) {
-                        var pic = $(val),
-                                val = pic.val();
-                        if (val.length === 0) {
+                        var pic = $(val), // инпут
+                                val = pic.val(); // значение инпута
+                        if (val.length === 0) { // если значение инпута пустое
                             pic
-                                .closest('.form-group')
-                                .find(wrap)
-                                .addClass('error');
+                                .closest('.form-group') // в родителях .form-group
+                                .find(wrap) // найти wrap
+                                .addClass('error'); // добавить класс
                             valid = false;
                         } else {
                            pic
                                 .closest('.form-group')
                                 .find(wrap)
-                                .removeClass('error')
-                                .text(loadPicName);
+                                .removeClass('error') // удалить класс
+                                .text(loadPicName); // показать имя
                         }});
                     return valid;
                     // Подключаем вотермарк
