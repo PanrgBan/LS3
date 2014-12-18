@@ -1,6 +1,5 @@
 .range-controls {
   position: relative;
-  overflow: hidden;
   padding-top: 30px;
   padding-bottom: 20px;
   margin-bottom: -20px;
@@ -12,7 +11,6 @@
     cursor: pointer;
 
     .bar {
-      width: 128px;
       height: 3px;
       background-color: $color-9eb2c0;
     }
@@ -20,6 +18,7 @@
     .toggle {
     position: absolute;
     top: 20px;
+    left: 210px;
     border: 7px solid $color-dbe1e8;
     border-radius: 50%;
     background-color: $color-9eb2c0;
