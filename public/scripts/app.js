@@ -484,39 +484,17 @@ var moveWatermark = (function() {
 
     // метод содержащий все события модуля
     events: function() {
-<<<<<<< HEAD
-      rangControls.on('mousedown', toggle, function (event) {
-=======
       rangeControls.on('mousedown', function (event) {
->>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         event.preventDefault();
         
         toggle.css('background-color', '#f97e76');
         startX = event.screenX - x;
         $document.on('mousemove', mousemove);
         $document.on('mouseup', mouseup);
-<<<<<<< HEAD
-=======
-        
-      scale.on('click', function(e) {
-//        toggle.css('left', );
-      });
-        
->>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
       });
 
       function mousemove(event) {
         x = event.screenX - startX;
-<<<<<<< HEAD
-
-        if ((x > -5) && (x < toggle.parent()[0].offsetWidth - 15)) {
-          toggle.css( 'left', x );
-          
-        lastPosX = ~~( toggle.css('left') );
-        bar.css('width', lastPosX);
-        $('.wm').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
-        $('.many-wm-wrap').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
-=======
         if (( x > 0 ) && ( x < scale.width() )) {
           toggle.css('left', x);
           
@@ -524,15 +502,10 @@ var moveWatermark = (function() {
           bar.css( 'width', lastPosX );
           $('.wm').css( 'opacity', lastPosX / scale.width() );
           $('.many-wm-wrap').css('opacity', lastPosX / scale.width());
->>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         }
       };
 
       function mouseup() {
-<<<<<<< HEAD
-=======
-        toggle.css('background-color', '#9eb2c0');
->>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         $document.off('mousemove', mousemove);
         $document.off('mouseup', mouseup);
       };
@@ -551,51 +524,56 @@ var module = (function() {
         DATA,
         GLOBALSCALE,
         defObj = {
-                url: 'php/upload.php',
-                type: 'POST',
-                success: function (src) {              //TODO нужно организовать проверку инпута!!!
-                    var mainWrap = wrap.closest('.upload__pic'),
-                            data = src.split("|"),
-                            loadPic = $('<img/>').attr('src', data[2]), // Создание картинки с путем
-                            loadPicName = this.files[0].name, // Имя картинки
-                            valid = true,// Флаг
-                            MAXWIDTH = 650,
-                            MAXHEIGHT = 535,
-                            SCALE = 0;
+            url: 'php/upload.php',
+            type: 'POST',
+            //TODO нужно организовать проверку инпута!!!
+            success: function (src) {
+                var
+                    mainWrap = wrap.closest('.upload__pic'),
+                    data = src.split("|"),
+                    // Создание картинки с путем
+                    loadPic = $('<img/>').attr('src', data[2]),
+                    // Имя картинки
+                    loadPicName = this.files[0].name,
+                    valid = true,// Флаг
+                    MAXWIDTH = 650,
+                    MAXHEIGHT = 535,
+                    SCALE = 0;
 
-                            console.log(this);
-                            DATA = data;
+                    console.log(this);
+                    DATA = data;
 
-                            $('#img').remove(); // Удалить предыдущую картинку
-                            loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                // Удалить предыдущую картинку
+                $('#img').remove();
+                // вставить в начало mg-area
+                loadPic.prependTo($('.img-area')).attr('id', 'img');
 
-                        if(data[0] > MAXWIDTH) {
-                            loadPic.css('max-width', MAXWIDTH + 'px');
-                            SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
-                        }
-                        if(data[1] > MAXHEIGHT) {
-                            loadPic.css('max-height', MAXHEIGHT+ 'px');
-                            SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
-                        }
+                if(data[0] > MAXWIDTH) {
+                    loadPic.css('max-width', MAXWIDTH + 'px');
+                    SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
+                }
 
+                if(data[1] > MAXHEIGHT) {
+                    loadPic.css('max-height', MAXHEIGHT+ 'px');
+                    SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
+                }
 
+                mainWrap
+                    .removeClass('disabled')
+                    .find(pics)
+                    .removeClass('disabled-input');
 
-                        mainWrap
-                            .removeClass('disabled')
-                                .find(pics)
-                                    .removeClass('disabled-input');
+                GLOBALSCALE = SCALE;
 
-                        GLOBALSCALE = SCALE;
-
-                    //} else {
-                    //    $('#wm').remove();
-                    //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
-                    //    loadPic.css({
-                    //        'max-width': GLOBALSCALE*100+'%',
-                    //        'max-height' : GLOBALSCALE*100+'%'
-                    //    });
-                    //    // Подключаем вотермарк
-                    //}
+                //} else {
+                //    $('#wm').remove();
+                //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
+                //    loadPic.css({
+                //        'max-width': GLOBALSCALE*100+'%',
+                //        'max-height' : GLOBALSCALE*100+'%'
+                //    });
+                //    // Подключаем вотермарк
+                //}
             }
         };
 
