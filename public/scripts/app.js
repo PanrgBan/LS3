@@ -14,8 +14,8 @@ var module = (function () {
             $.ajax({
                 url: 'php/create-img.php',
                 type: 'POST',
-                success: function () {
-                    console.log('Good');
+                success: function (src) {
+
                 }
             })
         }
@@ -243,20 +243,20 @@ var moveWatermark = (function() {
       } else {
         switch ( direction ) {
           case 'right':
-            marginX += 1;
-              dragX += countXWm;
+            marginY += 1;
+              dragY += countXWm;
             break;
           case 'left':
-            marginX -= 1;
-              dragX -= countXWm;
-            break;
-          case 'bottom':
-            marginY += 1;
-              dragY += countYWm;
+            marginY -= 1;
+              dragY -= countXWm;
             break;
           case 'top':
-            marginY -= 1;
-              dragY -= countYWm;
+            marginX += 1;
+              dragX += countYWm;
+            break;
+          case 'bottom':
+            marginX -= 1;
+              dragX -= countYWm;
             break;
           default:
             marginX = 0;
@@ -413,6 +413,12 @@ var moveWatermark = (function() {
                 drag:function(event, ui){
                     if(ui.position.left > 0) ui.position.left = 0;
                     if(ui.position.top > 0) ui.position.top = 0;
+                    /* Это наработки, пока не обращать внимание, уберу как разберусь!
+                    countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
+                    countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
+                    dragX = (countXWm * widthWm + marginX) - widthImg;
+                    dragY = (countYWm * heightWm + marginY) - heightImg;
+                    console.log(dragX);*/
                     if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
                     if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
                 }
@@ -428,16 +434,19 @@ var moveWatermark = (function() {
       if ( marginY > 100 ) marginY = 100;
 
       $('.many-wm-wrap-item').css({
-        marginTop: marginY/2,
-        marginLeft: marginX/2,
-        marginBottom: marginY/2,
-        marginRight: marginX/2
-      }); 
+        marginTop: marginX/2,
+        marginLeft: marginY/2,
+        marginBottom: marginX/2,
+        marginRight: marginY/2
+      });
     }
   };
 
   // инициализируем модуль
+  setTimeout(function() {
     app.init();
+    
+  }, 1000);
 
   // возвращаем объект с публичными методами
   return {};
@@ -452,22 +461,21 @@ var moveWatermark = (function() {
         scale,
         bar,
         lastPosX,
-        cursorX,
-        rangControls,
+        rangeControls,
         $document;
   
    app = {
     // метод инициалицации модуля
     init: function() {
-      startX = 0,
-      x = 0,
+      startX = 210,
+      x = 210,
       toggle = $('.toggle'),
       scale = $('.scale'),
       bar = $('.bar'),
-      rangControls = $('.range-controls'),
+      rangeControls = $('.range-controls'),
       $document = $(document),
       lastPosX = 0,
-      cursorX,
+      toggle.css('left', startX),
 
       self = this;
 
@@ -476,15 +484,30 @@ var moveWatermark = (function() {
 
     // метод содержащий все события модуля
     events: function() {
+<<<<<<< HEAD
       rangControls.on('mousedown', toggle, function (event) {
+=======
+      rangeControls.on('mousedown', function (event) {
+>>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         event.preventDefault();
+        
+        toggle.css('background-color', '#f97e76');
         startX = event.screenX - x;
         $document.on('mousemove', mousemove);
         $document.on('mouseup', mouseup);
+<<<<<<< HEAD
+=======
+        
+      scale.on('click', function(e) {
+//        toggle.css('left', );
+      });
+        
+>>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
       });
 
       function mousemove(event) {
         x = event.screenX - startX;
+<<<<<<< HEAD
 
         if ((x > -5) && (x < toggle.parent()[0].offsetWidth - 15)) {
           toggle.css( 'left', x );
@@ -493,10 +516,23 @@ var moveWatermark = (function() {
         bar.css('width', lastPosX);
         $('.wm').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
         $('.many-wm-wrap').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
+=======
+        if (( x > 0 ) && ( x < scale.width() )) {
+          toggle.css('left', x);
+          
+          lastPosX = parseInt(toggle.css('left'));
+          bar.css( 'width', lastPosX );
+          $('.wm').css( 'opacity', lastPosX / scale.width() );
+          $('.many-wm-wrap').css('opacity', lastPosX / scale.width());
+>>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         }
       };
 
       function mouseup() {
+<<<<<<< HEAD
+=======
+        toggle.css('background-color', '#9eb2c0');
+>>>>>>> 6f79021c5ff3c7c864a669c506a9d9f41bb9954f
         $document.off('mousemove', mousemove);
         $document.off('mouseup', mouseup);
       };
@@ -512,55 +548,56 @@ var module = (function() {
         self,
         pics = $('.fileupload'),
         wrap = $('.upload-wrapper'),
+        DATA,
+        GLOBALSCALE,
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
-                success: function (src) {
-                    var data = src.split("|"),
+                success: function (src) {              //TODO нужно организовать проверку инпута!!!
+                    var mainWrap = wrap.closest('.upload__pic'),
+                            data = src.split("|"),
                             loadPic = $('<img/>').attr('src', data[2]), // Создание картинки с путем
                             loadPicName = this.files[0].name, // Имя картинки
                             valid = true,// Флаг
                             MAXWIDTH = 650,
                             MAXHEIGHT = 535,
-                            scale = 0;
+                            SCALE = 0;
 
-                    if(data[0] > MAXWIDTH) {
-                        loadPic.css('max-width', MAXWIDTH + 'px');
-                        scale = (data[0] - MAXWIDTH)/MAXWIDTH;
-                    }
-                    if(data[1] > MAXHEIGHT) {
-                        loadPic.css('max-height', MAXHEIGHT+ 'px');
-                        scale = (data[1] - MAXHEIGHT)/MAXHEIGHT;
-                    }
+                            console.log(this);
+                            DATA = data;
 
-                    console.log(scale);
+                            $('#img').remove(); // Удалить предыдущую картинку
+                            loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+
+                        if(data[0] > MAXWIDTH) {
+                            loadPic.css('max-width', MAXWIDTH + 'px');
+                            SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
+                        }
+                        if(data[1] > MAXHEIGHT) {
+                            loadPic.css('max-height', MAXHEIGHT+ 'px');
+                            SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
+                        }
 
 
 
+                        mainWrap
+                            .removeClass('disabled')
+                                .find(pics)
+                                    .removeClass('disabled-input');
 
-                    $('#img').remove(); // Удалить предыдущую картинку
-                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                        GLOBALSCALE = SCALE;
 
-                    $.each(pics, function (index, val) {
-                        var pic = $(val), // инпут
-                                val = pic.val(); // значение инпута
-                        if (val.length === 0) { // если значение инпута пустое
-                            pic
-                                .closest('.form-group') // в родителях .form-group
-                                .find(wrap) // найти wrap
-                                .addClass('error'); // добавить класс
-                            valid = false;
-                        } else {
-                           pic
-                                .closest('.form-group')
-                                .find(wrap)
-                                .removeClass('error') // удалить класс
-                                .text(loadPicName); // показать имя
-                        }});
-                    return valid;
-                    // Подключаем вотермарк
+                    //} else {
+                    //    $('#wm').remove();
+                    //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
+                    //    loadPic.css({
+                    //        'max-width': GLOBALSCALE*100+'%',
+                    //        'max-height' : GLOBALSCALE*100+'%'
+                    //    });
+                    //    // Подключаем вотермарк
+                    //}
             }
-        }
+        };
 
 
    app = {

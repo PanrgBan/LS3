@@ -16,7 +16,7 @@
   overflow: hidden;
   position: relative;
   display: table;
-  transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;;
 }
 
 .fileupload {
@@ -58,4 +58,12 @@
 .error {
   border-color: $color-btn;
   color: $color-error;
+}
+
+.disabled {
+  opacity: 0.2;
+}
+
+.disabled-input {
+  display: none;
 }
