@@ -346,8 +346,8 @@ var moveWatermark = (function() {
         wmWrapHeight = heightImg * multipleTiling,
 
           // считаем кол-во воттеров, которые влезают в области нашего изображения
-          countXWmL = parseInt( widthImg / widthWm ),
-          countYWmL = parseInt( heightImg / heightWm );
+          countXWmL = ~~( widthImg / widthWm ),
+          countYWmL = ~~( heightImg / heightWm );
 
         // считаем кол-во воттеров, которые влезают в обертку
         countXWm = ~~( wmWrapWidth / widthWm);
@@ -420,7 +420,8 @@ var moveWatermark = (function() {
   // инициализируем модуль
   setTimeout(function() {
     app.init();
-  }, 700)
+    
+  }, 1000);
 
   // возвращаем объект с публичными методами
   return {};

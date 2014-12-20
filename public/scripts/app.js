@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use strict";
 
 var module = (function () {
@@ -33,6 +34,33 @@ var module = (function () {
     app.init();
     return {}
 })();
+=======
+"use strict";
+
+var module = (function () {
+    var app = {
+        init: function () {
+            app.setUpListeners();
+        },
+        setUpListeners: function () {
+            $('form.send').on('submit', app.createImg);
+        },
+        createImg: function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: 'php/create-img.php',
+                type: 'POST',
+                success: function (src) {
+
+                }
+            })
+        }
+    }
+    app.init();
+    return {}
+})();
+>>>>>>> 286b8757d89f2e75ef0c7171e325a6caf8959165
 ;'use strict';
 
 var moveWatermark = (function() {
@@ -381,8 +409,8 @@ var moveWatermark = (function() {
         wmWrapHeight = heightImg * multipleTiling,
 
           // считаем кол-во воттеров, которые влезают в области нашего изображения
-          countXWmL = parseInt( widthImg / widthWm ),
-          countYWmL = parseInt( heightImg / heightWm );
+          countXWmL = ~~( widthImg / widthWm ),
+          countYWmL = ~~( heightImg / heightWm );
 
         // считаем кол-во воттеров, которые влезают в обертку
         countXWm = ~~( wmWrapWidth / widthWm);
@@ -455,7 +483,8 @@ var moveWatermark = (function() {
   // инициализируем модуль
   setTimeout(function() {
     app.init();
-  }, 700)
+    
+  }, 1000);
 
   // возвращаем объект с публичными методами
   return {};
@@ -470,22 +499,21 @@ var moveWatermark = (function() {
         scale,
         bar,
         lastPosX,
-        cursorX,
-        rangControls,
+        rangeControls,
         $document;
   
    app = {
     // метод инициалицации модуля
     init: function() {
-      startX = 0,
-      x = 0,
+      startX = 210,
+      x = 210,
       toggle = $('.toggle'),
       scale = $('.scale'),
       bar = $('.bar'),
-      rangControls = $('.range-controls'),
+      rangeControls = $('.range-controls'),
       $document = $(document),
       lastPosX = 0,
-      cursorX,
+      toggle.css('left', startX),
 
       self = this;
 
@@ -494,30 +522,30 @@ var moveWatermark = (function() {
 
     // метод содержащий все события модуля
     events: function() {
-      rangControls.bind('mousedown', toggle, function (event) {
+      rangeControls.on('mousedown', function (event) {
         event.preventDefault();
+        
+        toggle.css('background-color', '#f97e76');
         startX = event.screenX - x;
-        $document.bind('mousemove', mousemove);
-        $document.bind('mouseup', mouseup);
+        $document.on('mousemove', mousemove);
+        $document.on('mouseup', mouseup);
       });
 
       function mousemove(event) {
         x = event.screenX - startX;
-        if ((x > -5) && (x < toggle.parent()[0].offsetWidth - 15)) {
-          toggle.css({
-          left: x + 'px'
-          });
+        if (( x > 0 ) && ( x < scale.width() )) {
+          toggle.css('left', x);
           
-        lastPosX = parseInt(toggle.css('left'));
-        bar.css('width', lastPosX + 'px');
-        $('.wm').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
-        $('.many-wm-wrap').css('opacity', lastPosX / toggle.parent()[0].offsetWidth);
+          lastPosX = parseInt(toggle.css('left'));
+          bar.css( 'width', lastPosX );
+          $('.wm').css( 'opacity', lastPosX / scale.width() );
+          $('.many-wm-wrap').css('opacity', lastPosX / scale.width());
         }
       };
 
       function mouseup() {
-        $document.unbind('mousemove', mousemove);
-        $document.unbind('mouseup', mouseup);
+        $document.off('mousemove', mousemove);
+        $document.off('mouseup', mouseup);
       };
     },
      
@@ -533,6 +561,7 @@ var module = (function() {
         wrap = $('.upload-wrapper'),
         GLOBALSCALE,
         defObj = {
+<<<<<<< HEAD
                 url: 'php/upload.php',
                 type: 'POST',
                 success: function (src) {
@@ -589,6 +618,58 @@ var module = (function() {
                         changeWm();
                         changeInputName();
                     }
+=======
+            url: 'php/upload.php',
+            type: 'POST',
+            //TODO нужно организовать проверку инпута!!!
+            success: function (src) {
+                var
+                    mainWrap = wrap.closest('.upload__pic'),
+                    data = src.split("|"),
+                    // Создание картинки с путем
+                    loadPic = $('<img/>').attr('src', data[2]),
+                    // Имя картинки
+                    loadPicName = this.files[0].name,
+                    valid = true,// Флаг
+                    MAXWIDTH = 650,
+                    MAXHEIGHT = 535,
+                    SCALE = 0;
+
+                    console.log(this);
+                    DATA = data;
+
+                // Удалить предыдущую картинку
+                $('#img').remove();
+                // вставить в начало mg-area
+                loadPic.prependTo($('.img-area')).attr('id', 'img');
+
+                if(data[0] > MAXWIDTH) {
+                    loadPic.css('max-width', MAXWIDTH + 'px');
+                    SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
+                }
+
+                if(data[1] > MAXHEIGHT) {
+                    loadPic.css('max-height', MAXHEIGHT+ 'px');
+                    SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
+                }
+
+                mainWrap
+                    .removeClass('disabled')
+                    .find(pics)
+                    .removeClass('disabled-input');
+
+                GLOBALSCALE = SCALE;
+
+                //} else {
+                //    $('#wm').remove();
+                //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
+                //    loadPic.css({
+                //        'max-width': GLOBALSCALE*100+'%',
+                //        'max-height' : GLOBALSCALE*100+'%'
+                //    });
+                //    // Подключаем вотермарк
+                //}
+>>>>>>> 286b8757d89f2e75ef0c7171e325a6caf8959165
             }
         };
 
