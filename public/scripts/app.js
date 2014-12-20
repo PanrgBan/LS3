@@ -11,13 +11,23 @@ var module = (function () {
         createImg: function (e) {
             e.preventDefault();
 
+            var dataObj = {
+                opacity : 1,
+                deltaX: 50,
+                deltaY: 50,
+                image: $('#img').attr('src') ,
+                watermark: $('#wm').attr('src')
+            }
+
             $.ajax({
                 url: 'php/create-img.php',
                 type: 'POST',
+                data: 'data='+ JSON.stringify(dataObj),
+                dataType: 'JSON',
                 success: function (src) {
 
                 }
-            })
+            });
         }
     }
     app.init();
@@ -521,54 +531,64 @@ var module = (function() {
         self,
         pics = $('.fileupload'),
         wrap = $('.upload-wrapper'),
-        DATA,
         GLOBALSCALE,
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
-                success: function (src) {              //TODO нужно организовать проверку инпута!!!
-                    var mainWrap = wrap.closest('.upload__pic'),
-                            data = src.split("|"),
-                            loadPic = $('<img/>').attr('src', data[2]), // Создание картинки с путем
-                            loadPicName = this.files[0].name, // Имя картинки
-                            valid = true,// Флаг
+                success: function (src) {
+                    console.log(JSON.parse(src));
+                    var data = JSON.parse(src),
+                            loadPicWidth = data.width,
+                            loadPicHeight = data.height,
+                            loadPicPath = $('<img/>').attr('src', data.path), // Создание картинки с путем
+                            loadPicName = data.fileName, // Имя картинки
                             MAXWIDTH = 650,
                             MAXHEIGHT = 535,
-                            SCALE = 0;
+                            inputName = data.inputName,
+                            changeWm = function () {
+                                $('#wm').remove();
+                                loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
+                                loadPicPath.css({
+                                    'width': loadPicWidth*GLOBALSCALE+'px',
+                                    'height' : loadPicHeight*GLOBALSCALE+'px'
+                                });
+                                console.log(GLOBALSCALE);
+                                // Подключаем вотермарк
+                            },
+                            changeInputName = function () {
+                                $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+                            };
 
-                            console.log(this);
-                            DATA = data;
 
-                            $('#img').remove(); // Удалить предыдущую картинку
-                            loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
 
-                        if(data[0] > MAXWIDTH) {
-                            loadPic.css('max-width', MAXWIDTH + 'px');
-                            SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
+                    if (inputName === 'userfile') {
+                        $('#img').remove(); // Удалить предыдущую картинку
+                        loadPicPath.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+
+                        if(loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH) {
+                            if (loadPicWidth > loadPicHeight) {
+                                loadPicPath.css('width', MAXWIDTH + 'px');
+                                GLOBALSCALE = MAXWIDTH/loadPicWidth;
+                                console.log(GLOBALSCALE);
+                            } else {
+                                loadPicPath.css('height', MAXHEIGHT+ 'px');
+                                GLOBALSCALE = MAXHEIGHT/loadPicHeight;
+                            }
+                        } else {
+                            GLOBALSCALE = 1;
+                            changeWm();
                         }
-                        if(data[1] > MAXHEIGHT) {
-                            loadPic.css('max-height', MAXHEIGHT+ 'px');
-                            SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
-                        }
 
-
-
-                        mainWrap
+                        $('.upload__pic')
                             .removeClass('disabled')
-                                .find(pics)
-                                    .removeClass('disabled-input');
+                            .find(pics)
+                            .removeClass('disabled-input');
+                        changeInputName();
 
-                        GLOBALSCALE = SCALE;
-
-                    //} else {
-                    //    $('#wm').remove();
-                    //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
-                    //    loadPic.css({
-                    //        'max-width': GLOBALSCALE*100+'%',
-                    //        'max-height' : GLOBALSCALE*100+'%'
-                    //    });
-                    //    // Подключаем вотермарк
-                    //}
+                    }  else {
+                        changeWm();
+                        changeInputName();
+                    }
             }
         };
 

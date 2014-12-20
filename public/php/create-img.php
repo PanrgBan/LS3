@@ -1,18 +1,16 @@
 <?php
 require_once 'lib/WideImage.php';
 
-$image = WideImage::load('../images/first.jpg');
-$watermark = WideImage::load('../images/second.jpg');
-//$left = отступ слева
-//$top = отступ сверху
+$data = json_decode($_POST['data']);
 
-$new = $image->merge($watermark, 'left + 20%', 'top+30%', '100');
+$opacity = $data -> opacity;
+$deltaX = $data -> deltaX;
+$deltaY = $data -> deltaY;
+$image = WideImage::load($data -> image);
+$watermark = WideImage::load($data -> watermark);
 
-$new ->saveToFile('../images/result.jpg');
+$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, '100');
 
-unlink('../images/first.jpg');
-unlink('../images/second.jpg');
-
-echo 'success!';
+$new -> saveToFile('../images/result.jpg');
 
 exit;
