@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use strict";
 
 var module = (function () {
@@ -34,33 +33,6 @@ var module = (function () {
     app.init();
     return {}
 })();
-=======
-"use strict";
-
-var module = (function () {
-    var app = {
-        init: function () {
-            app.setUpListeners();
-        },
-        setUpListeners: function () {
-            $('form.send').on('submit', app.createImg);
-        },
-        createImg: function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: 'php/create-img.php',
-                type: 'POST',
-                success: function (src) {
-
-                }
-            })
-        }
-    }
-    app.init();
-    return {}
-})();
->>>>>>> 286b8757d89f2e75ef0c7171e325a6caf8959165
 ;'use strict';
 
 var moveWatermark = (function() {
@@ -124,30 +96,7 @@ var moveWatermark = (function() {
 
   app = {
     // Инициалицация модуля
-    init: function() {
-      self = this;
-      img = $('#img');
-      wm = $('#wm');
-      field = $('.move-field');
-      boardX = $('#board-x');
-      boardY = $('#board-y');
 
-      self.events();
-      self.getInfo();
-      self.doOneStep();
-      self.refreshBoard();
-      wm.draggable({
-          containment: ".img-area",
-          scroll: false,
-          drag:function(event, ui){
-              self.refreshBoard(ui.position.left,ui.position.top)
-          },
-          stop: function(event, ui){
-              left = ui.position.left;
-              top = ui.position.top;
-          }
-      });
-    },
 
     // События модуля
     events: function() {
@@ -452,6 +401,7 @@ var moveWatermark = (function() {
                     if(ui.position.left > 0) ui.position.left = 0;
                     if(ui.position.top > 0) ui.position.top = 0;
                     /* Это наработки, пока не обращать внимание, уберу как разберусь!
+                    Ок, нет проблем
                     countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
                     countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
                     dragX = (countXWm * widthWm + marginX) - widthImg;
@@ -481,15 +431,38 @@ var moveWatermark = (function() {
   };
 
   // инициализируем модуль
-  setTimeout(function() {
-    app.init();
-    
-  }, 1000);
 
   // возвращаем объект с публичными методами
-  return {};
+  return {
+    init: function() {
+      self = app;
+      img = $('#img');
+      wm = $('#wm');
+      field = $('.move-field');
+      boardX = $('#board-x');
+      boardY = $('#board-y');
+
+      self.events();
+      self.getInfo();
+      self.doOneStep();
+      self.refreshBoard();
+      wm.draggable({
+          containment: ".img-area",
+          scroll: false,
+          drag:function(event, ui){
+              self.refreshBoard(ui.position.left,ui.position.top)
+          },
+          stop: function(event, ui){
+              left = ui.position.left;
+              top = ui.position.top;
+          }
+      });
+    },
+  };
 }());
-;var opacityRange = (function() {
+
+
+moveWatermark.init();;var opacityRange = (function() {
     var
         app,
         self,
@@ -504,21 +477,6 @@ var moveWatermark = (function() {
   
    app = {
     // метод инициалицации модуля
-    init: function() {
-      startX = 210,
-      x = 210,
-      toggle = $('.toggle'),
-      scale = $('.scale'),
-      bar = $('.bar'),
-      rangeControls = $('.range-controls'),
-      $document = $(document),
-      lastPosX = 0,
-      toggle.css('left', startX),
-
-      self = this;
-
-      self.events();
-    },
 
     // метод содержащий все события модуля
     events: function() {
@@ -550,8 +508,27 @@ var moveWatermark = (function() {
     },
      
   };
-  app.init();
-}());;'use strict';
+
+  return {
+    init: function() {
+      startX = 210,
+      x = 210,
+      toggle = $('.toggle'),
+      scale = $('.scale'),
+      bar = $('.bar'),
+      rangeControls = $('.range-controls'),
+      $document = $(document),
+      lastPosX = 0,
+      toggle.css('left', startX),
+
+      self = app;
+
+      self.events();
+    },
+  };
+}());
+
+opacityRange.init();;'use strict';
 
 var module = (function() {
     var
@@ -561,9 +538,9 @@ var module = (function() {
         wrap = $('.upload-wrapper'),
         GLOBALSCALE,
         defObj = {
-<<<<<<< HEAD
                 url: 'php/upload.php',
                 type: 'POST',
+
                 success: function (src) {
                     console.log(JSON.parse(src));
                     var data = JSON.parse(src),
@@ -574,6 +551,7 @@ var module = (function() {
                             MAXWIDTH = 650,
                             MAXHEIGHT = 535,
                             inputName = data.inputName,
+
                             changeWm = function () {
                                 $('#wm').remove();
                                 loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
@@ -584,6 +562,7 @@ var module = (function() {
                                 console.log(GLOBALSCALE);
                                 // Подключаем вотермарк
                             },
+
                             changeInputName = function () {
                                 $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
                             };
@@ -618,58 +597,6 @@ var module = (function() {
                         changeWm();
                         changeInputName();
                     }
-=======
-            url: 'php/upload.php',
-            type: 'POST',
-            //TODO нужно организовать проверку инпута!!!
-            success: function (src) {
-                var
-                    mainWrap = wrap.closest('.upload__pic'),
-                    data = src.split("|"),
-                    // Создание картинки с путем
-                    loadPic = $('<img/>').attr('src', data[2]),
-                    // Имя картинки
-                    loadPicName = this.files[0].name,
-                    valid = true,// Флаг
-                    MAXWIDTH = 650,
-                    MAXHEIGHT = 535,
-                    SCALE = 0;
-
-                    console.log(this);
-                    DATA = data;
-
-                // Удалить предыдущую картинку
-                $('#img').remove();
-                // вставить в начало mg-area
-                loadPic.prependTo($('.img-area')).attr('id', 'img');
-
-                if(data[0] > MAXWIDTH) {
-                    loadPic.css('max-width', MAXWIDTH + 'px');
-                    SCALE = (data[0] - MAXWIDTH)/MAXWIDTH;
-                }
-
-                if(data[1] > MAXHEIGHT) {
-                    loadPic.css('max-height', MAXHEIGHT+ 'px');
-                    SCALE = (data[1] - MAXHEIGHT)/MAXHEIGHT;
-                }
-
-                mainWrap
-                    .removeClass('disabled')
-                    .find(pics)
-                    .removeClass('disabled-input');
-
-                GLOBALSCALE = SCALE;
-
-                //} else {
-                //    $('#wm').remove();
-                //    loadPic.appendTo($('.img-area')).attr('id', 'img').addClass('.wm');
-                //    loadPic.css({
-                //        'max-width': GLOBALSCALE*100+'%',
-                //        'max-height' : GLOBALSCALE*100+'%'
-                //    });
-                //    // Подключаем вотермарк
-                //}
->>>>>>> 286b8757d89f2e75ef0c7171e325a6caf8959165
             }
         };
 
@@ -687,5 +614,4 @@ var module = (function() {
    }
 
   app.init();
-  return {};
 }());

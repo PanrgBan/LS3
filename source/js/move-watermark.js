@@ -61,30 +61,7 @@ var moveWatermark = (function() {
 
   app = {
     // Инициалицация модуля
-    init: function() {
-      self = this;
-      img = $('#img');
-      wm = $('#wm');
-      field = $('.move-field');
-      boardX = $('#board-x');
-      boardY = $('#board-y');
 
-      self.events();
-      self.getInfo();
-      self.doOneStep();
-      self.refreshBoard();
-      wm.draggable({
-          containment: ".img-area",
-          scroll: false,
-          drag:function(event, ui){
-              self.refreshBoard(ui.position.left,ui.position.top)
-          },
-          stop: function(event, ui){
-              left = ui.position.left;
-              top = ui.position.top;
-          }
-      });
-    },
 
     // События модуля
     events: function() {
@@ -389,6 +366,7 @@ var moveWatermark = (function() {
                     if(ui.position.left > 0) ui.position.left = 0;
                     if(ui.position.top > 0) ui.position.top = 0;
                     /* Это наработки, пока не обращать внимание, уберу как разберусь!
+                    Ок, нет проблем
                     countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
                     countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
                     dragX = (countXWm * widthWm + marginX) - widthImg;
@@ -418,11 +396,35 @@ var moveWatermark = (function() {
   };
 
   // инициализируем модуль
-  setTimeout(function() {
-    app.init();
-    
-  }, 1000);
 
   // возвращаем объект с публичными методами
-  return {};
+  return {
+    init: function() {
+      self = app;
+      img = $('#img');
+      wm = $('#wm');
+      field = $('.move-field');
+      boardX = $('#board-x');
+      boardY = $('#board-y');
+
+      self.events();
+      self.getInfo();
+      self.doOneStep();
+      self.refreshBoard();
+      wm.draggable({
+          containment: ".img-area",
+          scroll: false,
+          drag:function(event, ui){
+              self.refreshBoard(ui.position.left,ui.position.top)
+          },
+          stop: function(event, ui){
+              left = ui.position.left;
+              top = ui.position.top;
+          }
+      });
+    },
+  };
 }());
+
+
+moveWatermark.init();
