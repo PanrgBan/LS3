@@ -29,16 +29,21 @@ function rus2translit($string) {
     return strtr($string, $converter);
 }
 
+//$data = json_decode($_POST['obj']);
+
 $inputName = key($_FILES) ;
 
 $uploadFile = ($_FILES[$inputName]['tmp_name']);
 $uploadFileName = ($_FILES[$inputName]['name']);
-
 $uploadFileName = rus2translit($uploadFileName);
-
 $filePath = '../images/'. $uploadFileName;
-
 $size = getimagesize($uploadFile);
+
+//if ($inputName == 'userfile') {
+//    unlink($data->mainImg);
+//} else {
+//    unlink($data -> wtImg);
+//}
 
 WideImage::loadFromFile($uploadFile)->saveToFile($filePath);
 
@@ -51,4 +56,5 @@ $src = array(
 );
 
 echo json_encode($src);
+//echo $data;
 exit;

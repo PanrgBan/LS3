@@ -9,7 +9,7 @@
         getImg,
 
         MAXHEIGHT = 535,
-        MAXWIDTH = 635,
+        MAXWIDTH = 650,
         WM,
         WMGrid,
         tiling = false;
@@ -553,9 +553,15 @@
             pics = $('.fileupload'),
             wrap = $('.upload-wrapper'),
             GLOBALSCALE,
+            //delObj = {
+            //    mainImg: '123',
+            //    wtImg: '456'
+            //},
             defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
+                //data: 'obj=' + JSON.stringify(app.delObj),
+                //dataType: 'JSON',
                 success: function (src) {
                     var
                         data = JSON.parse(src),
@@ -573,7 +579,7 @@
                             loadPicPath.css({
                                 'width': loadPicWidth * GLOBALSCALE + 'px',
                                 'height': loadPicHeight * GLOBALSCALE + 'px'
-                            });
+                            })
                         },
 
                         changeInputName = function () {
@@ -592,6 +598,7 @@
                                 $('.img-area').css('height', 100 + '%');
                                 GLOBALSCALE = MAXHEIGHT / loadPicHeight;
                             }
+                            console.log(GLOBALSCALE);
                         }
                         $('.upload__pic')
                             .removeClass('disabled')
@@ -653,16 +660,17 @@
                     image: $('#img').attr('src'),
                     watermark: $('#wm').attr('src')
                 };
-
-                console.log(dataObj);
-                $.ajax({
-                    url: 'php/create-img.php',
-                    type: 'POST',
-                    data: 'data=' + JSON.stringify(dataObj),
-                    dataType: 'JSON',
-                    success: function (src) {
-
-                    }
+                //$.ajax({
+                //    url: 'php/create-img.php',
+                //    type: 'POST',
+                //    data: 'data=' + JSON.stringify(dataObj),
+                //    success: function () {
+                //        console.log('yes');
+                //    },
+                //    dataType: 'JSON'
+                //});
+                $.get("php/create-img.php", dataObj, function (src) {
+                    window.location.href = src;
                 });
             }
         }
