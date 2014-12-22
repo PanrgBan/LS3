@@ -1,6 +1,6 @@
 'use strict';
 
-var module = (function() {
+var upload = (function() {
     var
         app,
         self,

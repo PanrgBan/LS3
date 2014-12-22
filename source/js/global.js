@@ -5,11 +5,14 @@
   var
       moveWm, // модуль перемещения
       opacityWm, // модуль прозрачности
+      upload,
+      getImg,
 
+      MAXHEIGHT = 535,
+      MAXWIDTH = 635,
       WM,
       WMGrid,
       tiling = false;
-
 
   //=================================
   // Перемещение вотера
@@ -438,8 +441,8 @@
       getPosition: function() {
         return {
           tiling: tiling,
-          posX: left,
-          posY: top,
+          posX: left / MAXWIDTH * 100,
+          posY: top / MAXHEIGHT * 100,
           marginX: marginX,
           marginY: marginY
         }
@@ -499,7 +502,7 @@
         };
       },
 
-      moveOpacity: function(e) {
+      moveOpacity: function() {
         var pos = scaleWidth * opacity;
 
         toggle.css('left', pos);
@@ -540,21 +543,146 @@
   }());
 
 
+  //=================================
+  // Отправка изображений на сервер
+  //=================================
 
-  /* Получение инфы о вотере
-    
-    // возвращает объект
-    // tiling - boll (замощение on/off)
-    // posX
-    // poxY
-    // если включен режим замощения следующие переменные заполняются, иначе undefined
-    // marginX - расстояние между вотерами по горизинтали
-    // marginY - расстояние между вотерами по вертикали
-    moveWm.getPosition();
+  upload = (function() {
+    var
+      app, self,
+      pics = $('.fileupload'),
+      wrap = $('.upload-wrapper'),
+      GLOBALSCALE,
+      defObj = {
+        url: 'php/upload.php',
+        type: 'POST',
 
-    // возвращает число
-    opacityWm.getOpacity();
-  */
+            success: function (src) {
+              // console.log( JSON.parse(src) );
+              var
+                  data = JSON.parse(src),
+                  loadPicWidth = data.width,
+                  loadPicHeight = data.height,
+                  // Создание картинки с путем
+                  loadPicPath = $('<img/>').attr('src', data.path),
+                  // Имя картинки
+                  loadPicName = data.fileName,
+                  inputName = data.inputName,
+
+              changeWm = function () {
+                  if ( WM ) {
+                    WM.remove();
+                  }
+                  loadPicPath.appendTo( $('.img-area') ).attr('id', 'wm').addClass('wm');
+                  loadPicPath.css({
+                    'width': loadPicWidth * GLOBALSCALE + 'px',
+                    'height' : loadPicHeight * GLOBALSCALE + 'px'
+                  });
+                  // console.log(GLOBALSCALE);
+                  // Подключаем вотермарк
+              },
+
+              changeInputName = function () {
+                  $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+              };
+
+            // если инпут отправляет изображение
+            if (inputName === 'userfile') {
+                // Удалить предыдущую картинку
+                $('#img').remove();
+                // вставить в начало mg-area
+                loadPicPath.prependTo($('.img-area')).attr('id', 'img');
+
+                if( loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH ) {
+                    if (loadPicWidth > loadPicHeight) {
+                        loadPicPath.css('width', 100 + '%');
+                        GLOBALSCALE = MAXWIDTH/loadPicWidth;
+                        // console.log(GLOBALSCALE);
+                    } else {
+                        loadPicPath.css('height', 100 + '%');
+                        $('.img-area').css('height', 100 + '%');
+                        GLOBALSCALE = MAXHEIGHT/loadPicHeight;
+                    }
+                }
+
+                $('.upload__pic')
+                    .removeClass('disabled')
+                    .find(pics)
+                    .removeClass('disabled-input');
+                changeInputName();
+
+            }  else {
+                changeWm();
+                changeInputName();
+                initGlobal();
+            }
+        }
+      };
+
+
+     app = {
+         init: function () {
+             self = this;
+             self.events();
+         },
+
+         events: function () {
+                 pics.fileupload( defObj );
+         }
+     }
+
+    app.init();
+  }());
+
+
+  //=================================
+  // Загрузка изображений
+  //=================================
+
+  getImg = (function () {
+    var app = {
+        init: function () {
+            app.setUpListeners();
+        },
+
+        setUpListeners: function () {
+            $('form.send').on('submit', app.createImg);
+        },
+
+        createImg: function (e) {
+            e.preventDefault();
+
+            var move = moveWm.getPosition();
+
+            if ( move.tiling ) {
+              var marginX = move.marginX;
+              var marginY = move.marignY;
+            }
+
+            var dataObj = {
+                opacity : opacityWm.getOpacity(),
+                deltaX: move.posX,
+                deltaY: move.posY,
+                image: $('#img').attr('src') ,
+                watermark: $('#wm').attr('src')
+            }
+
+            $.ajax({
+                url: 'php/create-img.php',
+                type: 'POST',
+                data: 'data='+ JSON.stringify(dataObj),
+                dataType: 'JSON',
+                success: function (src) {
+
+                }
+            });
+        }
+    }
+    app.init();
+    return {}
+  })();
+
+
 
   // вызываем после загрузки изображений на сервер
   function initGlobal() {
@@ -563,7 +691,6 @@
     opacityWm.init();
   }
 
-  // тест функции. 
   setTimeout(function() {
     initGlobal();
   }, 500);
