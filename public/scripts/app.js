@@ -419,18 +419,31 @@
         self.getInfo();
         self.doOneStep();
         self.refreshBoard();
+
         WM.draggable({
             containment: ".img-area",
             scroll: false,
+
             drag:function(event, ui){
-                self.refreshBoard(ui.position.left,ui.position.top)
+                self.refreshBoard(ui.position.left, ui.position.top)
             },
+
             stop: function(event, ui){
                 left = ui.position.left;
                 top = ui.position.top;
             }
         });
       },
+
+      getPosition: function() {
+        return {
+          tiling: tiling,
+          posX: left,
+          posY: top,
+          marginX: marginX,
+          marginY: marginY
+        }
+      }
     };
   }());
 
@@ -530,12 +543,29 @@
 
 
 
+  /* Получение инфы о вотере
+    
+    // возвращает объект
+    // tiling - boll (замощение on/off)
+    // posX
+    // poxY
+    // если включен режим замощения следующие переменные заполняются, иначе undefined
+    // marginX - расстояние между вотерами по горизинтали
+    // marginY - расстояние между вотерами по вертикали
+    moveWm.getPosition();
+
+    // возвращает число
+    opacityWm.getOpacity();
+  */
+
+  // вызываем после загрузки изображений на сервер
   function initGlobal() {
     WM = $('.wm');
     moveWm.init();
     opacityWm.init();
   }
 
+  // тест функции. 
   setTimeout(function() {
     initGlobal();
   }, 500);
