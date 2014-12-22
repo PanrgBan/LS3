@@ -12,8 +12,6 @@ var opacityRange = (function() {
         $document;
   
    app = {
-    // метод инициалицации модуля
-
     // метод содержащий все события модуля
     events: function() {
       rangeControls.on('mousedown', function (event) {
@@ -42,7 +40,6 @@ var opacityRange = (function() {
         $document.off('mouseup', mouseup);
       };
     },
-     
   };
 
   return {
