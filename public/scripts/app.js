@@ -459,6 +459,7 @@
 
         rangeControls.on('mousedown', function (e) {
           e.preventDefault();
+          WM.css('transition', 'none');
 
           toggle.css('background-color', '#f97e76');
 
@@ -481,6 +482,7 @@
 
         function mouseup() {
           toggle.css('background-color', '');
+          WM.css('transition', '');
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
         };
