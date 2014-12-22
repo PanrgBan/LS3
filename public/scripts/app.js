@@ -490,11 +490,6 @@ var moveWatermark = (function() {
         startX = event.screenX - x;
         $document.on('mousemove', mousemove);
         $document.on('mouseup', mouseup);
-        
-      scale.on('click', function(e) {
-//        toggle.css('left', );
-      });
-        
       });
 
       function mousemove(event) {
@@ -514,6 +509,10 @@ var moveWatermark = (function() {
         $document.off('mousemove', mousemove);
         $document.off('mouseup', mouseup);
       };
+      scale.on('click', function(e) {
+//        toggle.css( 'left', e.clientX );
+//        console.log(e);
+      });
     },
      
   };
