@@ -5,11 +5,14 @@
   var
       moveWm, // модуль перемещения
       opacityWm, // модуль прозрачности
+      upload,
+      getImg,
 
+      MAXHEIGHT = 535,
+      MAXWIDTH = 635,
       WM,
       WMGrid,
       tiling = false;
-
 
   //=================================
   // Перемещение вотера
@@ -205,19 +208,15 @@
           switch ( direction ) {
             case 'right':
               marginX += 1;
-                dragX += countXWm;
               break;
             case 'left':
               marginX -= 1;
-                dragX -= countXWm;
               break;
             case 'top':
               marginY -= 1;
-                dragY += countYWm;
               break;
             case 'bottom':
               marginY += 1;
-                dragY -= countYWm;
               break;
             default:
               marginX = 0;
@@ -329,24 +328,27 @@
 
         // увеличиваем размеры обертки воттеров
             wmWrapWidth = widthImg * multipleTiling,
-          wmWrapHeight = heightImg * multipleTiling,
+            wmWrapHeight = heightImg * multipleTiling,
+
+            leftWmWrap = (wmWrapWidth/2) - (widthImg/2),
+            topWmWrap = (wmWrapHeight/2) - (heightImg/2),
 
             // считаем кол-во воттеров, которые влезают в области нашего изображения
             countXWmL = ~~( widthImg / widthWm ),
             countYWmL = ~~( heightImg / heightWm );
 
           // считаем кол-во воттеров, которые влезают в обертку
-          countXWm = ~~( wmWrapWidth / widthWm);
+          countXWm = ~~( wmWrapWidth / widthWm );
           countYWm = ~~( wmWrapHeight / heightWm );
           // выносим отдельно, чтобы ипользовать в др. ф-ции
           countWm = countXWm * countYWm;
         // считаем отступы для ровного заполнения воттерами большой картинки
-        marginX = ( widthImg / countXWmL ) - widthWm;
-        marginY = ( heightImg / countYWmL ) - heightWm;
+        marginY = ( wmWrapWidth / countXWm ) - widthWm;
+        marginX = ( wmWrapHeight / countYWm ) - heightWm;
 
           // для ограничения драга нашего каскада с воттерами внутри изображения
-          dragX = (countXWm * widthWm + marginX) - widthImg;
-          dragY = (countYWm * heightWm + marginY) - heightImg;
+          dragX = wmWrapWidth - widthImg;
+          dragY = wmWrapHeight - heightImg;
 
         // плодим воттеры
         for( var i = 0; i < countWm; i++ ){
@@ -355,17 +357,19 @@
 
         WMGrid.css({
           width: wmWrapWidth,
-          height: wmWrapHeight
+          height: wmWrapHeight,
+          top: -topWmWrap,
+          left: -leftWmWrap
         });
 
         $('.many-wm-wrap-item').css({
           background: "url(" + wmSrc + ") no-repeat",
           width: widthWm,
           height: heightWm,
-          marginTop: marginY/2,
-          marginLeft: marginX/2,
-          marginBottom: marginY/2,
-          marginRight: marginX/2
+          marginTop: marginX/2,
+          marginLeft: marginY/2,
+          marginBottom: marginX/2,
+          marginRight: marginY/2
         });
 
           $('.many-wm-wrap').on('mouseover',function(e){
@@ -374,13 +378,6 @@
                   drag:function(event, ui){
                       if(ui.position.left > 0) ui.position.left = 0;
                       if(ui.position.top > 0) ui.position.top = 0;
-                      /* Это наработки, пока не обращать внимание, уберу как разберусь!
-                      Ок, нет проблем
-                      countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
-                      countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
-                      dragX = (countXWm * widthWm + marginX) - widthImg;
-                      dragY = (countYWm * heightWm + marginY) - heightImg;
-                      console.log(dragX);*/
                       if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
                       if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
                   }
@@ -401,6 +398,15 @@
           marginBottom: marginX/2,
           marginRight: marginY/2
         });
+          var WMGridWidth = WMGrid.width(),
+              WMGridHeight = WMGrid.height();
+          dragX = WMGridWidth - widthImg;
+          dragY = WMGridHeight - heightImg;
+          console.log(WMGridWidth);
+          WMGrid.css({
+              width: WMGridWidth + (1 * countXWm),
+              height: WMGridHeight + (1 * countYWm)
+          });
       }
     };
 
@@ -438,8 +444,8 @@
       getPosition: function() {
         return {
           tiling: tiling,
-          posX: left,
-          posY: top,
+          posX: left / MAXWIDTH * 100,
+          posY: top / MAXHEIGHT * 100,
           marginX: marginX,
           marginY: marginY
         }
@@ -499,7 +505,7 @@
         };
       },
 
-      moveOpacity: function(e) {
+      moveOpacity: function() {
         var pos = scaleWidth * opacity;
 
         toggle.css('left', pos);
@@ -540,50 +546,126 @@
   }());
 
 
+  //=================================
+  // Отправка изображений на сервер
+  //=================================
 
-  /* Получение инфы о вотере
-    
-    // возвращает объект
-    // tiling - boll (замощение on/off)
-    // posX
-    // poxY
-    // если включен режим замощения следующие переменные заполняются, иначе undefined
-    // marginX - расстояние между вотерами по горизинтали
-    // marginY - расстояние между вотерами по вертикали
-    moveWm.getPosition();
+  upload = (function() {
+    var
+      app, self,
+      pics = $('.fileupload'),
+      wrap = $('.upload-wrapper'),
+      GLOBALSCALE,
+      defObj = {
+        url: 'php/upload.php',
+        type: 'POST',
 
-    // возвращает число
-    opacityWm.getOpacity();
-  */
+            success: function (src) {
+              // console.log( JSON.parse(src) );
+              var
+                  data = JSON.parse(src),
+                  loadPicWidth = data.width,
+                  loadPicHeight = data.height,
+                  // Создание картинки с путем
+                  loadPicPath = $('<img/>').attr('src', data.path),
+                  // Имя картинки
+                  loadPicName = data.fileName,
+                  inputName = data.inputName,
 
-  // вызываем после загрузки изображений на сервер
-  function initGlobal() {
-    WM = $('.wm');
-    moveWm.init();
-    opacityWm.init();
-  }
+              changeWm = function () {
+                  if ( WM ) {
+                    WM.remove();
+                  }
+                  loadPicPath.appendTo( $('.img-area') ).attr('id', 'wm').addClass('wm');
+                  loadPicPath.css({
+                    'width': loadPicWidth * GLOBALSCALE + 'px',
+                    'height' : loadPicHeight * GLOBALSCALE + 'px'
+                  });
+                  // console.log(GLOBALSCALE);
+                  // Подключаем вотермарк
+              },
 
-  // тест функции. 
-  setTimeout(function() {
-    initGlobal();
-  }, 500);
-}();"use strict";
+              changeInputName = function () {
+                  $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+              };
 
-var getImg = (function () {
+            // если инпут отправляет изображение
+            if (inputName === 'userfile') {
+                // Удалить предыдущую картинку
+                $('#img').remove();
+                // вставить в начало mg-area
+                loadPicPath.prependTo($('.img-area')).attr('id', 'img');
+
+                if( loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH ) {
+                    if (loadPicWidth > loadPicHeight) {
+                        loadPicPath.css('width', 100 + '%');
+                        GLOBALSCALE = MAXWIDTH/loadPicWidth;
+                        // console.log(GLOBALSCALE);
+                    } else {
+                        loadPicPath.css('height', 100 + '%');
+                        $('.img-area').css('height', 100 + '%');
+                        GLOBALSCALE = MAXHEIGHT/loadPicHeight;
+                    }
+                }
+
+                $('.upload__pic')
+                    .removeClass('disabled')
+                    .find(pics)
+                    .removeClass('disabled-input');
+                changeInputName();
+
+            }  else {
+                changeWm();
+                changeInputName();
+                initGlobal();
+            }
+        }
+      };
+
+
+     app = {
+         init: function () {
+             self = this;
+             self.events();
+         },
+
+         events: function () {
+                 pics.fileupload( defObj );
+         }
+     }
+
+    app.init();
+  }());
+
+
+  //=================================
+  // Загрузка изображений
+  //=================================
+
+  getImg = (function () {
     var app = {
         init: function () {
             app.setUpListeners();
         },
+
         setUpListeners: function () {
             $('form.send').on('submit', app.createImg);
         },
+
         createImg: function (e) {
             e.preventDefault();
 
+            var move = moveWm.getPosition();
+
+            if ( move.tiling ) {
+              var marginX = move.marginX;
+              var marginY = move.marignY;
+            }
+
             var dataObj = {
-                opacity : 1,
-                deltaX: 50,
-                deltaY: 50,
+                opacity : opacityWm.getOpacity(),
+                deltaX: move.posX,
+                deltaY: move.posY,
                 image: $('#img').attr('src') ,
                 watermark: $('#wm').attr('src')
             }
@@ -601,91 +683,18 @@ var getImg = (function () {
     }
     app.init();
     return {}
-})();
-;'use strict';
-
-var module = (function() {
-    var
-        app,
-        self,
-        pics = $('.fileupload'),
-        wrap = $('.upload-wrapper'),
-        GLOBALSCALE,
-        defObj = {
-                url: 'php/upload.php',
-                type: 'POST',
-
-                success: function (src) {
-                    console.log(JSON.parse(src));
-                    var data = JSON.parse(src),
-                            loadPicWidth = data.width,
-                            loadPicHeight = data.height,
-                            loadPicPath = $('<img/>').attr('src', data.path), // Создание картинки с путем
-                            loadPicName = data.fileName, // Имя картинки
-                            MAXWIDTH = 650,
-                            MAXHEIGHT = 535,
-                            inputName = data.inputName,
-
-                            changeWm = function () {
-                                $('#wm').remove();
-                                loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
-                                loadPicPath.css({
-                                    'width': loadPicWidth*GLOBALSCALE+'px',
-                                    'height' : loadPicHeight*GLOBALSCALE+'px'
-                                });
-                                console.log(GLOBALSCALE);
-                                // Подключаем вотермарк
-                            },
-
-                            changeInputName = function () {
-                                $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
-                            };
+  })();
 
 
 
-                    if (inputName === 'userfile') {
-                        $('#img').remove(); // Удалить предыдущую картинку
-                        loadPicPath.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+  // вызываем после загрузки изображений на сервер
+  function initGlobal() {
+    WM = $('.wm');
+    moveWm.init();
+    opacityWm.init();
+  }
 
-                        if(loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH) {
-                            if (loadPicWidth > loadPicHeight) {
-                                loadPicPath.css('width', MAXWIDTH + 'px');
-                                GLOBALSCALE = MAXWIDTH/loadPicWidth;
-                                console.log(GLOBALSCALE);
-                            } else {
-                                loadPicPath.css('height', MAXHEIGHT+ 'px');
-                                GLOBALSCALE = MAXHEIGHT/loadPicHeight;
-                            }
-                        } else {
-                            GLOBALSCALE = 1;
-                            changeWm();
-                        }
-
-                        $('.upload__pic')
-                            .removeClass('disabled')
-                            .find(pics)
-                            .removeClass('disabled-input');
-                        changeInputName();
-
-                    }  else {
-                        changeWm();
-                        changeInputName();
-                    }
-            }
-        };
-
-
-   app = {
-       init: function () {
-           self = this;
-
-           self.events();
-       },
-
-       events: function () {
-               pics.fileupload(defObj);
-       }
-   }
-
-  app.init();
-}());
+  setTimeout(function() {
+    initGlobal();
+  }, 500);
+}()
