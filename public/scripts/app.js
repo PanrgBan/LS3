@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use strict";
 
 var module = (function () {
@@ -34,33 +33,6 @@ var module = (function () {
     app.init();
     return {}
 })();
-=======
-"use strict";
-
-var module = (function () {
-    var app = {
-        init: function () {
-            app.setUpListeners();
-        },
-        setUpListeners: function () {
-            $('form.send').on('submit', app.createImg);
-        },
-        createImg: function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: 'php/create-img.php',
-                type: 'POST',
-                success: function (src) {
-
-                }
-            })
-        }
-    }
-    app.init();
-    return {}
-})();
->>>>>>> 286b8757d89f2e75ef0c7171e325a6caf8959165
 ;'use strict';
 
 var moveWatermark = (function() {
