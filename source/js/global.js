@@ -104,7 +104,7 @@
           e.preventDefault()
 
           // отключаем анимацию
-          wm.css('transition', 'none');
+          WM.css('transition', 'none');
 
           var direction = this.getAttribute('data-direction');
 
@@ -182,7 +182,7 @@
       // Попиксельное изменение позиции
       // direction - направление смещения
       move: function( direction ) {
-        if ( oneWater ) {
+        if ( !tiling ) {
           switch ( direction ) {
             case 'right':
               left += 1;
