@@ -209,20 +209,16 @@
         } else {
           switch ( direction ) {
             case 'right':
-              marginY += 1;
-                dragY += countXWm;
+              marginX += 1;
               break;
             case 'left':
-              marginY -= 1;
-                dragY -= countXWm;
+              marginX -= 1;
               break;
             case 'top':
-              marginX += 1;
-                dragX += countYWm;
+              marginY -= 1;
               break;
             case 'bottom':
-              marginX -= 1;
-                dragX -= countYWm;
+              marginY += 1;
               break;
             default:
               marginX = 0;
@@ -334,24 +330,27 @@
 
         // увеличиваем размеры обертки воттеров
             wmWrapWidth = widthImg * multipleTiling,
-          wmWrapHeight = heightImg * multipleTiling,
+            wmWrapHeight = heightImg * multipleTiling,
+
+            leftWmWrap = (wmWrapWidth/2) - (widthImg/2),
+            topWmWrap = (wmWrapHeight/2) - (heightImg/2),
 
             // считаем кол-во воттеров, которые влезают в области нашего изображения
             countXWmL = ~~( widthImg / widthWm ),
             countYWmL = ~~( heightImg / heightWm );
 
           // считаем кол-во воттеров, которые влезают в обертку
-          countXWm = ~~( wmWrapWidth / widthWm);
+          countXWm = ~~( wmWrapWidth / widthWm );
           countYWm = ~~( wmWrapHeight / heightWm );
           // выносим отдельно, чтобы ипользовать в др. ф-ции
           countWm = countXWm * countYWm;
         // считаем отступы для ровного заполнения воттерами большой картинки
-        marginX = ( widthImg / countXWmL ) - widthWm;
-        marginY = ( heightImg / countYWmL ) - heightWm;
+        marginY = ( wmWrapWidth / countXWm ) - widthWm;
+        marginX = ( wmWrapHeight / countYWm ) - heightWm;
 
           // для ограничения драга нашего каскада с воттерами внутри изображения
-          dragX = (countXWm * widthWm + marginX) - widthImg;
-          dragY = (countYWm * heightWm + marginY) - heightImg;
+          dragX = wmWrapWidth - widthImg;
+          dragY = wmWrapHeight - heightImg;
 
         // плодим воттеры
         for( var i = 0; i < countWm; i++ ){
@@ -360,17 +359,19 @@
 
         WMGrid.css({
           width: wmWrapWidth,
-          height: wmWrapHeight
+          height: wmWrapHeight,
+          top: -topWmWrap,
+          left: -leftWmWrap
         });
 
         $('.many-wm-wrap-item').css({
           background: "url(" + wmSrc + ") no-repeat",
           width: widthWm,
           height: heightWm,
-          marginTop: marginY/2,
-          marginLeft: marginX/2,
-          marginBottom: marginY/2,
-          marginRight: marginX/2
+          marginTop: marginX/2,
+          marginLeft: marginY/2,
+          marginBottom: marginX/2,
+          marginRight: marginY/2
         });
 
           $('.many-wm-wrap').on('mouseover',function(e){
@@ -379,13 +380,6 @@
                   drag:function(event, ui){
                       if(ui.position.left > 0) ui.position.left = 0;
                       if(ui.position.top > 0) ui.position.top = 0;
-                      /* Это наработки, пока не обращать внимание, уберу как разберусь!
-                      Ок, нет проблем
-                      countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
-                      countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
-                      dragX = (countXWm * widthWm + marginX) - widthImg;
-                      dragY = (countYWm * heightWm + marginY) - heightImg;
-                      console.log(dragX);*/
                       if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
                       if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
                   }
@@ -406,6 +400,15 @@
           marginBottom: marginX/2,
           marginRight: marginY/2
         });
+          var WMGridWidth = WMGrid.width(),
+              WMGridHeight = WMGrid.height();
+          dragX = WMGridWidth - widthImg;
+          dragY = WMGridHeight - heightImg;
+          console.log(WMGridWidth);
+          WMGrid.css({
+              width: WMGridWidth + (1 * countXWm),
+              height: WMGridHeight + (1 * countYWm)
+          });
       }
     };
 
