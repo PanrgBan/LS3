@@ -454,12 +454,11 @@
 
   opacityWm = (function() {
     var
-        app,
-        self,
-        toggle,
-        scale,
-        bar,
+        app, self,
         rangeControls,
+        bar,
+        scale,
+        toggle,
 
         opacity = .7,
         scaleWidth,
@@ -480,8 +479,6 @@
           $document.on('mouseup', mouseup);
         });
 
-
-
         //========================================
 
         function mousemove(e) {
@@ -496,6 +493,7 @@
         function mouseup() {
           toggle.css('background-color', '');
           WM.css('transition', '');
+
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
         };
@@ -519,10 +517,10 @@
     return {
       init: function() {
         self = app;
-        toggle = $('.toggle');
-        bar = $('.bar');
-        scale = $('.scale');
         rangeControls = $('.range-controls');
+        toggle = rangeControls.find('.toggle');
+        bar = rangeControls.find('.bar');
+        scale = rangeControls.find('.scale');
         $document = $(document);
 
         scaleWidth = scale.width();
