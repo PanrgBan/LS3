@@ -9,7 +9,7 @@ $deltaY = $data -> deltaY;
 $image = WideImage::load($data -> image);
 $watermark = WideImage::load($data -> watermark);
 
-$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, '100');
+$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity * 100);
 
 $new -> saveToFile('../images/result.jpg');
 
