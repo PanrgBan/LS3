@@ -50,13 +50,14 @@
         oneSectorH,
         maxWidth,
         maxHeight,
-        marginX,
-        marginY,
+        marginX = 0,
+        marginY = 0,
         dragX,
         dragY,
         countXWm,
         countYWm,
-        countWm,
+        wmWrapWidth,
+        wmWrapHeight,
 
         // Шаг позиции и расстояния
         // от вотермарка до границ
@@ -162,10 +163,10 @@
                   field.append("<div class='many-water-field'></div>");
                   manyWaterField = $('.many-water-field');
                   manyWaterField
-                    .append("<div class='many-water-field-x'><span></span></div>")
-                    .append("<div class='many-water-field-y'><span></span></div>");
-                  manyWaterFieldX = $('.many-water-field-x').find('span');
-                  manyWaterFieldY = $('.many-water-field-y').find('span');
+                    .append("<div class='many-water-field-y'><span></span></div>")
+                    .append("<div class='many-water-field-x'><span></span></div>");
+                  manyWaterFieldX = $('.many-water-field-y').find('span');
+                  manyWaterFieldY = $('.many-water-field-x').find('span');
                 }
 
                 if(WMGrid){
@@ -289,8 +290,8 @@
               boardX.text( ~~(marginX) );
               boardY.text( ~~(marginY) );
 
-              manyWaterFieldX.css( "height", marginX + '%' );
-              manyWaterFieldY.css( "width", marginY + '%' );
+              manyWaterFieldX.css( "width", marginX + '%' );
+              manyWaterFieldY.css( "height", marginY + '%' );
             }
           }else{
               boardX.text(x);
@@ -325,28 +326,23 @@
 
         $('.img-area').append( WMGrid );
 
+        // количество вотеров по x/y
+        countXWm = ~~( widthImg / widthWm ) * 2;
+        countYWm = ~~( heightImg / heightWm ) * 2;
+
+        // ширина/длина обертки
+        wmWrapWidth = countXWm * widthWm;
+        wmWrapHeight = countYWm * heightWm;
+
         var
             wmSrc = WM.attr('src'),
 
-        // увеличиваем размеры обертки воттеров
-            wmWrapWidth = widthImg * multipleTiling,
-            wmWrapHeight = heightImg * multipleTiling,
-
+            // Сдвиг враппера в центр
             leftWmWrap = (wmWrapWidth/2) - (widthImg/2),
             topWmWrap = (wmWrapHeight/2) - (heightImg/2),
 
-            // считаем кол-во воттеров, которые влезают в области нашего изображения
-            countXWmL = ~~( widthImg / widthWm ),
-            countYWmL = ~~( heightImg / heightWm );
-
-          // считаем кол-во воттеров, которые влезают в обертку
-          countXWm = ~~( wmWrapWidth / widthWm );
-          countYWm = ~~( wmWrapHeight / heightWm );
-          // выносим отдельно, чтобы ипользовать в др. ф-ции
-          countWm = countXWm * countYWm;
-        // считаем отступы для ровного заполнения воттерами большой картинки
-        marginY = ( wmWrapWidth / countXWm ) - widthWm;
-        marginX = ( wmWrapHeight / countYWm ) - heightWm;
+            // колличество воттеров
+            countWm = countXWm * countYWm;
 
           // для ограничения драга нашего каскада с воттерами внутри изображения
           dragX = wmWrapWidth - widthImg;
@@ -367,24 +363,20 @@
         $('.many-wm-wrap-item').css({
           background: "url(" + wmSrc + ") no-repeat",
           width: widthWm,
-          height: heightWm,
-          marginTop: marginX/2,
-          marginLeft: marginY/2,
-          marginBottom: marginX/2,
-          marginRight: marginY/2
+          height: heightWm
         });
 
-          $('.many-wm-wrap').on('mouseover',function(e){
-              $('.many-wm-wrap').draggable({
-                  scroll: false,
-                  drag:function(event, ui){
-                      if(ui.position.left > 0) ui.position.left = 0;
-                      if(ui.position.top > 0) ui.position.top = 0;
-                      if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
-                      if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
-                  }
-              });
-          });
+        $('.many-wm-wrap').on('mouseover',function(e){
+            $('.many-wm-wrap').draggable({
+                scroll: false,
+                drag:function(event, ui){
+                    if(ui.position.left > 0) ui.position.left = 0;
+                    if(ui.position.top > 0) ui.position.top = 0;
+                    if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
+                    if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
+                }
+            });
+        });
       },
 
       // двигаем наш каскад воттеров
@@ -395,19 +387,18 @@
         if ( marginY > 100 ) marginY = 100;
 
         $('.many-wm-wrap-item').css({
-          marginTop: marginX/2,
-          marginLeft: marginY/2,
-          marginBottom: marginX/2,
-          marginRight: marginY/2
+          marginTop: marginY,
+          marginLeft: marginX,
+          marginBottom: marginY,
+          marginRight: marginX
         });
-          var WMGridWidth = WMGrid.width(),
-              WMGridHeight = WMGrid.height();
-          dragX = WMGridWidth - widthImg;
-          dragY = WMGridHeight - heightImg;
-          console.log(WMGridWidth);
+
+          dragX = wmWrapWidth - widthImg;
+          dragY = wmWrapHeight - heightImg;
+
           WMGrid.css({
-              width: WMGridWidth + (1 * countXWm),
-              height: WMGridHeight + (1 * countYWm)
+              width: wmWrapWidth + (countXWm * marginX * 2),
+              height: wmWrapHeight + (countYWm * marginY * 2)
           });
       }
     };
