@@ -12,23 +12,6 @@ var opacityRange = (function() {
         $document;
   
    app = {
-    // метод инициалицации модуля
-    init: function() {
-      startX = 210,
-      x = 210,
-      toggle = $('.toggle'),
-      scale = $('.scale'),
-      bar = $('.bar'),
-      rangeControls = $('.range-controls'),
-      $document = $(document),
-      lastPosX = 0,
-      toggle.css('left', startX),
-
-      self = this;
-
-      self.events();
-    },
-
     // метод содержащий все события модуля
     events: function() {
       rangeControls.on('mousedown', function (event) {
@@ -57,7 +40,25 @@ var opacityRange = (function() {
         $document.off('mouseup', mouseup);
       };
     },
-     
   };
-  app.init();
+
+  return {
+    init: function() {
+      startX = 210,
+      x = 210,
+      toggle = $('.toggle'),
+      scale = $('.scale'),
+      bar = $('.bar'),
+      rangeControls = $('.range-controls'),
+      $document = $(document),
+      lastPosX = 0,
+      toggle.css('left', startX),
+
+      self = app;
+
+      self.events();
+    },
+  };
 }());
+
+opacityRange.init();
