@@ -195,19 +195,19 @@ var moveWatermark = (function() {
       } else {
         switch ( direction ) {
           case 'right':
-            marginY += 1;
+            marginX += 1;
               dragY += countXWm;
             break;
           case 'left':
-            marginY -= 1;
+            marginX -= 1;
               dragY -= countXWm;
             break;
           case 'top':
-            marginX += 1;
+            marginY += 1;
               dragX += countYWm;
             break;
           case 'bottom':
-            marginX -= 1;
+            marginY -= 1;
               dragX -= countYWm;
             break;
           default:

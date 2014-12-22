@@ -3,7 +3,7 @@
 !function () {
 
     var
-        moveWm, // модуль перемещения
+        moveWm, // модулgь перемещения
         opacityWm, // модуль прозрачности
         upload,
         getImg,
