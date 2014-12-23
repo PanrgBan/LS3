@@ -202,11 +202,11 @@ var moveWatermark = (function() {
             marginX -= 1;
               dragY -= countXWm;
             break;
-          case 'bottom':
+          case 'top':
             marginY += 1;
               dragX += countYWm;
             break;
-          case 'top':
+          case 'bottom':
             marginY -= 1;
               dragX -= countYWm;
             break;
@@ -254,7 +254,6 @@ var moveWatermark = (function() {
       // Размеры вотермарка
       widthWm = wm.width(),
       heightWm = wm.height();
-      console.log(widthWm);
 
       // Размеры сектора
       sectorW = ~~( widthImg / quantitySectors );
@@ -321,7 +320,7 @@ var moveWatermark = (function() {
 
       // увеличиваем размеры обертки воттеров
           wmWrapWidth = widthImg * multipleTiling,
-          wmWrapHeight = heightImg * multipleTiling,
+        wmWrapHeight = heightImg * multipleTiling,
 
           // считаем кол-во воттеров, которые влезают в области нашего изображения
           countXWmL = ~~( widthImg / widthWm ),

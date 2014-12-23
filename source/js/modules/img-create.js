@@ -1,6 +1,6 @@
 "use strict";
 
-var module = (function () {
+var getImg = (function () {
     var app = {
         init: function () {
             app.setUpListeners();
