@@ -633,12 +633,19 @@
     //=================================
 
     getImg = (function () {
+      var
+          btnReset = $('.btn-reset');
+
         var app = {
             init: function () {
                 app.setUpListeners();
             },
 
             setUpListeners: function () {
+                btnReset.on('click', function() {
+                  alert('Я скоро буду работать. Обещаю!');
+                });
+
                 $('form.send').on('submit', app.createImg);
             },
 
