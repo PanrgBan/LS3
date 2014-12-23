@@ -207,20 +207,20 @@
                 } else {
                     switch (direction) {
                         case 'right':
-                            marginY += 1;
+                            marginX += 1;
                             dragY += countXWm;
                             break;
                         case 'left':
-                            marginY -= 1;
+                            marginX -= 1;
                             dragY -= countXWm;
                             break;
                         case 'top':
-                            marginX += 1;
-                            dragX += countYWm;
+                            marginY -= 1;
+                            dragX -= countYWm;
                             break;
                         case 'bottom':
-                            marginX -= 1;
-                            dragX -= countYWm;
+                            marginY += 1;
+                            dragX += countYWm;
                             break;
                         default:
                             marginX = 0;
@@ -261,11 +261,11 @@
             getInfo: function () {
                 // Размеры основного изображения
                 widthImg = img.width(),
-                    heightImg = img.height(),
+                heightImg = img.height(),
 
-                    // Размеры вотермарка
-                    widthWm = WM.width(),
-                    heightWm = WM.height();
+                // Размеры вотермарка
+                widthWm = WM.width(),
+                heightWm = WM.height();
 
                 // Размеры сектора
                 sectorW = ~~( widthImg / quantitySectors );
@@ -572,9 +572,8 @@
                         inputName = data.inputName,
 
                         changeWm = function () {
-                            if (WM) {
-                                WM.remove();
-                            }
+                            if ( WM ) { WM.remove(); }
+
                             loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
                             loadPicPath.css({
                                 'width': loadPicWidth * GLOBALSCALE + 'px',
