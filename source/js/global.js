@@ -444,8 +444,8 @@
       getPosition: function() {
         return {
           tiling: tiling,
-          posX: left / MAXWIDTH * 100,
-          posY: top / MAXHEIGHT * 100,
+          posX: left / MAXWIDTH * 100 + '%',
+          posY: top / MAXHEIGHT * 100 + '%',
           marginX: marginX,
           marginY: marginY
         }
@@ -539,7 +539,7 @@
             setOpacity: app.setOpacity,
 
             getOpacity: function () {
-                return opacity;
+                return opacity*100;
             }
         };
     }());
@@ -676,17 +676,8 @@
                     image: $('#img').attr('src'),
                     watermark: $('#wm').attr('src')
                 };
-                //$.ajax({
-                //    url: 'php/create-img.php',
-                //    type: 'POST',
-                //    data: 'data=' + JSON.stringify(dataObj),
-                //    success: function () {
-                //        console.log('yes');
-                //    },
-                //    dataType: 'JSON'
-                //});
-                $.get("php/create-img.php", dataObj, function (src) {
-                    window.location.href = src;
+                $.post("php/create-img.php", dataObj, function (src) {
+                    location.href = 'php/show.php';
                 });
             }
         }
