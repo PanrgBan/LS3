@@ -601,10 +601,8 @@
                                 loadPicPath.css('height', 100 + '%');
                                 //TODO
                                 $('.img-area').css('height', 100 + '%');
-                                // console.log(2134);
                                 GLOBALSCALE = MAXHEIGHT / loadPicHeight;
                             }
-                            // console.log(GLOBALSCALE);
                         }
                         $('.upload__pic')
                             .removeClass('disabled')
@@ -617,7 +615,6 @@
 
                         // инизиализируем модули
                         initGlobal();
-                        console.log(123);
                     }
                 }
             };
@@ -655,7 +652,6 @@
                 btnReset.on('click', function() {
                   alert('Я скоро буду работать. Обещаю!');
                 });
-
                 $('form.send').on('submit', app.createImg);
             },
 
@@ -666,7 +662,7 @@
 
                 if (move.tiling) {
                     var marginX = move.marginX;
-                    var marginY = move.marignY;
+                    var marginY = move.marginY;
                 }
 
                 var dataObj = {
@@ -674,13 +670,20 @@
                     deltaX: move.posX,
                     deltaY: move.posY,
                     image: $('#img').attr('src'),
-                    watermark: $('#wm').attr('src')
+                    watermark: $('#wm').attr('src'),
+                    marginX: move.marginX,
+                    marginY : move.marginY,
+                    tiling: move.tiling
                 };
+
+                console.log(dataObj);
+
                 $.post("php/create-img.php", dataObj, function (src) {
                     location.href = 'php/show.php';
                 });
             }
         }
+
         app.init();
         return {}
     })();
