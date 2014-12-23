@@ -1,16 +1,20 @@
 <?php
 require_once 'lib/WideImage.php';
 
-$data = json_decode($_POST['data']);
+//$data = json_decode($_GET['data']);
 
-$opacity = $data -> opacity;
-$deltaX = $data -> deltaX;
-$deltaY = $data -> deltaY;
-$image = WideImage::load($data -> image);
-$watermark = WideImage::load($data -> watermark);
+$opacity = $_GET['opacity'];//$data -> opacity;
+$deltaX = $_GET['deltaX'];//$data -> deltaX;
+$deltaY = $_GET['deltaY'];//$data -> deltaY;
+$image = WideImage::load($_GET['image']);//$data -> image);
+$watermark = WideImage::load($_GET['watermark']);//$data -> watermark);
 
-$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, '100');
+$result = '../images/result.jpg';
 
-$new -> saveToFile('../images/result.jpg');
+$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity * 100);
+
+$new -> saveToFile($result);
+
+echo ($result) ;
 
 exit;
