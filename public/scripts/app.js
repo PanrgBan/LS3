@@ -11,13 +11,23 @@ var module = (function () {
         createImg: function (e) {
             e.preventDefault();
 
+            var dataObj = {
+                opacity : 1,
+                deltaX: 50,
+                deltaY: 50,
+                image: $('#img').attr('src') ,
+                watermark: $('#wm').attr('src')
+            }
+
             $.ajax({
                 url: 'php/create-img.php',
                 type: 'POST',
-                success: function () {
-                    console.log('Good');
+                data: 'data='+ JSON.stringify(dataObj),
+                dataType: 'JSON',
+                success: function (src) {
+
                 }
-            })
+            });
         }
     }
     app.init();
@@ -65,6 +75,9 @@ var moveWatermark = (function() {
       marginY,
       dragX,
       dragY,
+      countXWm,
+      countYWm,
+      countWm,
 
       // обертка множественного воттера
       wmWrap,
@@ -83,30 +96,7 @@ var moveWatermark = (function() {
 
   app = {
     // Инициалицация модуля
-    init: function() {
-      self = this;
-      img = $('#img');
-      wm = $('#wm');
-      field = $('.move-field');
-      boardX = $('#board-x');
-      boardY = $('#board-y');
 
-      self.events();
-      self.getInfo();
-      self.doOneStep();
-      self.refreshBoard();
-      wm.draggable({ 
-        containment: ".img-area", 
-        scroll: false, 
-        drag:function(event, ui){
-          self.refreshBoard(ui.position.left,ui.position.top)
-        },
-        stop: function(event, ui){
-          left = ui.position.left;
-          top = ui.position.top;
-        }
-    });
-    },
 
     // События модуля
     events: function() {
@@ -129,15 +119,15 @@ var moveWatermark = (function() {
             self.refreshBoard();
         }
       });
-
-      wm.on('mousedown', function(){
-        // отключаем анимацию при драге
-        wm.css('transition', 'none');
-      });
-      wm.on('mouseup', function(){
-        // отключаем анимацию при драге
-        wm.css('transition', '');
-      });
+        // события дропа одиночного воттера
+        wm.on('mousedown', function(){
+            // отключаем анимацию при драге
+            wm.css('transition', 'none');
+        });
+        wm.on('mouseup', function(){
+            // отключаем анимацию при драге
+            wm.css('transition', '');
+        });
 
       // Спинер =======================
       $('.spinner-group').on('mousedown', 'a', function(e) {
@@ -241,15 +231,19 @@ var moveWatermark = (function() {
         switch ( direction ) {
           case 'right':
             marginX += 1;
+              dragY += countXWm;
             break;
           case 'left':
             marginX -= 1;
+              dragY -= countXWm;
             break;
           case 'bottom':
             marginY += 1;
+              dragX += countYWm;
             break;
           case 'top':
             marginY -= 1;
+              dragX -= countYWm;
             break;
           default:
             marginX = 0;
@@ -295,6 +289,7 @@ var moveWatermark = (function() {
       // Размеры вотермарка
       widthWm = wm.width(),
       heightWm = wm.height();
+      console.log(widthWm);
 
       // Размеры сектора
       sectorW = ~~( widthImg / quantitySectors );
@@ -312,21 +307,21 @@ var moveWatermark = (function() {
 
     // Изменение значения позиции
     refreshBoard: function(x,y) {
-      if(!x || !y){
-        if ( oneWater ) {
-          boardX.text(left);
-          boardY.text(top);
-        } else {
-          boardX.text( ~~(marginX) );
-          boardY.text( ~~(marginY) );
+        if(!x || !y){
+          if ( oneWater ) {
+            boardX.text(left);
+            boardY.text(top);
+          } else {
+            boardX.text( ~~(marginX) );
+            boardY.text( ~~(marginY) );
 
-          manyWaterFieldX.css( "height", marginX + '%' );
-          manyWaterFieldY.css( "width", marginY + '%' );
+            manyWaterFieldX.css( "height", marginX + '%' );
+            manyWaterFieldY.css( "width", marginY + '%' );
+          }
+        }else{
+            boardX.text(x);
+            boardY.text(y);
         }
-      }else{
-        boardX.text(x);
-        boardY.text(y);
-      }
     },
 
     // Повтор функции каждые 40мс
@@ -359,27 +354,27 @@ var moveWatermark = (function() {
       var
           wmSrc = wm.attr('src'),
 
-          // увеличиваем размеры обертки воттеров
+      // увеличиваем размеры обертки воттеров
           wmWrapWidth = widthImg * multipleTiling,
           wmWrapHeight = heightImg * multipleTiling,
 
-          // считаем кол-во воттеров, которые влезают в обертку
-          countXWm = ~~( wmWrapWidth / widthWm) ,
-          countYWm = ~~( wmWrapHeight / heightWm ),
-          countWm = countXWm * countYWm,
-
           // считаем кол-во воттеров, которые влезают в области нашего изображения
-          countXWmL = parseInt( widthImg / widthWm ),
-          countYWmL = parseInt( heightImg / heightWm );
+          countXWmL = ~~( widthImg / widthWm ),
+          countYWmL = ~~( heightImg / heightWm );
 
+        // считаем кол-во воттеров, которые влезают в обертку
+        countXWm = ~~( wmWrapWidth / widthWm);
+        countYWm = ~~( wmWrapHeight / heightWm );
+        // выносим отдельно, чтобы ипользовать в др. ф-ции
+        countWm = countXWm * countYWm;
       // считаем отступы для ровного заполнения воттерами большой картинки
       marginX = ( widthImg / countXWmL ) - widthWm;
       marginY = ( heightImg / countYWmL ) - heightWm;
 
-      // для ограничения драга нашего каскада с воттерами внутри изображения
-      dragX = (countXWm * widthWm + marginX) - widthImg;
-      dragY = (countYWm * heightWm + marginY) - heightImg;
-      
+        // для ограничения драга нашего каскада с воттерами внутри изображения
+        dragX = (countXWm * widthWm + marginX) - widthImg;
+        dragY = (countYWm * heightWm + marginY) - heightImg;
+
       // плодим воттеры
       for( var i = 0; i < countWm; i++ ){
         wmWrap.append('<div class="many-wm-wrap-item"></div>');
@@ -400,18 +395,24 @@ var moveWatermark = (function() {
         marginRight: marginX/2
       });
 
-      $('.many-wm-wrap').on('mouseover',function(e){
-          $('.many-wm-wrap').draggable({
-            scroll: false, 
-            drag:function(event, ui){
-              console.log(dragY+','+dragX);
-              if(ui.position.left > 0) ui.position.left = 0;
-              if(ui.position.top > 0) ui.position.top = 0;
-              if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
-              if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
-            }
-         });
-      });
+        $('.many-wm-wrap').on('mouseover',function(e){
+            $('.many-wm-wrap').draggable({
+                scroll: false,
+                drag:function(event, ui){
+                    if(ui.position.left > 0) ui.position.left = 0;
+                    if(ui.position.top > 0) ui.position.top = 0;
+                    /* Это наработки, пока не обращать внимание, уберу как разберусь!
+                    Ок, нет проблем
+                    countXWm = parseInt( wmWrapWidth / (widthWm + marginX));
+                    countYWm = parseInt( wmWrapHeight / (heightWm + marginY));
+                    dragX = (countXWm * widthWm + marginX) - widthImg;
+                    dragY = (countYWm * heightWm + marginY) - heightImg;
+                    console.log(dragX);*/
+                    if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
+                    if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
+                }
+            });
+        });
     },
 
     // двигаем наш каскад воттеров
@@ -422,55 +423,113 @@ var moveWatermark = (function() {
       if ( marginY > 100 ) marginY = 100;
 
       $('.many-wm-wrap-item').css({
-        marginTop: marginY/2,
-        marginLeft: marginX/2,
-        marginBottom: marginY/2,
-        marginRight: marginX/2
-      }); 
+        marginTop: marginX/2,
+        marginLeft: marginY/2,
+        marginBottom: marginX/2,
+        marginRight: marginY/2
+      });
     }
   };
 
   // инициализируем модуль
-  setTimeout(function() {
-    app.init();
-  }, 700)
 
   // возвращаем объект с публичными методами
-  return {};
-}());
-;var app = angular.module('drag', []);
-
-app.controller('DragCtrl', ['$scope', function($scope) {
-  
-}]);
-
-app.directive('draggable', ['$document', function($document) {
   return {
-          restrict: 'C',
-          link: function(scope, element, attr) {
-            var startX = 0, x = 0;
+    init: function() {
+      self = app;
+      img = $('#img');
+      wm = $('#wm');
+      field = $('.move-field');
+      boardX = $('#board-x');
+      boardY = $('#board-y');
 
-            element.bind('mousedown', function(event) {
-              event.preventDefault();
-              startX = event.screenX - x;
-              $document.bind('mousemove', mousemove);
-              $document.bind('mouseup', mouseup);
-            });
-
-            function mousemove(event) {
-              x = event.screenX - startX;
-              element.css({
-                left: x + 'px'
-              });
-            }
-
-            function mouseup() {
-              $document.unbind('mousemove', mousemove);
-              $document.unbind('mouseup', mouseup);
-            }
+      self.events();
+      self.getInfo();
+      self.doOneStep();
+      self.refreshBoard();
+      wm.draggable({
+          containment: ".img-area",
+          scroll: false,
+          drag:function(event, ui){
+              self.refreshBoard(ui.position.left,ui.position.top)
+          },
+          stop: function(event, ui){
+              left = ui.position.left;
+              top = ui.position.top;
           }
-        };
-}]);;'use strict';
+      });
+    },
+  };
+}());
+
+
+moveWatermark.init();;var opacityRange = (function() {
+    var
+        app,
+        self,
+        startX,
+        x,
+        toggle,
+        scale,
+        bar,
+        lastPosX,
+        rangeControls,
+        $document;
+  
+   app = {
+    // метод инициалицации модуля
+
+    // метод содержащий все события модуля
+    events: function() {
+      rangeControls.on('mousedown', function (event) {
+        event.preventDefault();
+        
+        toggle.css('background-color', '#f97e76');
+        startX = event.screenX - x;
+        $document.on('mousemove', mousemove);
+        $document.on('mouseup', mouseup);
+      });
+
+      function mousemove(event) {
+        x = event.screenX - startX;
+        if (( x > 0 ) && ( x < scale.width() )) {
+          toggle.css('left', x);
+          
+          lastPosX = parseInt(toggle.css('left'));
+          bar.css( 'width', lastPosX );
+          $('.wm').css( 'opacity', lastPosX / scale.width() );
+          $('.many-wm-wrap').css('opacity', lastPosX / scale.width());
+        }
+      };
+
+      function mouseup() {
+        $document.off('mousemove', mousemove);
+        $document.off('mouseup', mouseup);
+      };
+    },
+     
+  };
+
+  return {
+    init: function() {
+      startX = 210,
+      x = 210,
+      toggle = $('.toggle'),
+      scale = $('.scale'),
+      bar = $('.bar'),
+      rangeControls = $('.range-controls'),
+      $document = $(document),
+      lastPosX = 0,
+      toggle.css('left', startX),
+
+      self = app;
+
+      self.events();
+    },
+  };
+}());
+
+opacityRange.init();;'use strict';
 
 var module = (function() {
     var
@@ -478,39 +537,69 @@ var module = (function() {
         self,
         pics = $('.fileupload'),
         wrap = $('.upload-wrapper'),
+        GLOBALSCALE,
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
+
                 success: function (src) {
-                    var loadPic = $('<img/>').attr('src', src), // Создание картинки с путем
-                            loadPicName = this.files[0].name, // Имя картинки
-                            valid = true; // Флаг
+                    console.log(JSON.parse(src));
+                    var data = JSON.parse(src),
+                            loadPicWidth = data.width,
+                            loadPicHeight = data.height,
+                            loadPicPath = $('<img/>').attr('src', data.path), // Создание картинки с путем
+                            loadPicName = data.fileName, // Имя картинки
+                            MAXWIDTH = 650,
+                            MAXHEIGHT = 535,
+                            inputName = data.inputName,
 
-                    console.log(pics.first());
+                            changeWm = function () {
+                                $('#wm').remove();
+                                loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
+                                loadPicPath.css({
+                                    'width': loadPicWidth*GLOBALSCALE+'px',
+                                    'height' : loadPicHeight*GLOBALSCALE+'px'
+                                });
+                                console.log(GLOBALSCALE);
+                                // Подключаем вотермарк
+                            },
 
-                    $('#img').remove(); // Удалить предыдущую картинку
-                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                            changeInputName = function () {
+                                $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+                            };
 
-                    $.each(pics, function (index, val) {
-                        var pic = $(val), // инпут
-                                val = pic.val(); // значение инпута
-                        if (val.length === 0) { // если значение инпута пустое
-                            pic
-                                .closest('.form-group') // в родителях .form-group
-                                .find(wrap) // найти wrap
-                                .addClass('error'); // добавить класс
-                            valid = false;
+
+
+                    if (inputName === 'userfile') {
+                        $('#img').remove(); // Удалить предыдущую картинку
+                        loadPicPath.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+
+                        if(loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH) {
+                            if (loadPicWidth > loadPicHeight) {
+                                loadPicPath.css('width', MAXWIDTH + 'px');
+                                GLOBALSCALE = MAXWIDTH/loadPicWidth;
+                                console.log(GLOBALSCALE);
+                            } else {
+                                loadPicPath.css('height', MAXHEIGHT+ 'px');
+                                GLOBALSCALE = MAXHEIGHT/loadPicHeight;
+                            }
                         } else {
-                           pic
-                                .closest('.form-group')
-                                .find(wrap)
-                                .removeClass('error') // удалить класс
-                                .text(loadPicName); // показать имя
-                        }});
-                    return valid;
-                    // Подключаем вотермарк
+                            GLOBALSCALE = 1;
+                            changeWm();
+                        }
+
+                        $('.upload__pic')
+                            .removeClass('disabled')
+                            .find(pics)
+                            .removeClass('disabled-input');
+                        changeInputName();
+
+                    }  else {
+                        changeWm();
+                        changeInputName();
+                    }
             }
-        }
+        };
 
 
    app = {
@@ -526,5 +615,4 @@ var module = (function() {
    }
 
   app.init();
-  return {};
 }());

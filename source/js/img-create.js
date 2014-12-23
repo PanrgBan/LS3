@@ -11,13 +11,23 @@ var module = (function () {
         createImg: function (e) {
             e.preventDefault();
 
+            var dataObj = {
+                opacity : 1,
+                deltaX: 50,
+                deltaY: 50,
+                image: $('#img').attr('src') ,
+                watermark: $('#wm').attr('src')
+            }
+
             $.ajax({
                 url: 'php/create-img.php',
                 type: 'POST',
-                success: function () {
-                    console.log('Good');
+                data: 'data='+ JSON.stringify(dataObj),
+                dataType: 'JSON',
+                success: function (src) {
+
                 }
-            })
+            });
         }
     }
     app.init();

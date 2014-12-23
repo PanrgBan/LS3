@@ -1,20 +1,54 @@
 <?php
 require_once 'lib/wideimage.php';
 
-$width =  650;
-$height = 535;
+function rus2translit($string) {
+    $converter = array(
+        'а' => 'a',   'б' => 'b',   'в' => 'v',
+        'г' => 'g',   'д' => 'd',   'е' => 'e',
+        'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+        'и' => 'i',   'й' => 'y',   'к' => 'k',
+        'л' => 'l',   'м' => 'm',   'н' => 'n',
+        'о' => 'o',   'п' => 'p',   'р' => 'r',
+        'с' => 's',   'т' => 't',   'у' => 'u',
+        'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+        'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+        'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+        'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+        'А' => 'A',   'Б' => 'B',   'В' => 'V',
+        'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+        'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+        'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+        'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+        'О' => 'O',   'П' => 'P',   'Р' => 'R',
+        'С' => 'S',   'Т' => 'T',   'У' => 'U',
+        'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+        'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+        'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+        'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+    );
+    return strtr($string, $converter);
+}
+
 $inputName = key($_FILES) ;
 
-
-
 $uploadFile = ($_FILES[$inputName]['tmp_name']);
-$uploadName = ($_FILES[$inputName]['name']);
-$filePath = ('../images/' . $uploadName);
+$uploadFileName = ($_FILES[$inputName]['name']);
+
+$uploadFileName = rus2translit($uploadFileName);
+
+$filePath = '../images/'. $uploadFileName;
 
 $size = getimagesize($uploadFile);
 
-WideImage::loadFromFile($uploadFile)->resize(651, 535)->saveToFile($filePath);
+WideImage::loadFromFile($uploadFile)->saveToFile($filePath);
 
-echo $size[0];
-echo $size[1];
+$src = array(
+    "width" => $size[0],
+    "height" => $size[1],
+    "path" => $filePath,
+    "inputName" => $inputName,
+    "fileName" => $uploadFileName
+);
+
+echo json_encode($src);
 exit;

@@ -6,39 +6,69 @@ var module = (function() {
         self,
         pics = $('.fileupload'),
         wrap = $('.upload-wrapper'),
+        GLOBALSCALE,
         defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
+
                 success: function (src) {
-                    var loadPic = $('<img/>').attr('src', src), // Создание картинки с путем
-                            loadPicName = this.files[0].name, // Имя картинки
-                            valid = true; // Флаг
+                    console.log(JSON.parse(src));
+                    var data = JSON.parse(src),
+                            loadPicWidth = data.width,
+                            loadPicHeight = data.height,
+                            loadPicPath = $('<img/>').attr('src', data.path), // Создание картинки с путем
+                            loadPicName = data.fileName, // Имя картинки
+                            MAXWIDTH = 650,
+                            MAXHEIGHT = 535,
+                            inputName = data.inputName,
 
-                    console.log(pics.first());
+                            changeWm = function () {
+                                $('#wm').remove();
+                                loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
+                                loadPicPath.css({
+                                    'width': loadPicWidth*GLOBALSCALE+'px',
+                                    'height' : loadPicHeight*GLOBALSCALE+'px'
+                                });
+                                console.log(GLOBALSCALE);
+                                // Подключаем вотермарк
+                            },
 
-                    $('#img').remove(); // Удалить предыдущую картинку
-                    loadPic.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+                            changeInputName = function () {
+                                $('input[name = '+ inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+                            };
 
-                    $.each(pics, function (index, val) {
-                        var pic = $(val), // инпут
-                                val = pic.val(); // значение инпута
-                        if (val.length === 0) { // если значение инпута пустое
-                            pic
-                                .closest('.form-group') // в родителях .form-group
-                                .find(wrap) // найти wrap
-                                .addClass('error'); // добавить класс
-                            valid = false;
+
+
+                    if (inputName === 'userfile') {
+                        $('#img').remove(); // Удалить предыдущую картинку
+                        loadPicPath.prependTo($('.img-area')).attr('id', 'img'); // вставить в начало mg-area
+
+                        if(loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH) {
+                            if (loadPicWidth > loadPicHeight) {
+                                loadPicPath.css('width', MAXWIDTH + 'px');
+                                GLOBALSCALE = MAXWIDTH/loadPicWidth;
+                                console.log(GLOBALSCALE);
+                            } else {
+                                loadPicPath.css('height', MAXHEIGHT+ 'px');
+                                GLOBALSCALE = MAXHEIGHT/loadPicHeight;
+                            }
                         } else {
-                           pic
-                                .closest('.form-group')
-                                .find(wrap)
-                                .removeClass('error') // удалить класс
-                                .text(loadPicName); // показать имя
-                        }});
-                    return valid;
-                    // Подключаем вотермарк
+                            GLOBALSCALE = 1;
+                            changeWm();
+                        }
+
+                        $('.upload__pic')
+                            .removeClass('disabled')
+                            .find(pics)
+                            .removeClass('disabled-input');
+                        changeInputName();
+
+                    }  else {
+                        changeWm();
+                        changeInputName();
+                    }
             }
-        }
+        };
 
 
    app = {
@@ -54,5 +84,4 @@ var module = (function() {
    }
 
   app.init();
-  return {};
 }());

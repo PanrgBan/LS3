@@ -2,6 +2,3 @@
 /source/bower_components
 .idea
 .DS_Store
-/public/scripts
-/public/styles
-/public/index.html
