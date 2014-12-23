@@ -144,6 +144,7 @@
               // режим наложения одиночного воттера
                 tiling = false;
                 field.find('td').eq(0).trigger('click');
+
                 $(".move-spinner").find(".pos-x").find("label").html("X");
                 $(".move-spinner").find(".pos-y").find("label").html("Y");
 
@@ -155,6 +156,7 @@
                 tiling = true;
                 WM.hide();
                 field.find('td').removeClass('active');
+
                 $(".move-spinner").find(".pos-x").find("label").html("<img src='/images/top-bottom.jpg'>");
                 $(".move-spinner").find(".pos-y").find("label").html("<img src='/images/left-right.jpg'>");
 
@@ -641,12 +643,19 @@
     //=================================
 
     getImg = (function () {
+      var
+          btnReset = $('.btn-reset');
+
         var app = {
             init: function () {
                 app.setUpListeners();
             },
 
             setUpListeners: function () {
+                btnReset.on('click', function() {
+                  alert('Я скоро буду работать. Обещаю!');
+                });
+
                 $('form.send').on('submit', app.createImg);
             },
 
