@@ -54,8 +54,20 @@
     width: 40px;
     height: 40px;
 
-    a{
-      display: block;
+    .b-share{
+      width: 100%;
+      height: 100%;
+      
+      .b-share__handle{
+        width: 100%;
+        height: 100%;
+        
+        .b-share-icon{
+          width: 100%;
+          height: 100%;
+          background: none;
+        }
+      }
     }
   }
 }
