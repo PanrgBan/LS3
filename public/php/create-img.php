@@ -18,7 +18,9 @@ $lengthY = $marginX;
 $i = 0;
 $j = 0;
 
-if($tiling) {
+// в $tiling приходит строка. "fasle" будет
+// true и else ни когда не отработает
+/*if($tiling) {
     while ($lengthY < $sizeImg[1]) {
         while ($lengthX < $sizeImg[0]) {
             $lengthX = $lengthX + $sizeWt[0] + $marginX;
@@ -33,8 +35,10 @@ if($tiling) {
 
     $new -> crop(0, 0, $sizeImg[0], $sizeImg[1]);
 } else {
+}*/
+
+    // вытащил из else
     $new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity);
-}
 
 
 

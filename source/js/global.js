@@ -48,12 +48,12 @@
         sectorCenterHeight,
         maxWidth,
         maxHeight,
-        dragX,
-        dragY,
         countXWm,
         countYWm,
         wmWrapWidth,
         wmWrapHeight,
+        newWmWrapWidth,
+        newWmWrapHeight,
 
         // Шаг позиции и расстояния
         // от вотермарка до границ
@@ -61,6 +61,8 @@
         stepY = 0,
         top = 0,
         left = 0,
+        posTilingX = 0,
+        posTilingY = 0,
         // расстояние между
         // вотерами в сетке
         marginX = 0,
@@ -103,6 +105,17 @@
 
         WM.on('mouseup', function(){
             WM.css('transition', '');
+        });
+
+        WM.draggable({
+            containment: ".img-area",
+            scroll: false,
+
+            drag:function(event, ui){
+              left = ui.position.left;
+              top = ui.position.top;
+              self.refreshBoard()
+            }
         });
 
         // ====================================
@@ -173,7 +186,7 @@
                 if ( WMGrid ){
                   manyWaterField.show();
                   WMGrid.show();
-                  self.setPosMany();
+                  self.setPosTiling();
                 } else {
                   self.createCross();
                   self.createTiling();
@@ -227,7 +240,7 @@
               marginX = 0;
               marginY = 0;
           }
-          self.setPosMany();
+          self.setPosTiling();
         }
       },
 
@@ -267,6 +280,7 @@
         // Размеры вотермарка
         wmWidth = WM.width(),
         wmHeight = WM.height();
+
         // Размеры сектора
         sectorWidth = ~~( imgWidth / quantitySectors );
         sectorHeight = ~~( imgHeight / quantitySectors );
@@ -283,22 +297,15 @@
       },
 
       // Изменение значения позиции
-      refreshBoard: function(x,y) {
-          if(!x || !y){
-            if ( !tiling ) {
-              boardX.text(left);
-              boardY.text(top);
-            } else {
-              boardX.text( ~~(marginY) );
-              boardY.text( ~~(marginX) );
+      refreshBoard: function() {
+        if ( tiling ) {
+          boardX.text( marginY );
+          boardY.text( marginX );
+        } else {
+          boardX.text( left );
+          boardY.text( top );
 
-              manyWaterFieldX.css( "width", marginX + '%' );
-              manyWaterFieldY.css( "height", marginY + '%' );
-            }
-          }else{
-              boardX.text(x);
-              boardY.text(y);
-          }
+        }
       },
 
       // Повтор функции каждые 40мс
@@ -351,19 +358,18 @@
         wmWrapWidth = countXWm * wmWidth;
         wmWrapHeight = countYWm * wmHeight;
 
+        newWmWrapWidth = wmWrapWidth;
+        newWmWrapHeight = wmWrapHeight;
+
+        // Сдвиг враппера в центр
+        posTilingX = -(( wmWrapWidth / 2 ) - ( imgWidth / 2 ));
+        posTilingY = -(( wmWrapHeight / 2 ) - ( imgHeight / 2 ));
+
         var
             wmSrc = WM.attr('src'),
-
-            // Сдвиг враппера в центр
-            leftWmWrap = (wmWrapWidth/2) - (imgWidth/2),
-            topWmWrap = (wmWrapHeight/2) - (imgHeight/2),
-
             // колличество воттеров
             countWm = countXWm * countYWm;
 
-          // для ограничения драга нашего каскада с воттерами внутри изображения
-          dragX = wmWrapWidth - imgWidth;
-          dragY = wmWrapHeight - imgHeight;
 
         // плодим воттеры
         for( var i = 0; i < countWm; i++ ){
@@ -377,48 +383,52 @@
         WMGrid.css({
           width: wmWrapWidth,
           height: wmWrapHeight,
-          top: -topWmWrap,
-          left: -leftWmWrap
+          top: posTilingY,
+          left: posTilingX
         });
 
         $('.many-wm-wrap').on('mouseover',function(e){
             $('.many-wm-wrap').draggable({
                 scroll: false,
-                drag:function(event, ui){
-                  var newWmWrapWidth = WMGrid.width(),
-                      newWMWrapHeight = WMGrid.height();
-                  dragX = newWmWrapWidth - imgWidth;
-                  dragY = newWMWrapHeight - imgHeight;
+                drag: function(event, ui){
+
+                  var
+                      stopDragX = imgWidth - newWmWrapWidth,
+                      stopDragY = imgHeight - newWmWrapHeight;
+
                   if(ui.position.left > 0) ui.position.left = 0;
                   if(ui.position.top > 0) ui.position.top = 0;
-                  if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
-                  if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
+                  if( ui.position.left < stopDragX ) ui.position.left = stopDragX;
+                  if( ui.position.top < stopDragY ) ui.position.top = stopDragY;
+
+                  posTilingX = ui.position.left;
+                  posTilingY = ui.position.top;
                 }
             });
         });
       },
 
       // двигаем наш каскад воттеров
-      setPosMany: function(){
+      setPosTiling: function(){
         if ( marginX < 0 ) marginX = 0;
         if ( marginY < 0 ) marginY = 0;
         if ( marginX > 100 ) marginX = 100;
         if ( marginY > 100 ) marginY = 100;
 
+        manyWaterFieldX.css( "width", marginX + '%' );
+        manyWaterFieldY.css( "height", marginY + '%' );
+
         $('.many-wm-wrap-item').css({
-          marginTop: marginY,
-          marginLeft: marginX,
           marginBottom: marginY,
           marginRight: marginX
         });
-          var newWmWrapWidth = wmWrapWidth + ( countXWm * marginX * 2 ),
-              newWMWrapHeight = wmWrapHeight + (countYWm * marginY * 2);
-          dragX = newWmWrapWidth - imgWidth;
-          dragY = newWMWrapHeight - imgHeight;
+
+          newWmWrapWidth = wmWrapWidth + ( countXWm * marginX );
+          newWmWrapHeight = wmWrapHeight + (countYWm * marginY );
 
           WMGrid.css({
               width: newWmWrapWidth,
-              height: newWMWrapHeight
+              height: newWmWrapHeight
           });
       }
     };
@@ -435,30 +445,21 @@
         self.getInfo();
         self.doOneStep();
         self.refreshBoard();
-
-        WM.draggable({
-            containment: ".img-area",
-            scroll: false,
-
-            drag:function(event, ui){
-                self.refreshBoard(ui.position.left, ui.position.top)
-            },
-
-            stop: function(event, ui){
-                left = ui.position.left;
-                top = ui.position.top;
-            }
-        });
       },
 
       getPosition: function() {
-        return {
-          tiling: tiling,
-          posX: left / MAXWIDTH * 100 + '%',
-          posY: top / MAXHEIGHT * 100 + '%',
-          marginX: marginX,
-          marginY: marginY
-        }
+        return tiling
+          ? {
+            tiling: true,
+            posTilingX: posTilingX,
+            posTilingY: posTilingY,
+            marginX: marginX,
+            marginY: marginY
+          }
+          : {
+            posX: left / MAXWIDTH * 100 + '%',
+            posY: top / MAXHEIGHT * 100 + '%',
+          };
       }
     };
   }());
@@ -565,15 +566,11 @@
             pics = $('.fileupload'),
             wrap = $('.upload-wrapper'),
             GLOBALSCALE,
-            //delObj = {
-            //    mainImg: '123',
-            //    wtImg: '456'
-            //},
+
             defObj = {
                 url: 'php/upload.php',
                 type: 'POST',
-                //data: 'obj=' + JSON.stringify(app.delObj),
-                //dataType: 'JSON',
+
                 success: function (src) {
                     var
                         data = JSON.parse(src),
@@ -626,7 +623,6 @@
                         changeWm();
                         changeInputName();
 
-                        console.log(123);
                         // инизиализируем модули
                         initGlobal();
                     }
@@ -675,22 +671,24 @@
 
                 if ( !init ) return;
 
-                var move = moveWm.getPosition();
-                if (move.tiling) {
-                    var marginX = move.marginX;
-                    var marginY = move.marginY;
-                }
+                var
+                    move = moveWm.getPosition(),
+                    dataObj = {
+                      opacity: opacityWm.getOpacity(),
+                      image: $('#img').attr('src'),
+                      watermark: $('#wm').attr('src'),
+                    };
 
-                var dataObj = {
-                    opacity: opacityWm.getOpacity(),
-                    deltaX: move.posX,
-                    deltaY: move.posY,
-                    image: $('#img').attr('src'),
-                    watermark: $('#wm').attr('src'),
-                    marginX: move.marginX,
-                    marginY : move.marginY,
-                    tiling: move.tiling
-                };
+                if ( move.tiling ) {
+                  dataObj.tiling = true;
+                  dataObj.posTilingX = move.posTilingX;
+                  dataObj.posTilingY = move.posTilingY;
+                  dataObj.marginX = move.marginX;
+                  dataObj.marginY = move.marginY;
+                } else {
+                  dataObj.deltaX = move.posX;
+                  dataObj.deltaY = move.posY;
+                }
 
                 console.log(dataObj);
 
@@ -712,4 +710,6 @@
         opacityWm.init();
         init = true;
     }
+
+    initGlobal();
 }()
