@@ -12,7 +12,8 @@
         getImg,          // получение изображения
 
         WM,       // объект вотермарка
-        WMGrid;   // объект с сеткой из вотеров
+        WMGrid,   // объект с сеткой из вотеров
+        init = false;
 
     //=================================
     // Перемещение вотера
@@ -433,8 +434,8 @@
       getPosition: function() {
         return {
           tiling: tiling,
-          posX: left / MAXWIDTH * 100,
-          posY: top / MAXHEIGHT * 100,
+          posX: left / MAXWIDTH * 100 + '%',
+          posY: top / MAXHEIGHT * 100 + '%',
           marginX: marginX,
           marginY: marginY
         }
@@ -555,6 +556,7 @@
                 //data: 'obj=' + JSON.stringify(app.delObj),
                 //dataType: 'JSON',
                 success: function (src) {
+                  console.log(src);
                     var
                         data = JSON.parse(src),
                         loadPicWidth = data.width,
@@ -642,7 +644,8 @@
             },
 
             setUpListeners: function () {
-                btnReset.on('click', function() {
+                btnReset.on('click', function(e) {
+                  e.preventDefault(e);
                   alert('Я скоро буду работать. Обещаю!');
                 });
 
@@ -652,8 +655,9 @@
             createImg: function (e) {
                 e.preventDefault();
 
-                var move = moveWm.getPosition();
+                if ( !init ) return;
 
+                var move = moveWm.getPosition();
                 if (move.tiling) {
                     var marginX = move.marginX;
                     var marginY = move.marignY;
@@ -690,9 +694,10 @@
         WM = $('.wm');
         moveWm.init();
         opacityWm.init();
+        init = true;
     }
 
     setTimeout(function () {
-        initGlobal();
+        // initGlobal();
     }, 500);
 }()
