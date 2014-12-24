@@ -1,20 +1,43 @@
 <?php
 require_once 'lib/WideImage.php';
 
-//$data = json_decode($_GET['data']);
-
-$opacity = $_GET['opacity'];//$data -> opacity;
-$deltaX = $_GET['deltaX'];//$data -> deltaX;
-$deltaY = $_GET['deltaY'];//$data -> deltaY;
-$image = WideImage::load($_GET['image']);//$data -> image);
-$watermark = WideImage::load($_GET['watermark']);//$data -> watermark);
-
 $result = '../images/result.jpg';
 
-$new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity * 100);
+$opacity = $_POST['opacity'];
+$deltaX = $_POST['deltaX'];
+$deltaY = $_POST['deltaY'];
+$tiling = $_POST['tiling'];
+$image = WideImage::load($_POST['image']);
+$watermark = WideImage::load($_POST['watermark']);
+$sizeImg = getimagesize($_POST['image']);
+$sizeWt = getimagesize($_POST['watermark']);
+$marginX = $_POST['marginX'];
+$marginY = $_POST['marginY'];
+$lengthX = $marginY;
+$lengthY = $marginX;
+$i = 0;
+$j = 0;
+
+if($tiling) {
+    while ($lengthY < $sizeImg[1]) {
+        while ($lengthX < $sizeImg[0]) {
+            $lengthX = $lengthX + $sizeWt[0] + $marginX;
+            $j++;
+            $new = $image->merge($watermark, 'left  + ' . $lengthX, 'top  +' . $lengthY, $opacity);
+        }
+        $lengthY = $lengthY + $sizeWt[1] + $marginY;
+        $lengthX = $marginX;
+        $i++;
+//        TODO нужен метод для повторного наложения вотермарка
+    }
+
+    $new -> crop(0, 0, $sizeImg[0], $sizeImg[1]);
+} else {
+    $new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity);
+}
+
+
 
 $new -> saveToFile($result);
-
-echo ($result) ;
 
 exit;

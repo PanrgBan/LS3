@@ -23,13 +23,40 @@
 }
 
   .work-area{
-    @extend %align-v;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    display: table-cell;
+    width: 650px;
     height: 535px;
     background: #fff url(/images/bg_work.jpg);
+    vertical-align: middle;
     text-align: center;
+  }
+
+  .img-area{
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    vertical-align: middle;
+
+    img{
+      display: block;
+    }
+
+    .wm{
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all .3s;
+    }
+
+    .many-wm-wrap{
+      position:absolute;
+      top:0;
+      left:0;
+
+      .many-wm-wrap-item{
+        float: left;
+      }
+    }
   }
 
 .side-panel{

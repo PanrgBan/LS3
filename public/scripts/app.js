@@ -12,6 +12,8 @@
         getImg,          // получение изображения
 
         WM,       // объект вотермарка
+        wmHeight,
+        wmWidth,
         WMGrid,   // объект с сеткой из вотеров
         init = false;
 
@@ -40,8 +42,6 @@
         // выравнивания вотермарка
         imgWidth,
         imgHeight,
-        wmWidth,
-        wmHeight,
         sectorWidth,
         sectorHeight,
         sectorCenterWidth,
@@ -69,7 +69,7 @@
         // Колличество секторов
         quantitySectors = 3,
         // Множитель увеличения полотна замощения О_о
-        multipleTiling = 1.5;
+        multipleTiling = 2;
 
     app = {
       events: function() {
@@ -146,6 +146,9 @@
                 tiling = false;
                 field.find('td').eq(0).trigger('click');
 
+                $(".move-spinner").find(".pos-x").find("label").html("X");
+                $(".move-spinner").find(".pos-y").find("label").html("Y");
+
                 manyWaterField && manyWaterField.hide()
                 WMGrid && WMGrid.hide()
                 WM.show();
@@ -154,6 +157,9 @@
                 tiling = true;
                 WM.hide();
                 field.find('td').removeClass('active');
+
+                $(".move-spinner").find(".pos-x").find("label").html("<img src='/images/top-bottom.jpg'>");
+                $(".move-spinner").find(".pos-y").find("label").html("<img src='/images/left-right.jpg'>");
 
                 if ( manyWaterField ){
                   // если крест создан, показываем
@@ -210,16 +216,16 @@
         } else {
           switch ( direction ) {
             case 'right':
-              marginX += 1;
+              marginY += 1;
               break;
             case 'left':
-              marginX -= 1;
-              break;
-            case 'top':
               marginY -= 1;
               break;
+            case 'top':
+              marginX -= 1;
+              break;
             case 'bottom':
-              marginY += 1;
+              marginX += 1;
               break;
             default:
               marginX = 0;
@@ -262,10 +268,6 @@
         imgWidth = img.width(),
         imgHeight = img.height(),
 
-        // Размеры вотермарка
-        wmWidth = WM.width(),
-        wmHeight = WM.height();
-
         // Размеры сектора
         sectorWidth = ~~( imgWidth / quantitySectors );
         sectorHeight = ~~( imgHeight / quantitySectors );
@@ -278,6 +280,7 @@
         // Максимальное расстояние чего-то там
         maxWidth = imgWidth - wmWidth;
         maxHeight = imgHeight - wmHeight;
+
       },
 
       // Изменение значения позиции
@@ -287,8 +290,8 @@
               boardX.text(left);
               boardY.text(top);
             } else {
-              boardX.text( ~~(marginX) );
-              boardY.text( ~~(marginY) );
+              boardX.text( ~~(marginY) );
+              boardY.text( ~~(marginX) );
 
               manyWaterFieldX.css( "width", marginX + '%' );
               manyWaterFieldY.css( "height", marginY + '%' );
@@ -327,8 +330,8 @@
         $('.img-area').append( WMGrid );
 
         // количество вотеров по x/y
-        countXWm = ~~( imgWidth / wmWidth ) * 2;
-        countYWm = ~~( imgHeight / wmHeight ) * 2;
+        countXWm = ~~( imgWidth / wmWidth ) * multipleTiling;
+        countYWm = ~~( imgHeight / wmHeight ) * multipleTiling;
 
         // ширина/длина обертки
         wmWrapWidth = countXWm * wmWidth;
@@ -350,7 +353,11 @@
 
         // плодим воттеры
         for( var i = 0; i < countWm; i++ ){
-          WMGrid.append('<div class="many-wm-wrap-item"></div>');
+          WMGrid.append($('<img>', {
+            src: wmSrc,
+            'class': 'many-wm-wrap-item',
+            style: 'width:' + wmWidth + '; height:' + wmHeight + ';'
+          }));
         }
 
         WMGrid.css({
@@ -360,20 +367,18 @@
           left: -leftWmWrap
         });
 
-        $('.many-wm-wrap-item').css({
-          background: "url(" + wmSrc + ") no-repeat",
-          width: wmWidth,
-          height: wmHeight
-        });
-
         $('.many-wm-wrap').on('mouseover',function(e){
             $('.many-wm-wrap').draggable({
                 scroll: false,
                 drag:function(event, ui){
-                    if(ui.position.left > 0) ui.position.left = 0;
-                    if(ui.position.top > 0) ui.position.top = 0;
-                    if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
-                    if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
+                  var newWmWrapWidth = WMGrid.width(),
+                      newWMWrapHeight = WMGrid.height();
+                  dragX = newWmWrapWidth - imgWidth;
+                  dragY = newWMWrapHeight - imgHeight;
+                  if(ui.position.left > 0) ui.position.left = 0;
+                  if(ui.position.top > 0) ui.position.top = 0;
+                  if(ui.position.left < (-dragX)) ui.position.left = (-dragX);
+                  if(ui.position.top < (-dragY)) ui.position.top = (-dragY);
                 }
             });
         });
@@ -392,13 +397,14 @@
           marginBottom: marginY,
           marginRight: marginX
         });
-
-          dragX = wmWrapWidth - imgWidth;
-          dragY = wmWrapHeight - imgHeight;
+          var newWmWrapWidth = wmWrapWidth + ( countXWm * marginX * 2 ),
+              newWMWrapHeight = wmWrapHeight + (countYWm * marginY * 2);
+          dragX = newWmWrapWidth - imgWidth;
+          dragY = newWMWrapHeight - imgHeight;
 
           WMGrid.css({
-              width: wmWrapWidth + (countXWm * marginX * 2),
-              height: wmWrapHeight + (countYWm * marginY * 2)
+              width: newWmWrapWidth,
+              height: newWMWrapHeight
           });
       }
     };
@@ -442,7 +448,6 @@
       }
     };
   }());
-
 
     //=================================
     // Прозрачность вотера
@@ -530,7 +535,7 @@
             setOpacity: app.setOpacity,
 
             getOpacity: function () {
-                return opacity;
+                return opacity*100;
             }
         };
     }());
@@ -556,7 +561,6 @@
                 //data: 'obj=' + JSON.stringify(app.delObj),
                 //dataType: 'JSON',
                 success: function (src) {
-                  console.log(src);
                     var
                         data = JSON.parse(src),
                         loadPicWidth = data.width,
@@ -569,6 +573,9 @@
                             if ( WM ) { WM.remove(); }
 
                             loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
+
+                            if ( !GLOBALSCALE ) return;
+
                             loadPicPath.css({
                                 'width': loadPicWidth * GLOBALSCALE + 'px',
                                 'height': loadPicHeight * GLOBALSCALE + 'px'
@@ -593,10 +600,8 @@
                                 loadPicPath.css('height', 100 + '%');
                                 //TODO
                                 $('.img-area').css('height', 100 + '%');
-                                // console.log(2134);
                                 GLOBALSCALE = MAXHEIGHT / loadPicHeight;
                             }
-                            // console.log(GLOBALSCALE);
                         }
                         $('.upload__pic')
                             .removeClass('disabled')
@@ -607,9 +612,10 @@
                         changeWm();
                         changeInputName();
 
+                        wmHeight = loadPicHeight;
+                        wmWidth = loadPicWidth;
                         // инизиализируем модули
                         initGlobal();
-                        console.log(123);
                     }
                 }
             };
@@ -648,7 +654,6 @@
                   e.preventDefault(e);
                   alert('Я скоро буду работать. Обещаю!');
                 });
-
                 $('form.send').on('submit', app.createImg);
             },
 
@@ -660,7 +665,7 @@
                 var move = moveWm.getPosition();
                 if (move.tiling) {
                     var marginX = move.marginX;
-                    var marginY = move.marignY;
+                    var marginY = move.marginY;
                 }
 
                 var dataObj = {
@@ -668,22 +673,20 @@
                     deltaX: move.posX,
                     deltaY: move.posY,
                     image: $('#img').attr('src'),
-                    watermark: $('#wm').attr('src')
+                    watermark: $('#wm').attr('src'),
+                    marginX: move.marginX,
+                    marginY : move.marginY,
+                    tiling: move.tiling
                 };
-                //$.ajax({
-                //    url: 'php/create-img.php',
-                //    type: 'POST',
-                //    data: 'data=' + JSON.stringify(dataObj),
-                //    success: function () {
-                //        console.log('yes');
-                //    },
-                //    dataType: 'JSON'
-                //});
-                $.get("php/create-img.php", dataObj, function (src) {
-                    window.location.href = src;
+
+                console.log(dataObj);
+
+                $.post("php/create-img.php", dataObj, function (src) {
+                    location.href = 'php/show.php';
                 });
             }
         }
+
         app.init();
         return {}
     })();
@@ -700,4 +703,5 @@
     setTimeout(function () {
         // initGlobal();
     }, 500);
+
 }()

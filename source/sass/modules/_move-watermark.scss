@@ -40,6 +40,8 @@
     label{
       display: inline-block;
       vertical-align: middle;
+      width: 27px;
+      text-align: right;
     }
 
     .spinner{
@@ -129,30 +131,3 @@
         height: 19px;
       }
     }
-
-
-
-/*
-*  Adding myself
-*/
-
-.img-area{
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-  vertical-align: middle;
-  .wm{
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: all .3s;
-  }
-  .many-wm-wrap{
-    position:absolute;
-    top:0;
-    left:0;
-    .many-wm-wrap-item{
-      float: left;
-    }
-  }
-}

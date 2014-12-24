@@ -5,20 +5,15 @@ html
         .wrapper
             .container
                 .main
-                    .case
-                        h1.h1 Генерация водяных знаков
-                        .work-area
-                            //- Область для работы с изображениями
-                            .img-area
-                                //- img#img(src="/images/400.jpg")
-                                //- img#wm.wm(src="http://placehold.it/100x100")
+                    h1.h1 Генерация водяных знаков
+                    .work-area
+                        .img-area
                 .side-panel
-                    .case
-                        h2.h2 Настройки
-                        include modules/upload-pic
-                        include modules/move-watermark
-                        include modules/transparency
-                        include modules/buttons
+                    h2.h2 Настройки
+                    include modules/upload-pic
+                    include modules/move-watermark
+                    include modules/transparency
+                    include modules/buttons
         include modules/footer.jade
         include modules/social-lang.jade
         include modules/scripts.jade
