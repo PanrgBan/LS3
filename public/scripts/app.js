@@ -12,8 +12,6 @@
         getImg,          // получение изображения
 
         WM,       // объект вотермарка
-        wmHeight,
-        wmWidth,
         WMGrid,   // объект с сеткой из вотеров
         init = false;
 
@@ -42,6 +40,8 @@
         // выравнивания вотермарка
         imgWidth,
         imgHeight,
+        wmWidth,
+        wmHeight,
         sectorWidth,
         sectorHeight,
         sectorCenterWidth,
@@ -149,8 +149,11 @@
                 $(".move-spinner").find(".pos-x").find("label").html("X");
                 $(".move-spinner").find(".pos-y").find("label").html("Y");
 
-                manyWaterField && manyWaterField.hide()
-                WMGrid && WMGrid.hide()
+                if ( WMGrid ) {
+                  WMGrid.hide()
+                  manyWaterField.hide()
+                }
+
                 WM.show();
             } else {
               // режим наложения множественного воттера
@@ -158,31 +161,24 @@
                 WM.hide();
                 field.find('td').removeClass('active');
 
-                $(".move-spinner").find(".pos-x").find("label").html("<img src='/images/top-bottom.jpg'>");
-                $(".move-spinner").find(".pos-y").find("label").html("<img src='/images/left-right.jpg'>");
+                $(".move-spinner")
+                  .find(".pos-x")
+                  .find("label")
+                  .html("<img src='/images/top-bottom.jpg'>");
+                $(".move-spinner")
+                  .find(".pos-y")
+                  .find("label")
+                  .html("<img src='/images/left-right.jpg'>");
 
-                if ( manyWaterField ){
-                  // если крест создан, показываем
+                if ( WMGrid ){
                   manyWaterField.show();
-                } else {
-                  // крест не создан - создаём
-                  field.append("<div class='many-water-field'></div>");
-                  manyWaterField = $('.many-water-field');
-                  manyWaterField
-                    .append("<div class='many-water-field-y'><span></span></div>")
-                    .append("<div class='many-water-field-x'><span></span></div>");
-                  manyWaterFieldX = $('.many-water-field-y').find('span');
-                  manyWaterFieldY = $('.many-water-field-x').find('span');
-                }
-
-                if(WMGrid){
-                  // если обертка каскадом воттеров существует - показываем
                   WMGrid.show();
                   self.setPosMany();
-                }else{
-                  //если не существует - создаём
-                  self.manyWater();
+                } else {
+                  self.createCross();
+                  self.createTiling();
                 }
+
               self.refreshBoard();
             }
 
@@ -268,6 +264,9 @@
         imgWidth = img.width(),
         imgHeight = img.height(),
 
+        // Размеры вотермарка
+        wmWidth = WM.width(),
+        wmHeight = WM.height();
         // Размеры сектора
         sectorWidth = ~~( imgWidth / quantitySectors );
         sectorHeight = ~~( imgHeight / quantitySectors );
@@ -321,8 +320,23 @@
         return setTimeout( handler, delay || 0 );
       },
 
+      //==========================================
+      // Функции замощения
+
+      createCross: function() {
+        manyWaterField = $('<div>', {
+          'class': 'many-water-field'
+        }).append("<div class='many-water-field-y'><span></span></div>")
+          .append("<div class='many-water-field-x'><span></span></div>");
+
+        $('.move-field-wr').append( manyWaterField );
+
+        manyWaterFieldX = $('.many-water-field-y').find('span');
+        manyWaterFieldY = $('.many-water-field-x').find('span');
+      },
+
       // множественная накладка водянного знака
-      manyWater: function(){
+      createTiling: function(){
         WMGrid = $('<div>', {
           'class': 'many-wm-wrap'
         });
@@ -356,7 +370,7 @@
           WMGrid.append($('<img>', {
             src: wmSrc,
             'class': 'many-wm-wrap-item',
-            style: 'width:' + wmWidth + '; height:' + wmHeight + ';'
+            style: 'width:' + wmWidth + 'px; height:' + wmHeight + 'px;'
           }));
         }
 
@@ -577,8 +591,8 @@
                             if ( !GLOBALSCALE ) return;
 
                             loadPicPath.css({
-                                'width': loadPicWidth * GLOBALSCALE + 'px',
-                                'height': loadPicHeight * GLOBALSCALE + 'px'
+                                'width': loadPicWidth * GLOBALSCALE,
+                                'height': loadPicHeight * GLOBALSCALE
                             })
                         },
 
@@ -612,8 +626,7 @@
                         changeWm();
                         changeInputName();
 
-                        wmHeight = loadPicHeight;
-                        wmWidth = loadPicWidth;
+                        console.log(123);
                         // инизиализируем модули
                         initGlobal();
                     }
@@ -699,9 +712,4 @@
         opacityWm.init();
         init = true;
     }
-
-    setTimeout(function () {
-        // initGlobal();
-    }, 500);
-
 }()

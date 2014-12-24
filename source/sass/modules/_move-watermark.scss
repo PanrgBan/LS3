@@ -60,12 +60,15 @@
     }
   }
 
-  .move-field{
-    float: left;
-    height: 102px;
-    width: 102px;
-    border-radius: 10px 10px 0 0;
+  .move-field-wr{
     position:relative;
+    float: left;
+    width: 102px;
+    height: 103px;
+  }
+
+  .move-field{
+    border-radius: 10px 10px 0 0;
 
 
     td{
@@ -82,44 +85,46 @@
         background: $color-btn;
       }
     }
-    .many-water-field{
-      position: absolute;
+  }
+
+  .many-water-field{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    .many-water-field-x,
+    .many-water-field-y{
+      width: 100%;
+      height: 34px;
       top:0;
       left:0;
-      width: 100%;
-      height: 100%;
-      .many-water-field-x,
-      .many-water-field-y{
+      right:0;
+      bottom:0;
+      margin: auto;
+      position: absolute;
+      & span{
+        display: block;
         width: 100%;
-        height: 34px;
-        top:0;
-        left:0;
-        right:0;
-        bottom:0;
+        background: #f97e76;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         margin: auto;
         position: absolute;
-        & span{
-          display: block;
-          width: 100%;
-          background: #f97e76;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-          position: absolute;
-        }
       }
-      .many-water-field-y{
-        width: 34px;
+    }
+    .many-water-field-y{
+      width: 34px;
+      height: 100%;
+      & span{
         height: 100%;
-        & span{
-          height: 100%;
-          width: auto;
-        }
+        width: auto;
       }
     }
   }
+
 
     .spinner-group{
       display: inline-block;
