@@ -8,9 +8,10 @@
       tiling = false,  // режим замощения
       moveWm,          // модуль перемещения
       opacityWm,       // модуль прозрачности
-      upload,          // загрузка на сервер
-      getImg,          // получение изображения
+
       wm,       // объект вотермарка
+      wmWidth,
+      wmHeight,
       wmGrid,   // объект с сеткой из вотеров
       init = false;
 
@@ -41,8 +42,6 @@
         // выравнивания вотермарка
         imgWidth,
         imgHeight,
-        wmWidth,
-        wmHeight,
         sectorWidth,
         sectorHeight,
         sectorCenterWidth,
@@ -91,6 +90,12 @@
 
               $this.addClass('active');
 
+              clearTimeout(timer)
+              wm.css('transition', 'all .3s')
+              timer = setTimeout(function() {
+                wm.css('transition', '')
+              }, 400);
+
               stepX = +this.getAttribute('data-x'),
               stepY = +this.getAttribute('data-y');
               self.doOneStep();
@@ -100,14 +105,6 @@
 
         // ====================================
         // события дропа одиночного воттера
-        wm.on('mousedown', function(){
-            wm.css('transition', 'none');
-        });
-
-        wm.on('mouseup', function(){
-            wm.css('transition', '');
-        });
-
         wm.draggable({
             containment: ".img-area",
             scroll: false,
@@ -135,12 +132,10 @@
 
         $('.spinner-group').on('mouseup', 'a', function(e) {
           clearInterval(timer);
-          wm.css('transition', '');
         });
 
         $('.spinner-group').on('mouseleave', 'a', function() {
           clearTimeout(timer);
-          wm.css('transition', '');
         });
 
         // ====================================
@@ -277,10 +272,6 @@
         // Размеры основного изображения
         imgWidth = img.width(),
         imgHeight = img.height(),
-
-        // Размеры вотермарка
-        wmWidth = wm.width(),
-        wmHeight = wm.height();
 
         // Размеры сектора
         sectorWidth = ~~( imgWidth / quantitySectors );
@@ -509,7 +500,6 @@
 
               function mouseup() {
                   toggle.css('background-color', '');
-                  wm.css('transition', '');
 
                   $document.off('mousemove', mousemove);
                   $document.off('mouseup', mouseup);
@@ -562,12 +552,13 @@
   // Отправка изображений на сервер
   //=================================
 
-  upload = (function () {
+  !function () {
       var
           app, self,
           pics = $('.fileupload'),
           wrap = $('.upload-wrapper'),
-          GLOBALSCALE,
+          imgArea = $('.img-area'),
+          GLOBALSCALE = 1,
 
           defObj = {
               url: 'php/upload.php',
@@ -578,54 +569,56 @@
                       data = JSON.parse(src),
                       loadPicWidth = data.width,
                       loadPicHeight = data.height,
-                      loadPicPath = $('<img/>').attr('src', data.path),
                       loadPicName = data.fileName,
-                      inputName = data.inputName,
+                      loadImg = $('<img/>', {
+                        src: data.path,
+                        id: data.inputName,
+                        'class': data.inputName
+                      }),
 
-                      changeWm = function () {
-                          if ( wm ) { wm.remove(); }
-
-                          loadPicPath.appendTo($('.img-area')).attr('id', 'wm').addClass('wm');
-
-                          console.log(rootImg);
-                          if ( !GLOBALSCALE ) return;
-
-                          loadPicPath.css({
-                              'width': loadPicWidth * GLOBALSCALE,
-                              'height': loadPicHeight * GLOBALSCALE
-                          })
-                      },
-
-                      changeInputName = function () {
-                          $('input[name = ' + inputName + ']').closest('.form-group').find(wrap).text(loadPicName);
+                      changeInputName = function() {
+                        var name = data.fileName
+                        if ( name.length > 23 ) {
+                          name = data.fileName.slice(0, 23) + '...';
+                        }
+                        $('input[name = ' + data.inputName + ']').closest('.form-group').find(wrap).text( name );
                       };
 
-                  if (inputName === 'userfile') {
+                  if (data.inputName === 'img') {
                       $('#img').remove();
-                      loadPicPath.prependTo($('.img-area')).attr('id', 'img');
+
+                      loadImg.prependTo( imgArea );
 
                       if (loadPicHeight > MAXHEIGHT || loadPicWidth > MAXWIDTH) {
                           if (loadPicWidth > loadPicHeight) {
-                              //TODO
-                              $('.img-area').css('height', '');
-                              loadPicPath.css('width', 100 + '%');
+                              loadImg.css('width', MAXWIDTH);
                               GLOBALSCALE = MAXWIDTH / loadPicWidth;
                           } else {
-                              loadPicPath.css('height', 100 + '%');
-                              //TODO
-                              $('.img-area').css('height', 100 + '%');
+                              loadImg.css('height', MAXHEIGHT);
                               GLOBALSCALE = MAXHEIGHT / loadPicHeight;
                           }
                       }
+
                       $('.upload__pic')
                           .removeClass('disabled')
                           .find(pics)
                           .removeClass('disabled-input');
                       changeInputName();
                   } else {
-                      changeWm();
-                      changeInputName();
+                    if ( wm ) { wm.remove(); }
 
+                    wm = loadImg;
+                    wmWidth = loadPicWidth * GLOBALSCALE;
+                    wmHeight = loadPicHeight * GLOBALSCALE;
+
+                    loadImg
+                      .css({
+                          'width': wmWidth,
+                          'height': wmHeight
+                      })
+                      .appendTo( imgArea );
+
+                      changeInputName();
                       // инизиализируем модули
                       initGlobal();
                   }
@@ -639,20 +632,22 @@
               self.events();
           },
 
+          createRootImg: function() {},
+
           events: function () {
               pics.fileupload(defObj);
           }
       }
 
       app.init();
-  }());
+  }();
 
 
   //=================================
-  // Загрузка изображений
+  // Загрузка готового изображения
   //=================================
 
-  getImg = (function () {
+  !function () {
     var
         btnReset = $('.btn-reset');
 
@@ -693,8 +688,6 @@
                 dataObj.deltaY = move.posY;
               }
 
-              console.log(dataObj);
-
               $.post("php/create-img.php", dataObj, function (src) {
                   location.href = 'php/show.php';
               });
@@ -703,18 +696,13 @@
 
       app.init();
       return {}
-  })();
+  }();
 
 
 
   function initGlobal() {
-      wm = $('.wm');
       moveWm.init();
       opacityWm.init();
       init = true;
   }
-
-  //=================================
-  // Тест
-  initGlobal()
 }()

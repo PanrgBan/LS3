@@ -15,8 +15,9 @@
 // Write here
 
 .main{
-  display: table-cell;
-  height: 100%;
+  // display: table-cell;
+  float: left;
+  height: 670px;
   width: 700px;
   padding: 25px;
   background: rgba(46, 54, 65,.64);
@@ -45,7 +46,6 @@
       position: absolute;
       top: 0;
       left: 0;
-      transition: all .3s;
     }
 
     .many-wm-wrap{
@@ -60,9 +60,10 @@
   }
 
 .side-panel{
-  display: table-cell;
+  // display: table-cell;
+  float: left;
   width: 260px;
-  height: 100%;
+  height: 670px;
   padding: 35px 0px 25px;
   border-left: 1px solid #2E3641;
   background: $color-f1f1f5;

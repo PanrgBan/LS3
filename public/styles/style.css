@@ -584,8 +584,8 @@ a {
       margin-left: -4px; }
 
 .main {
-  display: table-cell;
-  height: 100%;
+  float: left;
+  height: 670px;
   width: 700px;
   padding: 25px;
   background: rgba(46, 54, 65, 0.64); }
@@ -608,9 +608,7 @@ a {
   .img-area .wm {
     position: absolute;
     top: 0;
-    left: 0;
-    -webkit-transition: all 0.3s;
-            transition: all 0.3s; }
+    left: 0; }
   .img-area .many-wm-wrap {
     position: absolute;
     top: 0;
@@ -619,9 +617,9 @@ a {
       float: left; }
 
 .side-panel {
-  display: table-cell;
+  float: left;
   width: 260px;
-  height: 100%;
+  height: 670px;
   padding: 35px 0px 25px;
   border-left: 1px solid #2E3641;
   background: #f1f1f5; }
