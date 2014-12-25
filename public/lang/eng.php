@@ -1,13 +1,13 @@
 <?php
 
 $lang = array (
-    "title" => "Generation Watermarking",
+    "title" => "Watermark generator",
     "setting"  => "Settings",
-    "stock-img" => "Original image",
+    "stock-img" => "The original image",
     "watermark" => "Watermark",
     "download-img" => "Upload Image",
     "position" => "Position",
-    "opacity" => "Opacity",
+    "opacity" => "Transparency",
     "reset" => "Reset",
     "download" => "Download",
     "copyright" => "This is my website, please do not copy or steal it"

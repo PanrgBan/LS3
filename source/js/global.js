@@ -110,8 +110,7 @@
             scroll: false,
 
             drag:function(event, ui){
-              left = ui.position.left;
-              top = ui.position.top;
+              self.savePos(ui.position.top, ui.position.left)
               self.refreshBoard()
             }
         });
@@ -245,9 +244,11 @@
         if (typeof stepX !== 'number') stepX = 0;
         if (typeof stepY !== 'number') stepY = 0;
 
-        left = sectorCenterWidth + sectorWidth * stepX;
-        top = sectorCenterHeight + sectorHeight * stepY;
+        var
+            top =  sectorCenterHeight + sectorHeight * stepY,
+            left =  sectorCenterWidth + sectorWidth * stepX;
 
+        self.savePos(top, left);
         self.setPos();
       },
 
@@ -315,6 +316,11 @@
       // Задержка вызова функции
       delay: function( handler, delay ) {
         return setTimeout( handler, delay || 0 );
+      },
+
+      savePos: function(x, y) {
+        left = y;
+        top = x;
       },
 
       //==========================================
@@ -608,8 +614,8 @@
                     if ( wm ) { wm.remove(); }
 
                     wm = loadImg;
-                    wmWidth = loadPicWidth * GLOBALSCALE;
-                    wmHeight = loadPicHeight * GLOBALSCALE;
+                    wmWidth = ~~( loadPicWidth * GLOBALSCALE );
+                    wmHeight = ~~( loadPicHeight * GLOBALSCALE );
 
                     loadImg
                       .css({

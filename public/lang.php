@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting( 0 );
 
 if($_GET["lang"]){
 	switch ($_GET["lang"]) {
@@ -15,27 +16,12 @@ if($_GET["lang"]){
 	}
 	header("Location: /");
 }
-/*function switchLang ($lang){
-	switch ($lang) {
-	    case "rus":
-	        echo "русский";
-	        break;
-	    case "eng":
-	        echo "английскй";
-	        break;
-	    default:
-	        echo "хрен просышь";
-	        break;
-	}
-}*/
-
-/*switchLang($_GET["lang"]);*/
 
 function t($word){
 	if($_SESSION["lang-eng"]){
-		include '/lang/eng.php';
+		include 'lang/eng.php';
 	}else{
-		include '/lang/ru.php';
+		include 'lang/ru.php';
 	}
 	return $lang[$word];
 }

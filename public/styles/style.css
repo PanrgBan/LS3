@@ -584,7 +584,7 @@ a {
       margin-left: -4px; }
 
 .main {
-  float: left;
+  display: table-cell;
   height: 670px;
   width: 700px;
   padding: 25px;
@@ -617,7 +617,7 @@ a {
       float: left; }
 
 .side-panel {
-  float: left;
+  display: table-cell;
   width: 260px;
   height: 670px;
   padding: 35px 0px 25px;

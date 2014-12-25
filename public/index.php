@@ -1,6 +1,5 @@
 <?php 
-session_start();
-include "/lang.php";
+include "lang.php";
 ?>
 <!DOCTYPE html>
 <html>
