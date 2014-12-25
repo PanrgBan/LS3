@@ -12,7 +12,8 @@ include "/lang.php";
     <meta name="description" content="">
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles/style.css"><!--[if lt IE 9]>
+    <link rel="stylesheet" href="styles/style.css">
+    <!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
   </head>
@@ -22,7 +23,8 @@ include "/lang.php";
         <div class="main">
           <h1 class="h1"><?php echo t("title"); ?></h1>
           <div class="work-area">
-            <div class="img-area"><img id="img" src="/images/123.jpg"><img id="wm" src="/images/log.jpg" class="wm"></div>
+            <div class="img-area">
+            </div>
           </div>
         </div>
         <div class="side-panel">
@@ -37,7 +39,7 @@ include "/lang.php";
                     <div class="upload-btn">
                       <div class="ico_download"></div>
                     </div>
-                    <input type="file" name="userfile" class="fileupload">
+                    <input type="file" name="img" class="fileupload">
                   </div>
                 </div>
                 <div class="upload__pic disabled">
@@ -47,7 +49,7 @@ include "/lang.php";
                     <div class="upload-btn">
                       <div class="ico_download"></div>
                     </div>
-                    <input type="file" name="userfile2" class="fileupload disabled-input">
+                    <input type="file" name="wm" class="fileupload disabled-input">
                   </div>
                 </div>
               </form>
