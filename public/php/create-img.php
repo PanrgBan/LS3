@@ -20,28 +20,21 @@ $j = 0;
 
 // в $tiling приходит строка. "fasle" будет
 // true и else ни когда не отработает
-/*if($tiling) {
+if($tiling) {
+    $new = $image->merge($watermark, 'left + 0', 'top + 0', 0);
     while ($lengthY < $sizeImg[1]) {
+        $lengthX = $marginX;
         while ($lengthX < $sizeImg[0]) {
+            $new = $new->merge($watermark, 'left  + ' . $lengthX, 'top  +' . $lengthY, $opacity);
             $lengthX = $lengthX + $sizeWt[0] + $marginX;
-            $j++;
-            $new = $image->merge($watermark, 'left  + ' . $lengthX, 'top  +' . $lengthY, $opacity);
         }
         $lengthY = $lengthY + $sizeWt[1] + $marginY;
-        $lengthX = $marginX;
-        $i++;
-//        TODO нужен метод для повторного наложения вотермарка
-    }
-
-    $new -> crop(0, 0, $sizeImg[0], $sizeImg[1]);
+}
+    $new -> saveToFile($result);
 } else {
-}*/
-
-    // вытащил из else
     $new = $image->merge($watermark, 'left + ' . $deltaX, 'top+' . $deltaY, $opacity);
+    $new -> saveToFile($result);
+}
 
-
-
-$new -> saveToFile($result);
 
 exit;
