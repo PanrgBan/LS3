@@ -99,7 +99,6 @@
               stepX = +this.getAttribute('data-x'),
               stepY = +this.getAttribute('data-y');
               self.doOneStep();
-              self.refreshBoard();
           }
         });
 
@@ -125,7 +124,6 @@
 
           self.repeat(null, function() {
             self.move(direction);
-            self.refreshBoard();
           });
         });
 
@@ -265,6 +263,8 @@
           'left': left,
           'top': top
         })
+
+        self.refreshBoard();
       },
 
       // Получение необходимой информации
@@ -419,13 +419,15 @@
           marginRight: marginX
         });
 
-          newWmWrapWidth = wmWrapWidth + ( countXWm * marginX );
-          newWmWrapHeight = wmWrapHeight + (countYWm * marginY );
+        newWmWrapWidth = wmWrapWidth + ( countXWm * marginX );
+        newWmWrapHeight = wmWrapHeight + (countYWm * marginY );
 
-          wmGrid.css({
-              width: newWmWrapWidth,
-              height: newWmWrapHeight
-          });
+        wmGrid.css({
+            width: newWmWrapWidth,
+            height: newWmWrapHeight
+        });
+
+        self.refreshBoard();
       }
     };
 
@@ -443,14 +445,24 @@
         self.refreshBoard();
       },
 
+      resetPos: function() {
+
+        if ( tiling ) {
+          marginX = 0;
+          marginY = 0;
+          self.setPosTiling();
+        } else {
+          field.find('td').eq(0).trigger('click');
+        }
+      },
+
       getPosition: function() {
         return tiling
           ? {
-            tiling: true,
             posTilingX: posTilingX,
             posTilingY: posTilingY,
-            marginX: marginX,
-            marginY: marginY
+            marginX: marginX / imgWidth * 100 + '%',
+            marginY: marginY / imgHeight * 100 + '%'
           }
           : {
             posX: left / imgWidth * 100 + '%',
@@ -638,8 +650,6 @@
               self.events();
           },
 
-          createRootImg: function() {},
-
           events: function () {
               pics.fileupload(defObj);
           }
@@ -665,7 +675,7 @@
           setUpListeners: function () {
               btnReset.on('click', function(e) {
                 e.preventDefault(e);
-                alert('Я скоро буду работать. Обещаю!');
+                moveWm.resetPos();
               });
               $('form.send').on('submit', app.createImg);
           },
@@ -680,10 +690,10 @@
                   dataObj = {
                     opacity: opacityWm.getOpacity(),
                     image: $('#img').attr('src'),
-                    watermark: $('#wm').attr('src'),
+                    watermark: wm.attr('src'),
                   };
 
-              if ( move.tiling ) {
+              if ( tiling ) {
                 dataObj.tiling = true;
                 dataObj.posTilingX = move.posTilingX;
                 dataObj.posTilingY = move.posTilingY;
@@ -694,8 +704,16 @@
                 dataObj.deltaY = move.posY;
               }
 
-              $.post("php/create-img.php", dataObj, function (src) {
+              $('.loader-l').show();
+
+              $.ajax({
+                url: 'php/create-img.php',
+                type: 'POST',
+                data: dataObj,
+                success: function() {
                   location.href = 'php/show.php';
+                  $('.loader-l').hide();
+                }
               });
           }
       }
